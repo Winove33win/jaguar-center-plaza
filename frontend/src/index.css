@@ -7,17 +7,17 @@
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-[#f4f6f1] text-[#1f2a24] antialiased;
 }
 
 a {
-  @apply text-primary-600 hover:text-primary-700 transition-colors;
+  @apply text-primary-600 transition-colors hover:text-primary-500;
 }
 
 .section-title {
-  @apply text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl;
+  @apply text-3xl font-bold tracking-tight text-primary-800 sm:text-4xl;
 }
 
 .section-subtitle {
-  @apply mt-3 max-w-2xl text-lg text-slate-600;
+  @apply mt-3 max-w-2xl text-lg text-[#4f5d55];
 }

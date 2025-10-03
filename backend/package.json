@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "prestart": "node ../scripts/build-and-sync.mjs"
   },
   "dependencies": {
