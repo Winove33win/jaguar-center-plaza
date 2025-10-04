@@ -62,6 +62,17 @@ router.get('/health', (req, res) => {
   res.json({ ok: true });
 });
 
+// DEBUG: checar conexão com banco
+router.get('/_debug/db', async (req, res) => {
+  try {
+    const [db] = await pool.query('SELECT DATABASE() AS db, CURRENT_USER() AS user');
+    const [[count]] = await pool.query('SELECT COUNT(*) AS tot FROM lojas');
+    res.json({ ok: true, db: db[0], lojas: count.tot });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
 router.get('/tables', (req, res) => {
   res.json(allowedTables);
 });
