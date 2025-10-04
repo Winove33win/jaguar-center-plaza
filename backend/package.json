@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js",
-    "sync:frontend": "node ../scripts/build-and-sync.mjs"
+    "start": "node app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,7 +13,6 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
-    "morgan": "^1.10.0",
     "mysql2": "^3.9.7"
   },
   "devDependencies": {

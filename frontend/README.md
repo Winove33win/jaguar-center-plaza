@@ -11,8 +11,9 @@ Aplicação criada com Vite + React + TypeScript e Tailwind CSS.
 
 ## Configuração
 
-1. Copie `.env.example` para `.env` e atualize `VITE_API_URL` com o endereço do backend.
-2. Instale as dependências com `npm install`.
-3. Inicie o ambiente com `npm run dev`.
+1. Configure o arquivo `.env.development` (já incluso) com `VITE_API_BASE=http://localhost:3333/api` ou ajuste conforme o backend.
+2. Para produção/local build, utilize `.env.production` com `VITE_API_BASE=/api`.
+3. Instale as dependências com `npm install`.
+4. Inicie o ambiente com `npm run dev`.
 
 As páginas são gerenciadas via React Router e utilizam o hook `useSEO` para atualizar metadados dinamicamente.
