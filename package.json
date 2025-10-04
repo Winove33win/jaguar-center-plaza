@@ -1,0 +1,7 @@
+{
+  "name": "jaguar-center-plaza",
+  "private": true,
+  "scripts": {
+    "dev:server": "npm --prefix backend run dev"
+  }
+}
