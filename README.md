@@ -16,13 +16,59 @@ Este repositório contém o código-fonte do site institucional do Jaguar Center
 
 O frontend espera que `VITE_API_URL` esteja apontando para o endereço do backend (por padrão, `http://localhost:4000`).
 
-## Deploy
+## Deploy (Plesk)
 
-Para gerar os arquivos de produção do frontend dentro da pasta do backend, utilize:
+O fluxo de publicação segue o mesmo padrão adotado pelos demais projetos hospedados no Plesk.
 
-```bash
-cd backend
-npm run sync:frontend
+### Estrutura
+
+- O build do frontend (Vite) é servido como arquivos estáticos diretamente de `/httpdocs`.
+- A API Node.js roda isolada em `/httpdocs/backend`, com arquivo de inicialização `app.js`.
+- A URL do aplicativo Node.js no painel deve ser configurada para responder em `/api`.
+
+### Configuração do Node.js no Plesk
+
+| Campo                 | Valor                     |
+| --------------------- | ------------------------- |
+| **Raiz do documento** | `/httpdocs`               |
+| **Raiz do aplicativo**| `/httpdocs/backend`       |
+| **URL do aplicativo** | `/api`                    |
+| **Arquivo inicial**   | `app.js`                  |
+
+Variáveis de ambiente necessárias:
+
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=Winove-center-plaza
+DB_PASSWORD=<sua_senha>
+DB_NAME=JaguarPlaza
 ```
 
-Esse comando executa o build do Vite e copia o resultado para `backend/dist`. Em ambientes como o Plesk, configure o arquivo de inicialização para `app.js` dentro da pasta `backend/`.
+> **Importante:** não defina a variável `PORT`. O Plesk controla automaticamente a porta utilizada pela aplicação Node.js.
+
+### Build e sincronização do frontend
+
+O script abaixo executa o build do frontend e copia o resultado para a pasta pública. Ele deve ser configurado em **Git → Ações de implantação adicionais** no Plesk:
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+# 1) Dependências do backend (produção)
+cd httpdocs/backend
+if [ -f package-lock.json ]; then
+  npm ci --omit=dev
+else
+  npm install --omit=dev
+fi
+
+# 2) Build do front e cópia para /httpdocs
+cd ..
+npm run --prefix backend sync:frontend
+
+# 3) (Opcional) Limpar cache antigo do front
+# find ./ -maxdepth 1 -name 'assets' -o -name 'index.html' -print0 | xargs -0r touch
+```
+
+Após cada deploy, utilize o botão **Reiniciar aplicativo** no painel de Node.js para garantir que o serviço seja recarregado imediatamente.
