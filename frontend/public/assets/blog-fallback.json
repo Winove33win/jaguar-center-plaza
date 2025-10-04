@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "blog-fallback-1",
+      "slug": "jaguar-center-plaza-inaugura-arena-de-negocios",
+      "title": "Jaguar Center Plaza inaugura arena de negócios com foco em inovação",
+      "excerpt": "O complexo ganhou um novo espaço colaborativo para eventos, mentorias e ativações comerciais que aproximam empreendedores da região.",
+      "coverImage": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["inovacao", "eventos"],
+      "publishedAt": "2024-05-10T10:00:00.000Z",
+      "updatedAt": "2024-05-12T15:00:00.000Z",
+      "content": "A nova arena de negócios do Jaguar Center Plaza reúne auditório modular, estúdios para transmissões ao vivo e salas multiuso. O espaço foi pensado para impulsionar programas de aceleração, semanas temáticas e mentorias com executivos parceiros. Com curadoria da equipe de inovação do complexo, a agenda prevê encontros mensais focados em varejo, serviços e economia criativa.\n\nPara inaugurar o hub, realizamos um demo day com 12 startups da região metropolitana de Campinas. Mais de 200 participantes acompanharam pitches, workshops e painéis sobre tendências de omnichannel. A arena está disponível para locação mediante agendamento com a equipe comercial."
+    },
+    {
+      "id": "blog-fallback-2",
+      "slug": "gastronomia-local-ganha-espaco-no-jaguar-center-plaza",
+      "title": "Gastronomia local ganha espaço no Jaguar Center Plaza",
+      "excerpt": "Chefes e produtores artesanais passam a ocupar um corredor fixo dedicado a experiências gastronômicas.",
+      "coverImage": "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["gastronomia", "varejo"],
+      "publishedAt": "2024-03-22T12:00:00.000Z",
+      "updatedAt": "2024-03-22T12:00:00.000Z",
+      "content": "O Jaguar Center Plaza inaugurou o Corredor Sabores da Jaguariúna, reunindo marcas locais de cafés especiais, queijos artesanais e confeitaria. O espaço foi planejado para receber tanto operações temporárias quanto cozinhas de demonstração.\n\nOs primeiros meses incluem aulas-show com chefs convidados, eventos de harmonização e menus sazonais voltados a empresas residentes. O projeto reforça o compromisso do complexo em valorizar pequenos produtores e incentivar experiências presenciais para colaboradores e visitantes."
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "perPage": 6,
+    "total": 2,
+    "totalPages": 1
+  }
+}

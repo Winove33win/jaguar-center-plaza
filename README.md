@@ -1,104 +1,131 @@
-# Jaguar Center Plaza
+# Jaguar Center Plaza — Monorepositório
 
-Este repositório contém o código-fonte do site institucional do Jaguar Center Plaza, com frontend em React/Vite e backend em Node.js/Express conectado a MariaDB/MySQL.
+Este projeto reúne o backend Express e o frontend React/Vite do site institucional do Jaguar Center Plaza. O backend serve a API REST, compila e publica o build estático do frontend e expõe serviços auxiliares como geração de sitemap e integração opcional com Stripe.
 
 ## Estrutura
 
-- `frontend/`: aplicação React com TypeScript, Tailwind CSS e React Router.
-- `backend/`: API Express com integração ao banco de dados.
-- `deploy/`: scripts auxiliares de build e deploy.
+- `backend/`: API Node.js/Express que acessa MySQL via `mysql2/promise`, gera sitemaps e orquestra o build do frontend.
+- `frontend/`: SPA em React com React Router, TanStack Query, Tailwind CSS e provedores globais (toasts, SEO).
+- `scripts/` e `deploy/`: utilitários de build, sincronização e automação de deploy.
 
-## Configuração de ambiente
+## Variáveis de ambiente
 
-As credenciais do banco devem ser informadas por variáveis de ambiente (compatíveis com o Plesk):
+### Backend
 
-```
-DB_HOST=<host_do_banco>
-DB_PORT=<porta_do_banco>
-DB_USER=<usuario_do_banco>
-DB_PASSWORD=<senha_do_banco>
-DB_NAME=<nome_da_base>
-```
-
-Outras variáveis úteis:
-
-```
-PORT=3333 # opcional em desenvolvimento; no Plesk a porta é definida automaticamente
-NODE_ENV=development # ou production
-```
+| Variável               | Descrição                                                                 | Padrão                |
+| ---------------------- | ------------------------------------------------------------------------- | --------------------- |
+| `DB_HOST`              | Host do MySQL                                                             | `127.0.0.1`           |
+| `DB_PORT`              | Porta do MySQL                                                            | `3306`                |
+| `DB_USER`              | Usuário do banco                                                          | `root`                |
+| `DB_PASSWORD`          | Senha do banco                                                            | `""`                 |
+| `DB_NAME`              | Nome do schema                                                            | `jaguar_center_plaza` |
+| `DB_CONN_LIMIT`        | Máximo de conexões simultâneas                                            | `10`                  |
+| `PUBLIC_BASE_URL`      | URL base pública usada para montar links absolutos                        | —                     |
+| `PORT`                 | Porta HTTP do Express                                                     | `3333`                |
+| `STRIPE_SECRET_KEY`    | Chave secreta do Stripe (opcional)                                        | —                     |
+| `STRIPE_PUBLIC_KEY`    | Chave pública usada pelo checkout (opcional)                              | —                     |
+| `STRIPE_SERVICE_URL`   | URL de um serviço externo responsável pelo checkout (opcional)           | —                     |
+| `STRIPE_WEBHOOK_SECRET`| Segredo de webhook caso o serviço Stripe seja utilizado                   | —                     |
 
 ### Frontend
 
-- `.env.development`: usa a API local (`http://localhost:3333/api`).
-- `.env.production`: usa a API publicada (`/api`).
+| Variável                | Descrição                                                                 |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `VITE_API_URL`          | URL base da API (se vazio, usa o mesmo domínio da SPA)                    |
+| `VITE_STRIPE_PUBLIC_KEY`| Chave pública do Stripe para redirecionamento via `@stripe/stripe-js`     |
 
-### Passos para desenvolvimento local
+## Scripts essenciais
 
-1. Instale as dependências na raiz, frontend e backend:
+### Raiz
+
+| Script                    | Descrição                                                                 |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `npm start`               | Executa `npm --prefix backend run start`                                 |
+| `npm run dev`             | Sobe o backend em modo desenvolvimento (`nodemon`)                       |
+| `npm test`                | Lint do frontend (`npm --prefix frontend run lint`)                      |
+| `npm run build:frontend`  | Build do frontend com Vite                                               |
+| `npm run sync:frontend`   | Executa `scripts/build-and-sync.mjs` para compilar e copiar o `dist`     |
+
+### Backend
+
+| Script            | Descrição                                                                                             |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| `npm run start`   | Inicia o servidor Express (`src/server.js`) após executar `scripts/build-and-sync.mjs`                 |
+| `npm run dev`     | Desenvolvimento com `nodemon`                                                                          |
+| `npm run migrate` | Executa `.sql` em `backend/migrations/` utilizando o pool configurado                                 |
+| `npm run sitemap` | Gera `httpdocs/sitemap.xml` e `httpdocs/sitemap.xml.gz` consumindo a própria API                       |
+| `npm run deploy`  | Recompila o frontend, sincroniza o build e gera sitemaps estáticos                                     |
+
+### Frontend
+
+| Script        | Descrição                     |
+| ------------- | ----------------------------- |
+| `npm run dev` | Vite em modo desenvolvimento  |
+| `npm run build` | Build de produção            |
+| `npm run preview` | Servidor de preview Vite  |
+| `npm run lint` | ESLint em `src/`             |
+
+## API REST
+
+O backend expõe os endpoints abaixo (todas as respostas em JSON):
+
+- `GET /api/blog-posts` — Lista e pagina posts do blog (`page`, `perPage`, `search`, `tags`, `orderBy`).
+- `GET /api/blog-posts/:slug` — Detalha um post por `slug`.
+- `GET /api/cases` — Lista cases com normalização de galerias e URLs absolutas a partir de `PUBLIC_BASE_URL`.
+- `GET /api/templates` — Lista templates com conversão de campos JSON (features, preview, metadados).
+- `GET /api/templates/:slug` — Detalhe completo do template.
+- `POST /api/checkout` — Cria sessão de checkout no Stripe (usa `STRIPE_SECRET_KEY` ou delega para `STRIPE_SERVICE_URL`).
+- `POST /api/leads/libras` — Registra leads (formulário Libras/contato) com bloqueio anti-spam em memória.
+- `GET /sitemap.xml` — Gera sitemap dinâmico consumindo a própria API (cache em memória + resposta gzip).
+
+O servidor também serve `backend/dist/` (build do frontend) e faz fallback das rotas não reconhecidas para `index.html`.
+
+## Pipeline de build
+
+1. `npm run start` (no backend) executa `scripts/build-and-sync.mjs`, que:
+   - Instala dependências do frontend (com `npm ci`, caindo para `npm install` se necessário);
+   - Roda `vite build`;
+   - Copia `frontend/dist` para `backend/dist`.
+2. O Express serve os arquivos estáticos diretamente de `backend/dist`.
+3. `npm run sitemap` e `npm run deploy` geram versões estáticas em `backend/httpdocs/` (úteis para hospedagem Plesk/estática).
+
+## Desenvolvimento local
+
+1. Instale as dependências:
    ```bash
    npm install
-   cd backend && npm install && cd ..
-   cd frontend && npm install && cd ..
+   npm --prefix backend install
+   npm --prefix frontend install
    ```
-2. Garanta que o banco de dados esteja acessível com as variáveis informadas.
-3. Rode o backend:
+2. Configure o banco e rode `npm --prefix backend run migrate` (opcional).
+3. Em uma aba, suba o backend:
    ```bash
    npm run dev
    ```
-4. Rode o frontend em outra aba/terminal:
+4. Em outra aba, suba o frontend:
    ```bash
-   cd frontend
-   npm run dev
+   npm --prefix frontend run dev
    ```
+5. Acesse `http://localhost:5173` (frontend Vite) consumindo a API em `http://localhost:3333`.
 
-## Scripts principais
+## Deploy
 
-Os scripts abaixo estão disponíveis na raiz do projeto:
+- `backend/scripts/build-and-sync.mjs` é executado automaticamente antes do `npm run start` (prestart).
+- `backend/scripts/deploy.mjs` recompila o frontend, sincroniza `backend/dist` e gera sitemaps em `backend/httpdocs`.
+- Em ambientes sem Node (ex.: Plesk apenas com estáticos), use `deploy/deploy-plesk.sh` para publicar `httpdocs/`.
 
-| Script              | Descrição                                                                 |
-| ------------------- | ------------------------------------------------------------------------- |
-| `npm start`         | Inicia a API Express (`backend/app.js`).                                   |
-| `npm run dev`       | Inicia a API em modo desenvolvimento com `nodemon`.                       |
-| `npm test`          | Executa o lint do frontend com ESLint para garantir a qualidade do código. |
-| `npm run build:frontend` | Gera o build do frontend com Vite.                                   |
-| `npm run sync:frontend`  | Executa o build do frontend e copia o resultado para `backend/public`. |
+## Serviço Stripe auxiliar
 
-## Endpoints disponíveis
+O repositório assume a existência opcional do projeto `winove-stripe-system/`, responsável por webhooks e persistência de eventos. Defina as variáveis `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `DB_HOST`, `DB_USER`, `DB_PASSWORD` e `DB_NAME` para habilitar o checkout direto no backend ou configure `STRIPE_SERVICE_URL` para delegar a criação de sessões.
 
-A API fica exposta em `/api` e utiliza `mysql2/promise` com conversão automática de colunas JSON. Endpoints principais:
+## Tratamento do erro `EADDRINUSE`
 
-- `GET /api/health` → `{ ok: true, time: <ISO> }`
-- `GET /api/tables` → `{"tables": ["administracao", "advocacia", ...]}`
-- `GET /api/:table` → lista registros da tabela permitida (limite 500, ordenado por data)
-- `GET /api/:table/:id` → retorna um registro pelo `id` (UUID)
-- `GET /api/_debug/db` → disponível apenas quando `NODE_ENV !== 'production'` (útil para inspeção)
-
-Todas as respostas são em JSON e contam com rate limit (60 requisições/minuto por IP).
-
-## Testes rápidos com `curl`
-
-Substitua `$BASE` pela URL base (ex.: `http://localhost:3333`).
+Se a porta `3333` já estiver em uso, finalize o processo antigo ou execute o backend em outra porta:
 
 ```bash
-curl -sS $BASE/api/health
-curl -sS $BASE/api/tables
-curl -sS "$BASE/api/lojas"
-curl -sS "$BASE/api/lojas/<um-id>"
+PORT=8080 npm run start
 ```
 
-## Deploy no Plesk
+---
 
-- **Raiz do aplicativo Node.js:** `/httpdocs/backend`
-- **Arquivo inicial:** `app.js`
-- **URL do aplicativo:** `/api`
-- **Document root:** `/httpdocs`
-
-Certifique-se de definir as variáveis de ambiente (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) diretamente no painel. O backend detecta automaticamente a porta informada pelo Plesk via `PORT`.
-
-Para servir o frontend estático pelo backend:
-
-```bash
-npm run sync:frontend
-```
-
-O conteúdo gerado ficará em `backend/public` e será exposto a partir de `/`.
+Dúvidas e melhorias são bem-vindas via issues e pull requests.

@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "id": "template-fallback-1",
+      "slug": "landing-servicos-profissionais",
+      "name": "Landing page Serviços Profissionais",
+      "description": "Template focado em conversão para escritórios de advocacia, contabilidade e consultorias empresariais.",
+      "category": "Landing Page",
+      "price": 497,
+      "currency": "BRL",
+      "thumbnail": "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "Formulário integrado ao CRM",
+        "Seção de depoimentos animados",
+        "Integração com WhatsApp Business",
+        "Biblioteca de ícones profissionais",
+        "Blocos prontos para listar serviços"
+      ],
+      "metadata": {
+        "idealFor": ["advocacia", "contabilidade", "consultoria"],
+        "deliveryTime": "5 dias úteis"
+      },
+      "config": {
+        "previewImages": [
+          "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
+        ],
+        "sections": [
+          {
+            "id": "hero",
+            "title": "Hero com CTA primário",
+            "description": "Background em vídeo opcional, headline forte e formulário resumido para captação imediata.",
+            "image": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1200&q=80"
+          },
+          {
+            "id": "cases",
+            "title": "Cases em destaque",
+            "description": "Cards com depoimentos reais e métricas de impacto para gerar prova social.",
+            "image": "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80"
+          }
+        ]
+      },
+      "publishedAt": "2024-01-05T00:00:00.000Z",
+      "updatedAt": "2024-03-12T00:00:00.000Z"
+    },
+    {
+      "id": "template-fallback-2",
+      "slug": "catalogo-imobiliario",
+      "name": "Catálogo Imobiliário Interativo",
+      "description": "Ideal para imobiliárias e administradoras que desejam apresentar portfólio com filtros dinâmicos e tour virtual.",
+      "category": "Catálogo Digital",
+      "price": 697,
+      "currency": "BRL",
+      "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+      "features": [
+        "Grid responsivo com filtros",
+        "Mapa interativo com integração Google Maps",
+        "Álbum de fotos com lightbox",
+        "Integração com chats e atendimento 24/7"
+      ],
+      "metadata": {
+        "idealFor": ["imobiliaria", "condominios"],
+        "deliveryTime": "7 dias úteis"
+      },
+      "config": {
+        "previewImages": [
+          "https://images.unsplash.com/photo-1600585154340-0ef3c08dcdb6?auto=format&fit=crop&w=1200&q=80"
+        ],
+        "sections": [
+          {
+            "id": "portfolio",
+            "title": "Vitrine de empreendimentos",
+            "description": "Cards com atalhos para tours 360º, ficha técnica e botão de agendamento imediato.",
+            "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80"
+          }
+        ]
+      },
+      "publishedAt": "2023-12-01T00:00:00.000Z",
+      "updatedAt": "2024-02-02T00:00:00.000Z"
+    }
+  ]
+}
