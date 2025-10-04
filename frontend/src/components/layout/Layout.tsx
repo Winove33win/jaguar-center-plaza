@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -12,6 +13,7 @@ export default function Layout({ children }: LayoutProps) {
       <Header />
       <main className="flex-1 pb-20 pt-0">{children}</main>
       <Footer />
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
     </div>
   );
 }

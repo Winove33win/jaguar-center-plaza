@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
-import { submitContact } from '../lib/api';
+import { submitLibrasLead } from '../lib/api';
 import { useSEO } from '../hooks/useSEO';
 
 const schema = z.object({
@@ -22,7 +22,17 @@ export default function ContactPage() {
   const form = useForm<ContactFormValues>({ resolver: zodResolver(schema), defaultValues: { companyId: '' } });
 
   const mutation = useMutation({
-    mutationFn: async (values: ContactFormValues) => submitContact({ ...values, companyId: values.companyId || undefined }),
+    mutationFn: async (values: ContactFormValues) => {
+      const interest = values.companyId ? `Interesse: ${values.companyId}` : '';
+      const message = [values.message, interest].filter(Boolean).join('\n\n');
+      await submitLibrasLead({
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        message,
+        source: 'contact'
+      });
+    },
     onSuccess: () => {
       setResult({ type: 'success', message: 'Recebemos a sua mensagem! Em breve nossa equipe entrará em contato.' });
       form.reset();

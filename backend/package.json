@@ -1,20 +1,27 @@
 {
   "name": "jaguar-center-plaza-backend",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "main": "app.js",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "dev": "NODE_ENV=development nodemon --watch src --ext js,json --exec node src/server.js",
+    "start": "node src/server.js",
+    "prestart": "node scripts/build-and-sync.mjs",
+    "migrate": "node scripts/run-migrations.mjs",
+    "sitemap": "node scripts/generate-static-sitemaps.mjs",
+    "deploy": "node scripts/deploy.mjs"
   },
   "dependencies": {
+    "axios": "^1.7.2",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
-    "mysql2": "^3.9.7"
+    "mysql2": "^3.9.7",
+    "node-cache": "^5.1.2",
+    "stripe": "^14.24.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

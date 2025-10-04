@@ -1,0 +1,42 @@
+{
+  "items": [
+    {
+      "id": "case-fallback-1",
+      "slug": "clinica-aurora",
+      "title": "Clínica Aurora triplica carteira de pacientes em 8 meses",
+      "summary": "Com a mudança para o Jaguar Center Plaza, a Clínica Aurora ganhou visibilidade, ampliou o corpo clínico e estruturou programas corporativos.",
+      "description": "A empresa chegou ao complexo em busca de consultórios modulares para atender especialidades de otorrinolaringologia, fonoaudiologia e alergologia. Com apoio do time de marketing do Jaguar Center Plaza, estruturou campanhas de conteúdo, jornadas de onboarding para novos pacientes e ações de relacionamento com empresas residentes.",
+      "thumbnail": "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["saude", "expansao"],
+      "gallery": [
+        {
+          "url": "https://images.unsplash.com/photo-1504814532849-92766137aa47?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Equipe da Clínica Aurora em atendimento"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1587502538405-e1211c39e0df?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Consultório preparado para telemedicina"
+        }
+      ],
+      "publishedAt": "2023-11-01T00:00:00.000Z",
+      "updatedAt": "2024-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "case-fallback-2",
+      "slug": "studio-lumen",
+      "title": "Studio Lumen transforma espaço ocioso em estúdio de conteúdo",
+      "summary": "O coletivo de audiovisual passou a produzir semanalmente podcasts e vídeos institucionais para empresas instaladas no Jaguar Center Plaza.",
+      "description": "A proposta do Studio Lumen era montar um estúdio com isolamento acústico e estrutura para transmissões ao vivo sem precisar sair do complexo. Com consultoria da nossa equipe de facilities, o grupo readequou um pavimento, instalou iluminação modular e desenhou pacotes recorrentes de produção para os vizinhos de condomínio.",
+      "thumbnail": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["audiovisual", "coworking"],
+      "gallery": [
+        {
+          "url": "https://images.unsplash.com/photo-1516280030429-27679b3dc9cf?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Cenário principal do estúdio"
+        }
+      ],
+      "publishedAt": "2024-02-10T00:00:00.000Z",
+      "updatedAt": "2024-02-18T00:00:00.000Z"
+    }
+  ]
+}

@@ -2,11 +2,11 @@
   "name": "jaguar-center-plaza",
   "private": true,
   "scripts": {
-    "start": "node backend/app.js",
-    "dev": "nodemon backend/app.js",
+    "start": "npm --prefix backend run start",
+    "dev": "npm --prefix backend run dev",
     "test": "npm --prefix frontend run lint",
     "build:frontend": "npm --prefix frontend run build",
-    "sync:frontend": "npm run build:frontend && node ./scripts/sync-frontend.mjs"
+    "sync:frontend": "node ./scripts/build-and-sync.mjs"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
