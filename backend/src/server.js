@@ -27,6 +27,10 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.get('/', (_req, res) => {
+  res.type('text').send('JaguarPlaza API\n- /api/health\n- /api/tables\n- /api/lojas');
+});
+
 app.use('/api', apiRoutes);
 
 app.use(errorHandler);
