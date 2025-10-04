@@ -1,0 +1,97 @@
+{
+  "items": [
+    {
+      "id": "administracao",
+      "slug": "administracao",
+      "name": "Administração",
+      "description": "Salas planejadas para escritórios corporativos com recepção compartilhada e infraestrutura de TI.",
+      "records": [
+        {
+          "id": "adm-101",
+          "name": "Sala 101",
+          "fields": {
+            "andar": "1º andar",
+            "metragem": "42 m²",
+            "layout": "Open space com sala de reunião privativa",
+            "status": "Disponível para locação"
+          }
+        },
+        {
+          "id": "adm-204",
+          "name": "Sala 204",
+          "fields": {
+            "andar": "2º andar",
+            "metragem": "55 m²",
+            "diferenciais": "Vista para a praça central, copa montada e 4 vagas de garagem",
+            "status": "Ocupada"
+          }
+        }
+      ]
+    },
+    {
+      "id": "advocacia",
+      "slug": "advocacia",
+      "name": "Advocacia",
+      "description": "Ambientes silenciosos com isolamento acústico e salas de reunião exclusivas para escritórios jurídicos.",
+      "records": [
+        {
+          "id": "adv-305",
+          "name": "Sala 305",
+          "fields": {
+            "andar": "3º andar",
+            "metragem": "38 m²",
+            "estrutura": "Recepção privativa, arquivo inteligente e sala de atendimento",
+            "status": "Disponível para locação"
+          }
+        }
+      ]
+    },
+    {
+      "id": "saude",
+      "slug": "saude",
+      "name": "Saúde",
+      "description": "Consultórios com acessibilidade, pontos de gases medicinais e suporte para procedimentos ambulatoriais.",
+      "records": [
+        {
+          "id": "med-110",
+          "name": "Consultório 110",
+          "fields": {
+            "andar": "Térreo",
+            "metragem": "32 m²",
+            "estrutura": "Sala de exame, banheiro adaptado e recepção compartilhada",
+            "status": "Disponível para agendamento"
+          }
+        },
+        {
+          "id": "med-212",
+          "name": "Consultório 212",
+          "fields": {
+            "andar": "2º andar",
+            "metragem": "28 m²",
+            "especialidade": "Odontologia",
+            "status": "Em negociação"
+          }
+        }
+      ]
+    },
+    {
+      "id": "gastronomia",
+      "slug": "gastronomia",
+      "name": "Gastronomia",
+      "description": "Lojas e quiosques preparados para operações de alimentação com exaustão, gás e delivery integrado.",
+      "records": [
+        {
+          "id": "food-01",
+          "name": "Loja Praça Gourmet",
+          "fields": {
+            "localizacao": "Praça de alimentação",
+            "metragem": "64 m²",
+            "estrutura": "Exaustão individual, câmara fria e balcão de atendimento",
+            "status": "Disponível"
+          }
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2024-01-01T00:00:00.000Z"
+}

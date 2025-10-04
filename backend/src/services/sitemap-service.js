@@ -1,4 +1,3 @@
-import axios from 'axios';
 import NodeCache from 'node-cache';
 import zlib from 'zlib';
 
@@ -22,36 +21,12 @@ export async function getSitemap(baseUrl) {
 }
 
 async function buildSitemapXml(baseUrl) {
-  const [blogPosts, cases, templates] = await Promise.all([
-    fetchAllBlogPosts(baseUrl),
-    fetchJson(`${baseUrl}/api/cases`),
-    fetchJson(`${baseUrl}/api/templates`)
-  ]);
-
   const urlset = [
-    createUrl(baseUrl, 'daily', '1.0'),
-    createUrl(`${baseUrl}/blog`, 'daily', '0.9'),
-    createUrl(`${baseUrl}/cases`, 'weekly', '0.8'),
-    createUrl(`${baseUrl}/templates`, 'weekly', '0.8')
+    createUrl(baseUrl, 'weekly', '1.0'),
+    createUrl(`${baseUrl}/sobre-nos`, 'monthly', '0.8'),
+    createUrl(`${baseUrl}/salas`, 'weekly', '0.9'),
+    createUrl(`${baseUrl}/contato`, 'monthly', '0.7')
   ];
-
-  for (const post of blogPosts) {
-    urlset.push(
-      createUrl(`${baseUrl}/blog/${post.slug}`, 'weekly', '0.7', post.updatedAt || post.publishedAt)
-    );
-  }
-
-  for (const item of cases.items || cases) {
-    if (!item?.slug) continue;
-    urlset.push(createUrl(`${baseUrl}/cases/${item.slug}`, 'weekly', '0.6', item.updatedAt));
-  }
-
-  for (const template of templates.items || templates) {
-    if (!template?.slug) continue;
-    urlset.push(
-      createUrl(`${baseUrl}/templates/${template.slug}`, 'weekly', '0.6', template.updatedAt)
-    );
-  }
 
   const urls = urlset
     .map((url) => {
@@ -82,31 +57,6 @@ function escapeXml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-}
-
-async function fetchAllBlogPosts(baseUrl) {
-  let page = 1;
-  const perPage = 100;
-  const items = [];
-  let totalPages = 1;
-
-  do {
-    const response = await axios.get(`${baseUrl}/api/blog-posts`, {
-      params: { page, perPage, status: 'PUBLISHED' }
-    });
-    const data = response.data || {};
-    const received = Array.isArray(data.items) ? data.items : [];
-    items.push(...received);
-    totalPages = data.pagination?.totalPages || 1;
-    page += 1;
-  } while (page <= totalPages);
-
-  return items;
-}
-
-async function fetchJson(url) {
-  const response = await axios.get(url);
-  return response.data;
 }
 
 export async function generateSitemapFiles(baseUrl) {

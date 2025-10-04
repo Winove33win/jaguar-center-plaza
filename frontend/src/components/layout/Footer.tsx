@@ -2,9 +2,8 @@ import Container from './Container';
 
 const siteLinks = [
   { label: 'Home', href: '/' },
-  { label: 'O Shopping', href: '/sobre-nos' },
-  { label: 'Empresas', href: '/empresas' },
-  { label: 'Novidades', href: '/#novidades' },
+  { label: 'Sobre nós', href: '/sobre-nos' },
+  { label: 'Salas', href: '/salas' },
   { label: 'Contato', href: '/contato' }
 ];
 
