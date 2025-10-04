@@ -31,7 +31,20 @@ app.use('/api', apiRoutes);
 
 app.use(errorHandler);
 
-const port = Number(process.env.PORT || 3333);
-app.listen(port, () => {
+const DEFAULT_PORT = 3333;
+const port = Number(process.env.PORT || DEFAULT_PORT);
+
+const server = app.listen(port, () => {
   console.log(`API listening on :${port}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(
+      `Port ${port} is already in use. Set the PORT environment variable to use a different port or stop the process currently using it.`
+    );
+    process.exit(1);
+  }
+
+  throw err;
 });
