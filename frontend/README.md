@@ -11,8 +11,8 @@ Aplicação criada com Vite + React + TypeScript e Tailwind CSS.
 
 ## Configuração
 
-1. Configure o arquivo `.env.development` (já incluso) com `VITE_API_BASE=http://localhost:3333/api` ou ajuste conforme o backend.
-2. Para produção/local build, utilize `.env.production` com `VITE_API_BASE=/api`.
+1. Configure o arquivo `.env.development` (já incluso) com `VITE_API_BASE_URL=http://localhost:3333/api` ou ajuste conforme o backend.
+2. Para produção/local build, utilize `.env.production` com `VITE_API_BASE_URL=/api`.
 3. Instale as dependências com `npm install`.
 4. Inicie o ambiente com `npm run dev`.
 

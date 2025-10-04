@@ -4,6 +4,7 @@ const { randomUUID } = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const compression = require('compression');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const { query } = require('./src/db/pool');
@@ -355,6 +356,7 @@ const corsOptions = {
 };
 
 app.use(helmet());
+app.use(compression());
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -823,22 +825,22 @@ app.use('/api', (_req, res) => {
   res.status(404).json({ error: 'Rota não encontrada.' });
 });
 
-const publicDir = path.join(__dirname, 'public');
-const indexPath = path.join(publicDir, 'index.html');
+const staticRoot = path.join(__dirname, 'public');
+const indexFile = path.join(staticRoot, 'index.html');
 
-if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir));
+app.use(express.static(staticRoot));
 
-  if (fs.existsSync(indexPath)) {
-    app.get('*', (req, res, next) => {
-      if (req.path.startsWith('/api/')) {
-        return next();
-      }
-
-      res.sendFile(indexPath);
-    });
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
   }
-}
+
+  if (fs.existsSync(indexFile)) {
+    return res.sendFile(indexFile);
+  }
+
+  return next();
+});
 
 app.use((err, req, res, _next) => {
   if (err) {
