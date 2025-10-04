@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node backend/app.js",
     "dev": "nodemon backend/app.js",
+    "test": "npm --prefix frontend run lint",
     "build:frontend": "npm --prefix frontend run build",
     "sync:frontend": "npm run build:frontend && cp -r frontend/dist backend/public || true"
   },

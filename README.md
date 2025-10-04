@@ -59,6 +59,7 @@ Os scripts abaixo estão disponíveis na raiz do projeto:
 | ------------------- | ------------------------------------------------------------------------- |
 | `npm start`         | Inicia a API Express (`backend/app.js`).                                   |
 | `npm run dev`       | Inicia a API em modo desenvolvimento com `nodemon`.                       |
+| `npm test`          | Executa o lint do frontend com ESLint para garantir a qualidade do código. |
 | `npm run build:frontend` | Gera o build do frontend com Vite.                                   |
 | `npm run sync:frontend`  | Executa o build do frontend e copia o resultado para `backend/public`. |
 
