@@ -199,9 +199,33 @@ export async function getTables() {
   return response.data.tables;
 }
 
+type MaybePaginatedResponse<Row> =
+  | Row[]
+  | {
+      data?: Row[];
+      pagination?: {
+        page?: number;
+        limit?: number;
+        total?: number;
+        totalPages?: number;
+      } | null;
+    };
+
+function ensureRowArray<Row>(payload: MaybePaginatedResponse<Row>): Row[] {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (payload && Array.isArray(payload.data)) {
+    return payload.data;
+  }
+
+  return [];
+}
+
 export async function getList(table: TableName) {
-  const response = await api.get<Record<string, unknown>[]>(`/${table}`);
-  return response.data;
+  const response = await api.get<MaybePaginatedResponse<Record<string, unknown>>>(`/${table}`);
+  return ensureRowArray(response.data);
 }
 
 export async function getById(table: TableName, id: string) {
