@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../db');
-const { allowedTables, defaults } = require('../tables');
+const { allowedTables, defaults, categoryMetadata } = require('../tables');
 
 const router = express.Router();
 
@@ -75,6 +75,187 @@ router.get('/_debug/db', async (_req, res) => {
     res.json({ ok: true, db: db.db, lojas: count.tot });
   } catch (e) {
     res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+const COMPANY_FIELD_CANDIDATES = {
+  name: ['titulo', 'nome', 'name', 'empresa', 'razao_social', 'fantasia'],
+  summary: ['resumo', 'descricao_curta', 'descricao_resumida', 'descricao', 'texto_curto', 'headline'],
+  details: ['detalhes', 'descricao_completa', 'informacoes', 'texto', 'sobre', 'descricao'],
+  phone: ['telefone', 'celular', 'whatsapp', 'fone', 'contato', 'contato_telefone'],
+  email: ['email', 'e_mail', 'contato_email'],
+  address: ['endereco', 'endereco_completo', 'localizacao', 'local', 'address', 'sala'],
+  hours: ['horario', 'horario_funcionamento', 'funcionamento', 'horarios', 'atendimento']
+};
+
+const UPDATED_AT_FIELDS = [
+  'updated_at',
+  'atualizado_em',
+  'data_atualizacao',
+  'ultima_atualizacao',
+  'modified_at'
+];
+
+function humanizeTableName(table) {
+  return table
+    .split(/[_-]/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function ensureString(value, fallback = '') {
+  if (value === null || value === undefined) {
+    return fallback;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+
+  if (typeof value === 'number') {
+    return String(value);
+  }
+
+  return fallback;
+}
+
+function pickValue(row, candidates, fallback = '') {
+  for (const candidate of candidates) {
+    if (typeof candidate === 'function') {
+      const result = candidate(row);
+      if (result) {
+        return ensureString(result, fallback);
+      }
+      continue;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(row, candidate)) {
+      const result = ensureString(row[candidate], fallback);
+      if (result) {
+        return result;
+      }
+    }
+  }
+
+  return fallback;
+}
+
+function extractUpdatedAt(row) {
+  for (const field of UPDATED_AT_FIELDS) {
+    if (!Object.prototype.hasOwnProperty.call(row, field)) {
+      continue;
+    }
+
+    const value = row[field];
+    if (!value) {
+      continue;
+    }
+
+    const date = new Date(value);
+    if (!Number.isNaN(date.valueOf())) {
+      return date;
+    }
+  }
+
+  return null;
+}
+
+function resolveOrderColumn(table, metadata) {
+  const defaultOrder = defaults.orderBy[table] || defaults.orderBy['*'];
+  const candidates = [defaultOrder, 'ordem', 'order', 'posicao', 'titulo', 'nome', metadata.primaryKey];
+
+  for (const candidate of candidates) {
+    if (candidate && metadata.columns.includes(candidate)) {
+      return candidate;
+    }
+  }
+
+  return metadata.primaryKey;
+}
+
+function mapCompanyRow(table, metadata, row, index) {
+  const category = categoryMetadata[table];
+
+  const pkValue = row[metadata.primaryKey];
+  const idSuffix = pkValue !== undefined && pkValue !== null ? pkValue : index + 1;
+
+  const name = pickValue(row, COMPANY_FIELD_CANDIDATES.name, category?.name || humanizeTableName(table));
+  const summary = pickValue(row, COMPANY_FIELD_CANDIDATES.summary, '');
+  const details = pickValue(row, COMPANY_FIELD_CANDIDATES.details, summary);
+  const phone = pickValue(row, COMPANY_FIELD_CANDIDATES.phone, '');
+  const email = pickValue(row, COMPANY_FIELD_CANDIDATES.email, '');
+  const address = pickValue(row, COMPANY_FIELD_CANDIDATES.address, '');
+  const hours = pickValue(row, COMPANY_FIELD_CANDIDATES.hours, '');
+
+  return {
+    id: `${table}-${idSuffix}`,
+    name,
+    summary,
+    details,
+    phone,
+    email,
+    address,
+    hours
+  };
+}
+
+router.get('/categories', async (_req, res, next) => {
+  try {
+    const categoriesResult = await Promise.all(
+      allowedTables.map(async (table) => {
+        const metadata = await getTableMetadata(table);
+        const orderColumn = resolveOrderColumn(table, metadata);
+        const [rows] = await pool.query('SELECT * FROM ?? ORDER BY ?? ASC', [table, orderColumn]);
+
+        let latestUpdate = null;
+
+        const companies = rows.map((row, index) => {
+          const normalized = normalizeRow(row);
+          const company = mapCompanyRow(table, metadata, normalized, index);
+          const rowUpdatedAt = extractUpdatedAt(normalized);
+
+          if (rowUpdatedAt && (!latestUpdate || rowUpdatedAt > latestUpdate)) {
+            latestUpdate = rowUpdatedAt;
+          }
+
+          return company;
+        });
+
+        const categoryMeta = categoryMetadata[table] || {
+          id: table,
+          name: humanizeTableName(table),
+          description: ''
+        };
+
+        return {
+          table,
+          latestUpdate,
+          category: {
+            id: categoryMeta.id,
+            name: categoryMeta.name,
+            description: categoryMeta.description,
+            companies
+          }
+        };
+      })
+    );
+
+    let updatedAt = null;
+    const categories = categoriesResult.map(({ category, latestUpdate }) => {
+      if (latestUpdate && (!updatedAt || latestUpdate > updatedAt)) {
+        updatedAt = latestUpdate;
+      }
+
+      return category;
+    });
+
+    res.json({
+      updatedAt: (updatedAt || new Date()).toISOString(),
+      categories
+    });
+  } catch (error) {
+    next(error);
   }
 });
 
