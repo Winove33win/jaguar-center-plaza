@@ -19,7 +19,7 @@ Este diretório reserva espaço para scripts de publicação futura. O fluxo rec
    fi
 
    cd ..
-   npm run --prefix backend sync:frontend
+   npm run sync:frontend
    ```
 
 5. Após o deploy, clique em **Reiniciar aplicativo** no painel Node.js para aplicar as atualizações imediatamente.

@@ -6,7 +6,7 @@
     "dev": "nodemon backend/app.js",
     "test": "npm --prefix frontend run lint",
     "build:frontend": "npm --prefix frontend run build",
-    "sync:frontend": "npm run build:frontend && cp -r frontend/dist backend/public || true"
+    "sync:frontend": "npm run build:frontend && node ./scripts/sync-frontend.mjs"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
