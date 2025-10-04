@@ -3,9 +3,8 @@ import Container from './Container';
 
 const navItems = [
   { label: 'Home', to: '/', type: 'route' as const },
-  { label: 'Blog', to: '/blog', type: 'route' as const },
-  { label: 'Cases', to: '/cases', type: 'route' as const },
-  { label: 'Templates', to: '/templates', type: 'route' as const },
+  { label: 'Sobre nós', to: '/sobre-nos', type: 'route' as const },
+  { label: 'Salas', to: '/salas', type: 'route' as const },
   { label: 'Contato', to: '/contato', type: 'route' as const }
 ];
 

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import areasRouter from './areas.js';
 import blogPostsRouter from './blog-posts.js';
 import casesRouter from './cases.js';
 import checkoutRouter from './checkout.js';
@@ -7,6 +8,7 @@ import templatesRouter from './templates.js';
 
 const router = Router();
 
+router.use('/areas', areasRouter);
 router.use('/blog-posts', blogPostsRouter);
 router.use('/cases', casesRouter);
 router.use('/templates', templatesRouter);

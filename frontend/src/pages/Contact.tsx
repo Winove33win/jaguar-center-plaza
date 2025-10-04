@@ -61,22 +61,22 @@ export default function ContactPage() {
           <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">Contato</p>
           <h1 className="section-title">Conecte sua marca ao Jaguar Center Plaza</h1>
           <p className="section-subtitle">
-            Preencha o formulário ao lado para agendar uma visita guiada, saber mais sobre locação de espaços ou
-            apresentar novas parcerias. Você também pode falar com nosso concierge pelo telefone (11) 3333-1100 ou
-            pelo e-mail concierge@jaguarcenterplaza.com.br.
+            Preencha o formulário ao lado para agendar uma visita guiada, solicitar propostas de locação ou construir
+            parcerias estratégicas. Nossa equipe comercial está pronta para entender sua necessidade e indicar o melhor
+            espaço dentro do complexo.
           </p>
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Endereços oficiais</h2>
             <ul className="mt-4 space-y-4 text-sm text-slate-600">
               <li>
                 <p className="font-semibold text-slate-800">Jaguar Center Plaza</p>
-                <p>Av. Jaguar, 1000 · Centro · Jaguaruana/SP</p>
-                <p>Segunda a sábado: 8h às 22h · Domingo: 10h às 20h</p>
+                <p>Rua Amazonas, 504 · Centro · Jaguariúna/SP</p>
+                <p>Segunda a sábado: 8h às 20h · Domingo: fechado</p>
               </li>
               <li>
                 <p className="font-semibold text-slate-800">Central de Relacionamento</p>
-                <p>Telefone: (11) 3333-1100 · WhatsApp: (11) 9 8800-1100</p>
-                <p>E-mail: concierge@jaguarcenterplaza.com.br</p>
+                <p>Telefone: (19) 3833-5600 · WhatsApp: (19) 9 8300-5600</p>
+                <p>E-mail: contato@jaguarcenterplaza.com.br</p>
               </li>
             </ul>
           </div>
