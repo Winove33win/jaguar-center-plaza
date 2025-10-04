@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
@@ -27,11 +28,38 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get('/', (_req, res) => {
-  res.type('text').send('JaguarPlaza API\n- /api/health\n- /api/tables\n- /api/lojas');
-});
-
 app.use('/api', apiRoutes);
+
+const shouldServeFrontend = String(process.env.SERVE_FRONTEND || 'true').toLowerCase() !== 'false';
+const frontendDistEnv = process.env.FRONTEND_DIST || path.resolve(__dirname, '..', 'dist');
+const frontendDistPath = path.isAbsolute(frontendDistEnv)
+  ? frontendDistEnv
+  : path.resolve(__dirname, '..', frontendDistEnv);
+
+let servingFrontend = false;
+
+if (shouldServeFrontend) {
+  const frontendIndex = path.join(frontendDistPath, 'index.html');
+  if (fs.existsSync(frontendIndex)) {
+    servingFrontend = true;
+    app.use(express.static(frontendDistPath));
+    app.get('*', (req, res, next) => {
+      if (req.method !== 'GET' || req.path.startsWith('/api/')) {
+        return next();
+      }
+
+      res.sendFile(frontendIndex);
+    });
+  } else {
+    console.warn(`Frontend dist não encontrado em ${frontendDistPath}. Serviço estático desabilitado.`);
+  }
+}
+
+if (!servingFrontend) {
+  app.get('/', (_req, res) => {
+    res.type('text').send('JaguarPlaza API\n- /api/health\n- /api/tables\n- /api/lojas');
+  });
+}
 
 app.use(errorHandler);
 

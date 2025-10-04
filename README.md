@@ -35,15 +35,23 @@ O fluxo de publicação segue o mesmo padrão adotado pelos demais projetos hosp
 | **URL do aplicativo** | `/api`                    |
 | **Arquivo inicial**   | `app.js`                  |
 
-Variáveis de ambiente necessárias:
+Variáveis de ambiente necessárias (defina no arquivo `backend/.env`):
 
 ```
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USER=Winove-center-plaza
-DB_PASSWORD=<sua_senha>
-DB_NAME=JaguarPlaza
+DB_HOST=<host_do_banco>
+DB_PORT=<porta_do_banco>
+DB_USER=<usuario_do_banco>
+DB_PASSWORD=<senha_do_banco>
+DB_NAME=<nome_da_base>
+# Opcional: porta local quando executado fora do Plesk
+PORT=3333
+# Opcional: servir o build do frontend diretamente pela API
+SERVE_FRONTEND=true
+# Opcional: caminho (relativo ao backend) do build do frontend
+FRONTEND_DIST=../dist
 ```
+
+Para cenários em que apenas a API deve ser executada (sem build ou entrega do frontend), defina a variável de ambiente `SKIP_FRONTEND_BUILD=1` ao rodar o script `npm run --prefix backend sync:frontend` ou simplesmente não execute esse script. Também é possível desabilitar completamente a entrega de arquivos estáticos pela API configurando `SERVE_FRONTEND=false`.
 
 > **Importante:** não defina a variável `PORT`. O Plesk controla automaticamente a porta utilizada pela aplicação Node.js.
 

@@ -10,6 +10,29 @@ const frontendDir = path.join(rootDir, 'frontend');
 const backendDir = path.join(rootDir, 'backend');
 const distDir = path.join(backendDir, 'dist');
 
+const truthyValues = new Set(['1', 'true', 'yes', 'on']);
+
+function isTruthy(value) {
+  if (typeof value === 'string') {
+    return truthyValues.has(value.trim().toLowerCase());
+  }
+
+  return Boolean(value);
+}
+
+async function pathExists(target) {
+  try {
+    await fs.access(target);
+    return true;
+  } catch (error) {
+    if (error?.code !== 'ENOENT') {
+      throw error;
+    }
+
+    return false;
+  }
+}
+
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { stdio: 'inherit', ...options });
@@ -40,6 +63,19 @@ async function syncDist() {
 }
 
 (async () => {
+  const skipByEnv = isTruthy(process.env.SKIP_FRONTEND_BUILD) || isTruthy(process.env.BACKEND_ONLY);
+
+  const hasFrontendDir = await pathExists(frontendDir);
+  if (!hasFrontendDir) {
+    console.warn(`Pasta do frontend não encontrada em ${frontendDir}. Pulando build e sincronização.`);
+    return;
+  }
+
+  if (skipByEnv) {
+    console.log('Variável de ambiente detectada. Pulando build e sincronização do frontend.');
+    return;
+  }
+
   await buildFrontend();
   await syncDist();
 })();
