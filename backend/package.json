@@ -2,9 +2,11 @@
   "name": "jaguar-center-plaza-backend",
   "version": "1.0.0",
   "private": true,
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "sync:frontend": "node ../scripts/build-and-sync.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",
