@@ -86,7 +86,7 @@ export default function CompaniesPage() {
         <div className="mt-12 space-y-16">
           {isLoading && <p className="text-sm text-slate-500">Carregando empresas...</p>}
           {!isLoading && filteredCategories.length === 0 && (
-            <p className="text-sm text-slate-500">Não encontramos empresas para essa categoria.</p>
+            <p className="text-sm text-slate-500">Nenhum item.</p>
           )}
           {filteredCategories.map((category) => (
             <CategorySection key={category.id} category={category} />
@@ -116,6 +116,9 @@ function CategorySection({ category }: CategorySectionProps) {
         </span>
       </div>
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        {category.companies.length === 0 && (
+          <p className="col-span-full text-sm text-slate-500">Nenhum item.</p>
+        )}
         {category.companies.map((company) => (
           <article
             key={company.id}
@@ -132,23 +135,27 @@ function CategorySection({ category }: CategorySectionProps) {
               <dl className="grid gap-2 text-sm text-slate-600">
                 <div className="flex items-start gap-2">
                   <dt className="font-semibold text-slate-700">Telefone:</dt>
-                  <dd>{company.phone}</dd>
+                  <dd>{company.phone || '—'}</dd>
                 </div>
                 <div className="flex items-start gap-2">
                   <dt className="font-semibold text-slate-700">E-mail:</dt>
                   <dd>
-                    <a href={`mailto:${company.email}`} className="text-primary-600">
-                      {company.email}
-                    </a>
+                    {company.email ? (
+                      <a href={`mailto:${company.email}`} className="text-primary-600">
+                        {company.email}
+                      </a>
+                    ) : (
+                      '—'
+                    )}
                   </dd>
                 </div>
                 <div className="flex items-start gap-2">
                   <dt className="font-semibold text-slate-700">Localização:</dt>
-                  <dd>{company.address}</dd>
+                  <dd>{company.address || '—'}</dd>
                 </div>
                 <div className="flex items-start gap-2">
                   <dt className="font-semibold text-slate-700">Horário:</dt>
-                  <dd>{company.hours}</dd>
+                  <dd>{company.hours || '—'}</dd>
                 </div>
               </dl>
             </div>

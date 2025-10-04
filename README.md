@@ -1,41 +1,16 @@
 # Jaguar Center Plaza
 
-Este repositório contém o código-fonte do site institucional do Jaguar Center Plaza, com frontend em React/Vite e backend em Node.js/Express.
+Este repositório contém o código-fonte do site institucional do Jaguar Center Plaza, com frontend em React/Vite e backend em Node.js/Express conectado a MariaDB/MySQL.
 
 ## Estrutura
 
 - `frontend/`: aplicação React com TypeScript, Tailwind CSS e React Router.
-- `backend/`: API Express que fornece dados das empresas e recebe contatos.
+- `backend/`: API Express com integração ao banco de dados.
 - `deploy/`: scripts auxiliares de build e deploy.
 
-## Configuração rápida
+## Configuração de ambiente
 
-1. Copie `.env.example` para `.env` na raiz do backend e configure as variáveis (como `PORT` e credenciais de banco de dados).
-2. Instale as dependências no frontend e backend com `npm install`.
-3. Rode `npm run dev` no frontend e `npm start` no backend (ou `npm run dev` para usar nodemon).
-
-O frontend espera que `VITE_API_URL` esteja apontando para o endereço do backend (por padrão, `http://localhost:4000`).
-
-## Deploy (Plesk)
-
-O fluxo de publicação segue o mesmo padrão adotado pelos demais projetos hospedados no Plesk.
-
-### Estrutura
-
-- O build do frontend (Vite) é servido como arquivos estáticos diretamente de `/httpdocs`.
-- A API Node.js roda isolada em `/httpdocs/backend`, com arquivo de inicialização `app.js`.
-- A URL do aplicativo Node.js no painel deve ser configurada para responder em `/api`.
-
-### Configuração do Node.js no Plesk
-
-| Campo                 | Valor                     |
-| --------------------- | ------------------------- |
-| **Raiz do documento** | `/httpdocs`               |
-| **Raiz do aplicativo**| `/httpdocs/backend`       |
-| **URL do aplicativo** | `/api`                    |
-| **Arquivo inicial**   | `app.js`                  |
-
-Variáveis de ambiente necessárias (defina no arquivo `backend/.env`):
+As credenciais do banco devem ser informadas por variáveis de ambiente (compatíveis com o Plesk):
 
 ```
 DB_HOST=<host_do_banco>
@@ -43,40 +18,86 @@ DB_PORT=<porta_do_banco>
 DB_USER=<usuario_do_banco>
 DB_PASSWORD=<senha_do_banco>
 DB_NAME=<nome_da_base>
-# Opcional: porta local quando executado fora do Plesk
-PORT=3333
-# Opcional: servir o build do frontend diretamente pela API
-SERVE_FRONTEND=true
-# Opcional: caminho (relativo ao backend) do build do frontend
-FRONTEND_DIST=../dist
 ```
 
-Para cenários em que apenas a API deve ser executada (sem build ou entrega do frontend), defina a variável de ambiente `SKIP_FRONTEND_BUILD=1` ao rodar o script `npm run --prefix backend sync:frontend` ou simplesmente não execute esse script. Também é possível desabilitar completamente a entrega de arquivos estáticos pela API configurando `SERVE_FRONTEND=false`.
+Outras variáveis úteis:
 
-> **Importante:** não defina a variável `PORT`. O Plesk controla automaticamente a porta utilizada pela aplicação Node.js.
+```
+PORT=3333 # opcional em desenvolvimento; no Plesk a porta é definida automaticamente
+NODE_ENV=development # ou production
+```
 
-### Build e sincronização do frontend
+### Frontend
 
-O script abaixo executa o build do frontend e copia o resultado para a pasta pública. Ele deve ser configurado em **Git → Ações de implantação adicionais** no Plesk:
+- `.env.development`: usa a API local (`http://localhost:3333/api`).
+- `.env.production`: usa a API publicada (`/api`).
+
+### Passos para desenvolvimento local
+
+1. Instale as dependências na raiz, frontend e backend:
+   ```bash
+   npm install
+   cd backend && npm install && cd ..
+   cd frontend && npm install && cd ..
+   ```
+2. Garanta que o banco de dados esteja acessível com as variáveis informadas.
+3. Rode o backend:
+   ```bash
+   npm run dev
+   ```
+4. Rode o frontend em outra aba/terminal:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+## Scripts principais
+
+Os scripts abaixo estão disponíveis na raiz do projeto:
+
+| Script              | Descrição                                                                 |
+| ------------------- | ------------------------------------------------------------------------- |
+| `npm start`         | Inicia a API Express (`backend/app.js`).                                   |
+| `npm run dev`       | Inicia a API em modo desenvolvimento com `nodemon`.                       |
+| `npm run build:frontend` | Gera o build do frontend com Vite.                                   |
+| `npm run sync:frontend`  | Executa o build do frontend e copia o resultado para `backend/public`. |
+
+## Endpoints disponíveis
+
+A API fica exposta em `/api` e utiliza `mysql2/promise` com conversão automática de colunas JSON. Endpoints principais:
+
+- `GET /api/health` → `{ ok: true, time: <ISO> }`
+- `GET /api/tables` → `{"tables": ["administracao", "advocacia", ...]}`
+- `GET /api/:table` → lista registros da tabela permitida (limite 500, ordenado por data)
+- `GET /api/:table/:id` → retorna um registro pelo `id` (UUID)
+- `GET /api/_debug/db` → disponível apenas quando `NODE_ENV !== 'production'` (útil para inspeção)
+
+Todas as respostas são em JSON e contam com rate limit (60 requisições/minuto por IP).
+
+## Testes rápidos com `curl`
+
+Substitua `$BASE` pela URL base (ex.: `http://localhost:3333`).
 
 ```bash
-#!/bin/bash
-set -euo pipefail
-
-# 1) Dependências do backend (produção)
-cd httpdocs/backend
-if [ -f package-lock.json ]; then
-  npm ci --omit=dev
-else
-  npm install --omit=dev
-fi
-
-# 2) Build do front e cópia para /httpdocs
-cd ..
-npm run --prefix backend sync:frontend
-
-# 3) (Opcional) Limpar cache antigo do front
-# find ./ -maxdepth 1 -name 'assets' -o -name 'index.html' -print0 | xargs -0r touch
+curl -sS $BASE/api/health
+curl -sS $BASE/api/tables
+curl -sS "$BASE/api/lojas"
+curl -sS "$BASE/api/lojas/<um-id>"
 ```
 
-Após cada deploy, utilize o botão **Reiniciar aplicativo** no painel de Node.js para garantir que o serviço seja recarregado imediatamente.
+## Deploy no Plesk
+
+- **Raiz do aplicativo Node.js:** `/httpdocs/backend`
+- **Arquivo inicial:** `app.js`
+- **URL do aplicativo:** `/api`
+- **Document root:** `/httpdocs`
+
+Certifique-se de definir as variáveis de ambiente (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) diretamente no painel. O backend detecta automaticamente a porta informada pelo Plesk via `PORT`.
+
+Para servir o frontend estático pelo backend:
+
+```bash
+npm run sync:frontend
+```
+
+O conteúdo gerado ficará em `backend/public` e será exposto a partir de `/`.
