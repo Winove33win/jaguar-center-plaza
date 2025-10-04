@@ -854,8 +854,9 @@ app.use((err, req, res, _next) => {
   res.status(status).json({ error: message });
 });
 
-const port = Number(process.env.PORT || 3333);
-const host = '0.0.0.0';
+const isProd = process.env.NODE_ENV === 'production';
+const port = isProd ? process.env.PORT : Number(process.env.PORT || 3333);
+const host = isProd ? '127.0.0.1' : '0.0.0.0';
 
 app.listen(port, host, () => {
   // eslint-disable-next-line no-console
