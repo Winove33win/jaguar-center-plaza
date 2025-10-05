@@ -18,7 +18,7 @@ Este projeto reúne o backend Express e o frontend React/Vite do site institucio
 | `DB_PORT`              | Porta do MySQL                                                            | `3306`                |
 | `DB_USER`              | Usuário do banco                                                          | `root`                |
 | `DB_PASSWORD`          | Senha do banco                                                            | `""`                 |
-| `DB_NAME`              | Nome do schema                                                            | `jaguar_center_plaza` |
+| `DB_NAME`              | Nome do schema                                                            | `JaguarPlaza`         |
 | `DB_CONN_LIMIT`        | Máximo de conexões simultâneas                                            | `10`                  |
 | `PUBLIC_BASE_URL`      | URL base pública usada para montar links absolutos                        | —                     |
 | `PORT`                 | Porta HTTP do Express                                                     | `3333`                |
