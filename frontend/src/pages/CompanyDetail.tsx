@@ -159,6 +159,23 @@ export default function CompanyDetailPage() {
                     </ul>
                   </div>
                 )}
+                {company?.whatsapp && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-500">WhatsApp</p>
+                    <a
+                      href={normalizeLink(company.whatsapp)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex items-center gap-2 font-medium text-primary-700 hover:text-accent-500"
+                    >
+                      Conversar pelo WhatsApp
+                      <svg aria-hidden className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 3.5A11.24 11.24 0 0 0 12.09 1 11 11 0 0 0 1 12.1 11 11 0 0 0 19 20.9L23 23l-2.18-4.09A11 11 0 0 0 23 12.09 11.24 11.24 0 0 0 20 3.5Zm-7.91 16a8.49 8.49 0 0 1-7.7-12.4 8.47 8.47 0 0 1 7.48-4.59h.32a8.5 8.5 0 0 1 6 14.49l-.44.44 1 1.83-2-.53-.49.14a8.45 8.45 0 0 1-4.23 1.08Z" />
+                        <path d="M16.31 13.81a1.5 1.5 0 0 0-1-1.06c-.27-.15-.63-.3-1.09-.51a.79.79 0 0 0-.89.16l-.39.4a.33.33 0 0 1-.4.08 5.87 5.87 0 0 1-2.83-2.48.34.34 0 0 1 .05-.43l.34-.42a1.36 1.36 0 0 0 .24-1.22c-.07-.26-.52-1.26-.71-1.65s-.37-.38-.52-.38h-.45a.86.86 0 0 0-.62.28 2.08 2.08 0 0 0-.65 1.55 3.63 3.63 0 0 0 .77 1.9 8.32 8.32 0 0 0 3.5 3 5.31 5.31 0 0 0 1.45.45 1.93 1.93 0 0 0 1.26-.4 1.56 1.56 0 0 0 .48-1 .78.78 0 0 0-.03-.26Z" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
                 {company?.website && (
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-500">Site</p>
@@ -173,6 +190,19 @@ export default function CompanyDetailPage() {
                         <path d="M7 17 17 7" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M8 7h9v9" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
+                    </a>
+                  </div>
+                )}
+                {company?.facebook && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-500">Facebook</p>
+                    <a
+                      href={normalizeLink(company.facebook)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex items-center gap-2 font-medium text-primary-700 hover:text-accent-500"
+                    >
+                      {company.facebook.replace(/^https?:\/\//, '')}
                     </a>
                   </div>
                 )}

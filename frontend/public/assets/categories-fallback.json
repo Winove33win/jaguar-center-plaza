@@ -10,92 +10,196 @@
       "cardImage": "/Fachada.jpg",
       "companies": [
         {
-          "id": "integra-consultoria",
-          "slug": "integra-consultoria",
-          "name": "Integra Consultoria Empresarial",
-          "tagline": "Planejamento financeiro, societário e de processos sob medida.",
-          "shortDescription": "Equipe multidisciplinar que estrutura diagnósticos, planos de ação e implementação de rotinas de gestão.",
-          "description": "A Integra Consultoria Empresarial atua há mais de 12 anos com assessoria estratégica, estruturação financeira, governança e implantação de indicadores para pequenas e médias empresas.",
+          "id": "deal4b",
+          "slug": "deal4b",
+          "name": "Deal4B",
+          "tagline": "Soluções inteligentes em pós-vendas de tecnologia.",
+          "shortDescription": "Especialistas em logística, importação e suporte ao consumidor para eletrônicos.",
+          "description": "Nós da Deal4B somos especializados em soluções inteligentes e inovadoras em pós-vendas de produtos eletrônicos e de tecnologia, contribuindo em toda rede de reparos, importação/exportação, logística, suporte ao consumidor, refurbish, entre outras. Focados nos clientes e em valores competitivos, somos sua melhor escolha!",
           "coverImage": "/Fachada4.jpg",
-          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
-          "phones": ["+55 (19) 3833-5601"],
-          "emails": ["contato@integraconsultoria.com.br"],
-          "website": "https://integraconsultoria.com.br",
-          "instagram": "https://instagram.com/integraconsultoria",
-          "address": "Sala 210 · Jaguar Center Plaza",
-          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
-          "schedule": "Seg. a sex. · 8h às 18h",
-          "services": [
-            "Planejamento financeiro e orçamentário",
-            "Implantação de indicadores (KPIs)",
-            "Consultoria societária e sucessória"
+          "logo": "https://static.wixstatic.com/media/8f340e_f15e0439e1c644599b22f083dda91cae~mv2.png/v1/fill/w_272,h_100,al_c/logo.png",
+          "phones": [
+            "(19) 99724-2194"
           ],
-          "gallery": [
-            { "url": "/Fachada.jpg", "alt": "Equipe da Integra Consultoria reunida em sala de reuniões" },
-            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Workshop de planejamento com clientes" }
+          "emails": [
+            "victoriocordeiro@gmaill.com"
           ],
+          "whatsapp": "https://wa.me/19997242194",
+          "address": "Sala 08S · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
           "socialLinks": [
-            { "label": "Site", "url": "https://integraconsultoria.com.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/integraconsultoria", "type": "instagram" }
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/19997242194",
+              "type": "whatsapp"
+            }
           ]
         },
         {
-          "id": "atlas-contabilidade",
-          "slug": "atlas-contabilidade",
-          "name": "Atlas Contabilidade & BPO",
-          "tagline": "BPO financeiro, fiscal e folha integrado à tecnologia.",
-          "shortDescription": "Especialistas em terceirização de rotinas administrativas com dashboards em tempo real.",
-          "description": "A Atlas Contabilidade oferece soluções completas de contabilidade consultiva, gestão de folha, apuração fiscal e controladoria com acompanhamento digital.",
-          "coverImage": "/Fachada3.jpg",
-          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 3833-5602", "+55 (19) 99123-4455"],
-          "emails": ["relacionamento@atlasbpo.com.br"],
-          "website": "https://atlasbpo.com.br",
-          "instagram": "https://instagram.com/atlasbpo",
-          "address": "Sala 312 · Jaguar Center Plaza",
-          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
-          "schedule": "Seg. a sex. · 8h às 18h",
-          "services": [
-            "BPO financeiro e administrativo",
-            "Gestão de folha e benefícios",
-            "Apuração fiscal e relatórios gerenciais"
+          "id": "grano-nicoletti",
+          "slug": "grano-nicoletti",
+          "name": "Grano Nicoletti",
+          "tagline": "Distribuidora de alimentos com mais de 2 mil itens.",
+          "shortDescription": "Produtos selecionados e logística ágil para padarias e mercados em São Paulo.",
+          "description": "Distribuindo alimentos desde o ano 2000 a Grano Nicoletti leva até seus clientes produtos selecionados, que atendem as necessidades do mercado com agilidade, qualidade acima da média e inovação. São mais de 2000 produtos em nosso portfólio, chocolates, chantillys, pré-misturas para bolos e pães, aditivos, embalagens, metalúrgica e etc, atendendo as principais padarias e mercados do estado de São Paulo, principalmente na região metropolitana.",
+          "coverImage": "https://static.wixstatic.com/media/d127aa_7cd3d9eef0cc4b14a29eafc56367b696~mv2.png/v1/fill/w_1600,h_1200,al_c/logo-granonicoletti-desde-2000.png",
+          "logo": "https://static.wixstatic.com/media/d127aa_7cd3d9eef0cc4b14a29eafc56367b696~mv2.png/v1/fill/w_400,h_400,al_c/logo-granonicoletti-desde-2000.png",
+          "phones": [
+            "(11) 99897-4201"
           ],
+          "emails": [
+            "elisabete@granonicoletti.com.b"
+          ],
+          "whatsapp": "https://wa.me/11998974201",
+          "instagram": "https://www.instagram.com/granonicoletti/",
+          "facebook": "https://www.facebook.com/granonicoletti/",
+          "address": "Sala 20S · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
           "gallery": [
-            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Equipe da Atlas reunida em frente ao Jaguar Center Plaza" },
-            { "url": "/img-jaguar-center-plaza-001-768x460.jpg", "alt": "Vista interna do Jaguar Center Plaza" }
+            {
+              "url": "https://static.wixstatic.com/media/d127aa_7cd3d9eef0cc4b14a29eafc56367b696~mv2.png/v1/fill/w_1600,h_1600,al_c/logo-granonicoletti-desde-2000.png",
+              "alt": "Logo da Grano Nicoletti"
+            },
+            {
+              "url": "https://static.wixstatic.com/media/d127aa_a22bf14e6b984f3c915b71da9c7de5bc~mv2.png/v1/fill/w_1200,h_900,al_c/PRODUTOS-GRANO-GOURMET.png",
+              "alt": "Produtos Grano Nicoletti"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://atlasbpo.com.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/atlasbpo", "type": "instagram" }
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/11998974201",
+              "type": "whatsapp"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://www.instagram.com/granonicoletti/",
+              "type": "instagram"
+            },
+            {
+              "label": "Facebook",
+              "url": "https://www.facebook.com/granonicoletti/",
+              "type": "facebook"
+            }
           ]
         },
         {
-          "id": "prime-gestao",
-          "slug": "prime-gestao",
-          "name": "Prime Gestão Condominial",
-          "tagline": "Administração condominial com suporte jurídico e financeiro.",
-          "shortDescription": "Atendimento personalizado para condomínios residenciais, comerciais e industriais.",
-          "description": "A Prime Gestão Condominial atende mais de 80 empreendimentos com soluções de governança, compliance, cobrança e prestação de contas digital.",
+          "id": "escritorio-do-baianinho",
+          "slug": "escritorio-do-baianinho",
+          "name": "Escritório do Baianinho",
+          "tagline": "Consultoria administrativa personalizada.",
+          "shortDescription": "Atendimento sob medida para demandas administrativas e financeiras.",
+          "description": "Informações institucionais em atualização. Entre em contato para conhecer os serviços oferecidos pelo Escritório do Baianinho.",
           "coverImage": "/Fachada5.jpg",
-          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 3833-5603"],
-          "emails": ["relacionamento@primegestao.com.br"],
-          "website": "https://primegestao.com.br",
-          "instagram": "https://instagram.com/primegestaocondominial",
-          "address": "Sala 118 · Jaguar Center Plaza",
-          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
-          "schedule": "Seg. a sex. · 8h às 17h",
-          "services": [
-            "Prestação de contas digital",
-            "Gestão de assembleias e comunicação",
-            "Consultoria jurídica condominial"
+          "logo": "https://static.wixstatic.com/media/3e41d7_09c0012818c04677831dc2e7ad265ae6~mv2.png/v1/fill/w_768,h_535,al_c/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": [
+            "(19) 97408-3837"
           ],
+          "whatsapp": "https://wa.me/19974083837",
+          "address": "Sala 06S · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
+          "socialLinks": [
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/19974083837",
+              "type": "whatsapp"
+            }
+          ]
+        },
+        {
+          "id": "rm-barros",
+          "slug": "rm-barros",
+          "name": "RM Barros Administradora de Condomínios",
+          "tagline": "Gestão completa para condomínios residenciais e corporativos.",
+          "shortDescription": "Equipe especializada em administração, cobranças e suporte a síndicos.",
+          "description": "Informações institucionais em atualização. Entre em contato com a RM Barros para saber mais sobre os serviços de administração condominial.",
+          "coverImage": "/Fachada4.jpg",
+          "logo": "https://static.wixstatic.com/media/3e41d7_09c0012818c04677831dc2e7ad265ae6~mv2.png/v1/fill/w_768,h_535,al_c/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": [
+            "(19) 99234-8178"
+          ],
+          "emails": [
+            "adm7@rmbarros.com.br"
+          ],
+          "whatsapp": "https://wa.me/19992348178",
+          "address": "Sala 02T · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
+          "socialLinks": [
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/19992348178",
+              "type": "whatsapp"
+            }
+          ]
+        },
+        {
+          "id": "cb-capital-family-office",
+          "slug": "cb-capital-family-office",
+          "name": "CB Capital Family Office e CB Sports Investimentos",
+          "tagline": "Gestão patrimonial para atletas e empresários.",
+          "shortDescription": "Family office com soluções financeiras completas e investimentos personalizados.",
+          "description": "CB Sports investimentos Ai-EQI Empresa de investimentos e Family Office para atletas e empresários.",
+          "coverImage": "https://static.wixstatic.com/media/235d91_d69f236cecf74c1188f296d3af0f14aa~mv2.jpeg/v1/fill/w_1400,h_1050,al_c/IMG_4653.jpeg",
+          "logo": "https://static.wixstatic.com/media/235d91_588a63a6cc0f4229a790cecc0706d8d8~mv2.jpeg/v1/fill/w_400,h_418,al_c/2d78a1e6-3e36-40d2-93cc-b7192f3dc440.jpeg",
+          "phones": [
+            "(19) 99433-0055"
+          ],
+          "emails": [
+            "cassiano@cbsportsinvestimentos.com.br"
+          ],
+          "whatsapp": "https://wa.me/19994330055",
+          "instagram": "https://www.instagram.com/cb_family_office?igsh=bzhrdGNybmc0Mm0%3D",
+          "address": "Sala 21S · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
           "gallery": [
-            { "url": "/Fachada4.jpg", "alt": "Atendimento da Prime Gestão em sala corporativa" }
+            {
+              "url": "https://static.wixstatic.com/media/235d91_d69f236cecf74c1188f296d3af0f14aa~mv2.jpeg/v1/fill/w_1400,h_1050,al_c/IMG_4653.jpeg",
+              "alt": "Espaço CB Sports Investimentos"
+            },
+            {
+              "url": "https://static.wixstatic.com/media/235d91_842b6dcdd61747abafcb210a791706df~mv2.jpeg/v1/fill/w_1400,h_1050,al_c/IMG_4654.jpeg",
+              "alt": "Ambiente CB Sports Investimentos"
+            },
+            {
+              "url": "https://static.wixstatic.com/media/235d91_aa17e0ac88704af9983e9b1387a72b98~mv2.jpeg/v1/fill/w_1400,h_1050,al_c/IMG_4655.jpeg",
+              "alt": "Estrutura CB Sports Investimentos"
+            },
+            {
+              "url": "https://static.wixstatic.com/media/235d91_22875c0c77c5499093cf4b3d3327a526~mv2.jpeg/v1/fill/w_1326,h_1205,al_c/IMG_4290.jpeg",
+              "alt": "Equipe CB Sports Investimentos"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://primegestao.com.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/primegestaocondominial", "type": "instagram" }
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/19994330055",
+              "type": "whatsapp"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://www.instagram.com/cb_family_office?igsh=bzhrdGNybmc0Mm0%3D",
+              "type": "instagram"
+            }
+          ]
+        },
+        {
+          "id": "sem-bagunca",
+          "slug": "sem-bagunca",
+          "name": "Sem Bagunça",
+          "tagline": "Organização e suporte administrativo sob demanda.",
+          "shortDescription": "Serviços para otimizar rotinas corporativas e manter o dia a dia em ordem.",
+          "description": "Informações institucionais em atualização. Fale com a equipe Sem Bagunça para conhecer soluções personalizadas para o seu negócio.",
+          "coverImage": "/Fachada3.jpg",
+          "logo": "https://static.wixstatic.com/media/3e41d7_09c0012818c04677831dc2e7ad265ae6~mv2.png/v1/fill/w_768,h_535,al_c/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": [
+            "(19) 99415-8638"
+          ],
+          "emails": [
+            "antoniocarloscantizano@gmail.com"
+          ],
+          "whatsapp": "https://wa.me/19994158638",
+          "address": "Sala 04T · Rua Candido Bueno 1299 - Centro 13820-000 Jaguariúna, SP",
+          "socialLinks": [
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/19994158638",
+              "type": "whatsapp"
+            }
           ]
         }
       ]
@@ -118,8 +222,12 @@
           "description": "O escritório Andrade & Azevedo reúne especialistas em direito empresarial, societário e tributário. Atende empresas de médio e grande porte com foco na mitigação de riscos e na sustentabilidade jurídica dos negócios.",
           "coverImage": "/Fachada.jpg",
           "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
-          "phones": ["+55 (19) 3833-5604"],
-          "emails": ["contato@andradeeazevedo.adv.br"],
+          "phones": [
+            "+55 (19) 3833-5604"
+          ],
+          "emails": [
+            "contato@andradeeazevedo.adv.br"
+          ],
           "website": "https://andradeeazevedo.adv.br",
           "instagram": "https://instagram.com/andradeeazevedo",
           "address": "Sala 504 · Jaguar Center Plaza",
@@ -131,11 +239,22 @@
             "Atuação contenciosa estratégica"
           ],
           "gallery": [
-            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Reunião da equipe Andrade & Azevedo" }
+            {
+              "url": "/333984251_205311685379957_6835703374332389472_n.jpg",
+              "alt": "Reunião da equipe Andrade & Azevedo"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://andradeeazevedo.adv.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/andradeeazevedo", "type": "instagram" }
+            {
+              "label": "Site",
+              "url": "https://andradeeazevedo.adv.br",
+              "type": "website"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/andradeeazevedo",
+              "type": "instagram"
+            }
           ]
         },
         {
@@ -147,8 +266,12 @@
           "description": "O escritório Salvador Lima atua há 20 anos em direito do trabalho, oferecendo consultoria preventiva, auditoria, due diligence e defesa em litígios estratégicos.",
           "coverImage": "/Fachada5.jpg",
           "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 3833-5605"],
-          "emails": ["agenda@salvadorlima.adv.br"],
+          "phones": [
+            "+55 (19) 3833-5605"
+          ],
+          "emails": [
+            "agenda@salvadorlima.adv.br"
+          ],
           "website": "https://salvadorlima.adv.br",
           "instagram": "https://instagram.com/salvadorlimaadv",
           "address": "Sala 410 · Jaguar Center Plaza",
@@ -160,11 +283,22 @@
             "Defesa em ações trabalhistas complexas"
           ],
           "gallery": [
-            { "url": "/Fachada4.jpg", "alt": "Sala de atendimento do escritório Salvador Lima" }
+            {
+              "url": "/Fachada4.jpg",
+              "alt": "Sala de atendimento do escritório Salvador Lima"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://salvadorlima.adv.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/salvadorlimaadv", "type": "instagram" }
+            {
+              "label": "Site",
+              "url": "https://salvadorlima.adv.br",
+              "type": "website"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/salvadorlimaadv",
+              "type": "instagram"
+            }
           ]
         },
         {
@@ -176,8 +310,12 @@
           "description": "A Pires & Rodrigues é referência regional em mediação e resolução de conflitos cíveis, imobiliários e de família, com suporte jurídico completo.",
           "coverImage": "/Fachada3.jpg",
           "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
-          "phones": ["+55 (19) 3833-5606"],
-          "emails": ["contato@piresrodrigues.adv.br"],
+          "phones": [
+            "+55 (19) 3833-5606"
+          ],
+          "emails": [
+            "contato@piresrodrigues.adv.br"
+          ],
           "instagram": "https://instagram.com/piresrodriguesadv",
           "address": "Sala 220 · Jaguar Center Plaza",
           "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
@@ -188,10 +326,17 @@
             "Inventários e planejamento sucessório"
           ],
           "gallery": [
-            { "url": "/Fachada.jpg", "alt": "Equipe da Pires & Rodrigues atendendo clientes" }
+            {
+              "url": "/Fachada.jpg",
+              "alt": "Equipe da Pires & Rodrigues atendendo clientes"
+            }
           ],
           "socialLinks": [
-            { "label": "Instagram", "url": "https://instagram.com/piresrodriguesadv", "type": "instagram" }
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/piresrodriguesadv",
+              "type": "instagram"
+            }
           ]
         }
       ]
@@ -214,8 +359,12 @@
           "description": "A Plaza Contábil Inteligente oferece assessoria completa em abertura de empresas, planejamento tributário, folha de pagamento e contabilidade consultiva.",
           "coverImage": "/Fachada5.jpg",
           "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 3833-5607"],
-          "emails": ["contato@plazacontabil.com.br"],
+          "phones": [
+            "+55 (19) 3833-5607"
+          ],
+          "emails": [
+            "contato@plazacontabil.com.br"
+          ],
           "website": "https://plazacontabil.com.br",
           "instagram": "https://instagram.com/plazacontabil",
           "address": "Sala 315 · Jaguar Center Plaza",
@@ -227,11 +376,22 @@
             "Relatórios gerenciais em tempo real"
           ],
           "gallery": [
-            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Equipe da Plaza Contábil em reunião" }
+            {
+              "url": "/333674171_999380511025032_54232673152881839_n.jpg",
+              "alt": "Equipe da Plaza Contábil em reunião"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://plazacontabil.com.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/plazacontabil", "type": "instagram" }
+            {
+              "label": "Site",
+              "url": "https://plazacontabil.com.br",
+              "type": "website"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/plazacontabil",
+              "type": "instagram"
+            }
           ]
         },
         {
@@ -243,8 +403,12 @@
           "description": "A Domus Fiscal é referência regional em auditoria e recuperação de créditos tributários, com equipe composta por contadores e advogados tributaristas.",
           "coverImage": "/Fachada3.jpg",
           "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
-          "phones": ["+55 (19) 3833-5608"],
-          "emails": ["relacionamento@domusfiscal.com.br"],
+          "phones": [
+            "+55 (19) 3833-5608"
+          ],
+          "emails": [
+            "relacionamento@domusfiscal.com.br"
+          ],
           "instagram": "https://instagram.com/domusfiscal",
           "address": "Sala 221 · Jaguar Center Plaza",
           "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
@@ -255,10 +419,17 @@
             "Treinamentos in company"
           ],
           "gallery": [
-            { "url": "/Fachada4.jpg", "alt": "Reunião de consultores Domus Fiscal" }
+            {
+              "url": "/Fachada4.jpg",
+              "alt": "Reunião de consultores Domus Fiscal"
+            }
           ],
           "socialLinks": [
-            { "label": "Instagram", "url": "https://instagram.com/domusfiscal", "type": "instagram" }
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/domusfiscal",
+              "type": "instagram"
+            }
           ]
         },
         {
@@ -270,8 +441,12 @@
           "description": "A Epsilon Contabilidade alia tecnologia, atendimento consultivo e planejamento tributário para negócios em expansão.",
           "coverImage": "/Fachada.jpg",
           "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 3833-5609"],
-          "emails": ["contato@epsiloncontabil.com.br"],
+          "phones": [
+            "+55 (19) 3833-5609"
+          ],
+          "emails": [
+            "contato@epsiloncontabil.com.br"
+          ],
           "website": "https://epsiloncontabil.com.br",
           "instagram": "https://instagram.com/epsiloncontabil",
           "address": "Sala 214 · Jaguar Center Plaza",
@@ -283,11 +458,22 @@
             "BPO fiscal e trabalhista"
           ],
           "gallery": [
-            { "url": "/img-jaguar-center-plaza-001-768x460.jpg", "alt": "Espaço compartilhado da Epsilon Contabilidade" }
+            {
+              "url": "/img-jaguar-center-plaza-001-768x460.jpg",
+              "alt": "Espaço compartilhado da Epsilon Contabilidade"
+            }
           ],
           "socialLinks": [
-            { "label": "Site", "url": "https://epsiloncontabil.com.br", "type": "website" },
-            { "label": "Instagram", "url": "https://instagram.com/epsiloncontabil", "type": "instagram" }
+            {
+              "label": "Site",
+              "url": "https://epsiloncontabil.com.br",
+              "type": "website"
+            },
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/epsiloncontabil",
+              "type": "instagram"
+            }
           ]
         }
       ]
@@ -310,8 +496,12 @@
           "description": "O Studio Alessandra Moraes é um ambiente dedicado ao movimento consciente, pilates, treinamento funcional, barras de access, ventosaterapia e bem-estar integral.",
           "coverImage": "/Fachada4.jpg",
           "logo": "/1.png",
-          "phones": ["+55 (19) 99697-6642"],
-          "emails": ["ale.pca@hotmail.com"],
+          "phones": [
+            "+55 (19) 99697-6642"
+          ],
+          "emails": [
+            "ale.pca@hotmail.com"
+          ],
           "instagram": "https://instagram.com/studioalessandramoraes",
           "address": "Sala 117 · Jaguar Center Plaza",
           "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
@@ -322,13 +512,30 @@
             "Terapias integrativas"
           ],
           "gallery": [
-            { "url": "/jaguar center plaza - Jaguariuna.jpg", "alt": "Sala de pilates do Studio Alessandra Moraes" },
-            { "url": "/jaguar center plaza - Jaguariuna_edited.jpg", "alt": "Alunos praticando treinamento funcional" },
-            { "url": "/Fachada5.jpg", "alt": "Entrada do Studio Alessandra Moraes" }
+            {
+              "url": "/jaguar center plaza - Jaguariuna.jpg",
+              "alt": "Sala de pilates do Studio Alessandra Moraes"
+            },
+            {
+              "url": "/jaguar center plaza - Jaguariuna_edited.jpg",
+              "alt": "Alunos praticando treinamento funcional"
+            },
+            {
+              "url": "/Fachada5.jpg",
+              "alt": "Entrada do Studio Alessandra Moraes"
+            }
           ],
           "socialLinks": [
-            { "label": "Instagram", "url": "https://instagram.com/studioalessandramoraes", "type": "instagram" },
-            { "label": "WhatsApp", "url": "https://wa.me/5519996976642", "type": "whatsapp" }
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/studioalessandramoraes",
+              "type": "instagram"
+            },
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/5519996976642",
+              "type": "whatsapp"
+            }
           ]
         },
         {
@@ -340,7 +547,9 @@
           "description": "A Dom Fernandes oferece experiência completa de grooming masculino, com barbearia, spa capilar, bar, mesas de sinuca e curadoria musical semanal.",
           "coverImage": "/Fachada3.jpg",
           "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
-          "phones": ["+55 (19) 99874-1020"],
+          "phones": [
+            "+55 (19) 99874-1020"
+          ],
           "instagram": "https://instagram.com/domfernandesbarber",
           "address": "Sala 028 · Piso térreo · Jaguar Center Plaza",
           "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
@@ -351,12 +560,26 @@
             "Eventos temáticos com DJ e mixologia"
           ],
           "gallery": [
-            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Barbearia Dom Fernandes com clientes" },
-            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Bar da barbearia Dom Fernandes" }
+            {
+              "url": "/333984251_205311685379957_6835703374332389472_n.jpg",
+              "alt": "Barbearia Dom Fernandes com clientes"
+            },
+            {
+              "url": "/333674171_999380511025032_54232673152881839_n.jpg",
+              "alt": "Bar da barbearia Dom Fernandes"
+            }
           ],
           "socialLinks": [
-            { "label": "Instagram", "url": "https://instagram.com/domfernandesbarber", "type": "instagram" },
-            { "label": "WhatsApp", "url": "https://wa.me/5519998741020", "type": "whatsapp" }
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/domfernandesbarber",
+              "type": "instagram"
+            },
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/5519998741020",
+              "type": "whatsapp"
+            }
           ]
         },
         {
@@ -368,8 +591,12 @@
           "description": "A Galeria Retrô combina estética avançada, consultoria de imagem e produtos dermocosméticos exclusivos em um ambiente acolhedor.",
           "coverImage": "/Fachada.jpg",
           "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
-          "phones": ["+55 (19) 99852-4411"],
-          "emails": ["contato@galeriaretro.com.br"],
+          "phones": [
+            "+55 (19) 99852-4411"
+          ],
+          "emails": [
+            "contato@galeriaretro.com.br"
+          ],
           "instagram": "https://instagram.com/galeriaretroestetica",
           "address": "Sala 036 · Jaguar Center Plaza",
           "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
@@ -380,12 +607,26 @@
             "Depilação a laser e design de sobrancelhas"
           ],
           "gallery": [
-            { "url": "/Fachada5.jpg", "alt": "Sala de atendimento da Galeria Retrô" },
-            { "url": "/jaguar center plaza - Jaguariuna.jpg", "alt": "Detalhes do ambiente da Galeria Retrô" }
+            {
+              "url": "/Fachada5.jpg",
+              "alt": "Sala de atendimento da Galeria Retrô"
+            },
+            {
+              "url": "/jaguar center plaza - Jaguariuna.jpg",
+              "alt": "Detalhes do ambiente da Galeria Retrô"
+            }
           ],
           "socialLinks": [
-            { "label": "Instagram", "url": "https://instagram.com/galeriaretroestetica", "type": "instagram" },
-            { "label": "WhatsApp", "url": "https://wa.me/5519998524411", "type": "whatsapp" }
+            {
+              "label": "Instagram",
+              "url": "https://instagram.com/galeriaretroestetica",
+              "type": "instagram"
+            },
+            {
+              "label": "WhatsApp",
+              "url": "https://wa.me/5519998524411",
+              "type": "whatsapp"
+            }
           ]
         }
       ]
