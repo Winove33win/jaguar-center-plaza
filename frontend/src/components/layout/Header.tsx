@@ -1,5 +1,8 @@
-import { NavLink } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import Container from './Container';
+import { fetchAreas } from '../../lib/api';
 
 const navItems = [
   { label: 'Home', to: '/', type: 'route' as const },
@@ -9,6 +12,17 @@ const navItems = [
 ];
 
 export default function Header() {
+  const query = useQuery({ queryKey: ['areas'], queryFn: fetchAreas });
+  const areas = query.data?.items ?? [];
+  const categoryLinks = useMemo(
+    () =>
+      areas.map((item) => ({
+        label: item.name,
+        slug: item.slug || item.id
+      })),
+    [areas]
+  );
+
   return (
     <header className="sticky top-0 z-50 shadow-sm">
       <div className="bg-[#0b4f6c] text-white">
@@ -106,10 +120,33 @@ export default function Header() {
                   {item.label}
                 </option>
               ))}
+              {categoryLinks.map((category) => (
+                <option key={category.slug} value={`/salas#${category.slug}`}>
+                  {category.label}
+                </option>
+              ))}
             </select>
           </div>
         </Container>
       </div>
+      {categoryLinks.length > 0 && (
+        <div className="border-b border-primary-100 bg-[#f1f5ee]/90 backdrop-blur">
+          <Container className="flex flex-wrap items-center gap-2 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-700">
+            <span className="mr-2 hidden text-[10px] tracking-[0.3em] text-primary-500 sm:inline">Categorias</span>
+            <div className="flex flex-wrap gap-2">
+              {categoryLinks.map((category) => (
+                <Link
+                  key={category.slug}
+                  to={`/salas#${category.slug}`}
+                  className="inline-flex items-center rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-primary-700 shadow-sm transition hover:bg-primary-100 hover:text-primary-800"
+                >
+                  {category.label}
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </div>
+      )}
     </header>
   );
 }

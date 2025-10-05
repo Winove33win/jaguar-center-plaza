@@ -2,32 +2,8 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
 import { fetchAreas } from '../lib/api';
+import { formatFieldLabel, formatFieldValue } from '../lib/format';
 import { useSEO } from '../hooks/useSEO';
-
-function formatFieldLabel(key: string) {
-  return key
-    .replace(/_/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/\b\w/g, (match) => match.toUpperCase());
-}
-
-function formatFieldValue(value: unknown) {
-  if (value === null || value === undefined) {
-    return '';
-  }
-
-  if (Array.isArray(value)) {
-    return value.map((item) => formatFieldValue(item)).join(', ');
-  }
-
-  if (typeof value === 'object') {
-    return Object.entries(value as Record<string, unknown>)
-      .map(([key, itemValue]) => `${formatFieldLabel(key)}: ${formatFieldValue(itemValue)}`)
-      .join(' • ');
-  }
-
-  return String(value);
-}
 
 export default function RoomsPage() {
   const query = useQuery({ queryKey: ['areas'], queryFn: fetchAreas });
@@ -66,7 +42,7 @@ export default function RoomsPage() {
 
         <div className="space-y-12">
           {areas.map((area) => (
-            <article key={area.id} className="space-y-6">
+            <article key={area.id} id={area.slug || area.id} className="space-y-6">
               <div className="space-y-3">
                 <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary-500">
                   {(area.slug || area.id).replace(/_/g, ' ')}
