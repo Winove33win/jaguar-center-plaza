@@ -3,12 +3,13 @@ import { fetchCompanyCategories } from '../services/companies-service.js';
 
 const router = Router();
 
-router.get('/', async (_req, res, next) => {
+router.get('/', async (_req, res) => {
   try {
     const payload = await fetchCompanyCategories();
     res.json(payload);
   } catch (error) {
-    next(error);
+    console.error('Failed to load categories', error);
+    res.status(500).json({ error: 'Failed to load categories' });
   }
 });
 
