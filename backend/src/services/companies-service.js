@@ -311,7 +311,7 @@ async function fetchRowsForCategory(config) {
     return Array.isArray(rows) ? rows : [];
   } catch (error) {
     console.error(`Falha ao consultar a tabela ${tableName}`, error);
-    return [];
+    throw error;
   }
 }
 
