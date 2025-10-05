@@ -72,6 +72,7 @@ O backend expõe os endpoints abaixo (todas as respostas em JSON):
 - `GET /api/blog-posts` — Lista e pagina posts do blog (`page`, `perPage`, `search`, `tags`, `orderBy`).
 - `GET /api/blog-posts/:slug` — Detalha um post por `slug`.
 - `GET /api/cases` — Lista cases com normalização de galerias e URLs absolutas a partir de `PUBLIC_BASE_URL`.
+- `GET /api/categories` → Retorna as categorias de empresas com dados publicados diretamente das tabelas do MySQL.
 - `GET /api/templates` — Lista templates com conversão de campos JSON (features, preview, metadados).
 - `GET /api/templates/:slug` — Detalhe completo do template.
 - `POST /api/checkout` — Cria sessão de checkout no Stripe (usa `STRIPE_SECRET_KEY` ou delega para `STRIPE_SERVICE_URL`).
