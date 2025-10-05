@@ -1,0 +1,11 @@
+{
+  "name": "jaguar-center-plaza",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "sync:frontend": "npm -w frontend run build && npm -w backend run sync:frontend"
+  }
+}

@@ -34,7 +34,7 @@ export default function CompaniesPage() {
       : undefined
   });
 
-  const categories = data?.categories ?? [];
+  const categories = useMemo(() => data?.categories ?? [], [data]);
 
   const filteredCategories = useMemo(() => {
     if (selectedCategory === 'todas') {

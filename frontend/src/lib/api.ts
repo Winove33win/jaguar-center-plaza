@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:4000'
-});
+export const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 export interface CompanyCategoryResponse {
   updatedAt: string;
@@ -27,9 +23,11 @@ export interface Company {
   hours: string;
 }
 
-export async function fetchCategories() {
-  const response = await api.get<CompanyCategoryResponse>('/api/categories');
-  return response.data;
+export interface SearchResponse {
+  query: string;
+  updatedAt: string | null;
+  categories: Array<Pick<CompanyCategory, 'id' | 'name' | 'description'>>;
+  companies: Array<Company & { categoryId: string; categoryName: string }>;
 }
 
 export interface ContactPayload {
@@ -40,9 +38,45 @@ export interface ContactPayload {
   companyId?: string;
 }
 
-export async function submitContact(payload: ContactPayload) {
-  const response = await api.post('/api/contact', payload);
-  return response.data;
+async function parseJson<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || `Falha ao comunicar com a API (${response.status})`);
+  }
+
+  return (await response.json()) as T;
 }
 
-export default api;
+export async function fetchCategories(): Promise<CompanyCategoryResponse> {
+  const response = await fetch(`${API_BASE}/categories`, {
+    headers: {
+      Accept: 'application/json'
+    }
+  });
+
+  return parseJson<CompanyCategoryResponse>(response);
+}
+
+export async function submitContact(payload: ContactPayload) {
+  const response = await fetch(`${API_BASE}/contact`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  return parseJson<{ message: string }>(response);
+}
+
+export async function searchDirectory(query: string): Promise<SearchResponse> {
+  const searchParams = new URLSearchParams({ q: query });
+  const response = await fetch(`${API_BASE}/search?${searchParams.toString()}`, {
+    headers: {
+      Accept: 'application/json'
+    }
+  });
+
+  return parseJson<SearchResponse>(response);
+}
