@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Container from '../components/layout/Container';
-import { fetchCategories, type CompanyCategory } from '../lib/api';
-import { useSEO } from '../hooks/useSEO';
+import Container from 'components/layout/Container';
+import { fetchCategories, type CompanyCategory } from 'lib/api';
+import { useSEO } from 'hooks/useSEO';
 
 export default function CompaniesPage() {
   const { data, isLoading } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories });

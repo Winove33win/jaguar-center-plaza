@@ -1,5 +1,5 @@
-import Container from '../components/layout/Container';
-import { useSEO } from '../hooks/useSEO';
+import Container from 'components/layout/Container';
+import { useSEO } from 'hooks/useSEO';
 
 const timeline = [
   {

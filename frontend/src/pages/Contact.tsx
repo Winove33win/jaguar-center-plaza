@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import Container from '../components/layout/Container';
-import { submitContact } from '../lib/api';
-import { useSEO } from '../hooks/useSEO';
+import Container from 'components/layout/Container';
+import { submitContact } from 'lib/api';
+import { useSEO } from 'hooks/useSEO';
 
 const schema = z.object({
   name: z.string().min(3, 'Informe pelo menos 3 caracteres.'),
