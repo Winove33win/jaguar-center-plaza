@@ -10,7 +10,8 @@
     "prestart": "node scripts/build-and-sync.mjs",
     "migrate": "node scripts/run-migrations.mjs",
     "sitemap": "node scripts/generate-static-sitemaps.mjs",
-    "deploy": "node scripts/deploy.mjs"
+    "deploy": "node scripts/deploy.mjs",
+    "test": "node --test"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -26,6 +27,10 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.4",
+
     "supertest": "^7.1.4"
+
+    "supertest": "^6.3.4"
+main
   }
 }

@@ -163,6 +163,41 @@ function pickFirst(row, candidates, fallback = '') {
   return fallback;
 }
 
+function pickFirstValue(row, candidates) {
+  for (const candidate of candidates) {
+    if (!Object.prototype.hasOwnProperty.call(row, candidate)) {
+      continue;
+    }
+
+    const value = row[candidate];
+
+    if (value === null || value === undefined) {
+      continue;
+    }
+
+    if (typeof value === 'string') {
+      const normalized = ensureString(value, '');
+      if (normalized) {
+        return { key: candidate, value };
+      }
+
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      if (value.length > 0) {
+        return { key: candidate, value };
+      }
+
+      continue;
+    }
+
+    return { key: candidate, value };
+  }
+
+  return { key: null, value: null };
+}
+
 function pickList(row, candidates) {
   for (const candidate of candidates) {
     if (Object.prototype.hasOwnProperty.call(row, candidate)) {
@@ -311,7 +346,7 @@ async function fetchRowsForCategory(config) {
     return Array.isArray(rows) ? rows : [];
   } catch (error) {
     console.error(`Falha ao consultar a tabela ${tableName}`, error);
-    return [];
+    throw error;
   }
 }
 
@@ -328,6 +363,8 @@ function mapRowToCompany(tableId, row, index) {
   const galleryKey = getFirstExistingKey(row, COMPANY_FIELD_CANDIDATES.gallery);
   const highlightKey = getFirstExistingKey(row, COMPANY_FIELD_CANDIDATES.highlight);
 
+  const { value: addressValue } = pickFirstValue(row, COMPANY_FIELD_CANDIDATES.address);
+
   const company = {
     id,
     slug,
@@ -342,7 +379,7 @@ function mapRowToCompany(tableId, row, index) {
     instagram: pickFirst(row, COMPANY_FIELD_CANDIDATES.instagram, ''),
     facebook: pickFirst(row, COMPANY_FIELD_CANDIDATES.facebook, ''),
     linkedin: pickFirst(row, COMPANY_FIELD_CANDIDATES.linkedin, ''),
-    address: normalizeAddress(pickFirst(row, COMPANY_FIELD_CANDIDATES.address, '')),
+    address: normalizeAddress(addressValue ?? ''),
     mapsUrl: pickFirst(row, COMPANY_FIELD_CANDIDATES.mapsUrl, ''),
     schedule: pickFirst(row, COMPANY_FIELD_CANDIDATES.schedule, ''),
     services: pickList(row, COMPANY_FIELD_CANDIDATES.services),
@@ -385,3 +422,9 @@ export async function fetchCompanyCategories() {
 
   return { categories, generatedAt };
 }
+
+export const __test__ = {
+  mapRowToCompany,
+  normalizeAddress,
+  pickFirstValue
+};
