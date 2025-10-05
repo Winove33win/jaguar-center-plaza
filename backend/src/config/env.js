@@ -46,7 +46,7 @@ export const env = {
     port: toNumber(process.env.DB_PORT, 3306),
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    name: process.env.DB_NAME || 'jaguar_center_plaza',
+    name: process.env.DB_NAME || 'JaguarPlaza',
     connectionLimit: toNumber(process.env.DB_CONN_LIMIT, 10)
   },
   security: {
