@@ -1,0 +1,45 @@
+{
+  "categories": [
+    {
+      "id": "servicos-corporativos",
+      "name": "Serviços corporativos",
+      "description": "Contabilidade, advocacia, tecnologia e consultorias preparadas para apoiar o crescimento das empresas.",
+      "companies": [
+        { "id": "contato-digital", "name": "Contato Digital" },
+        { "id": "atlas-contabilidade", "name": "Atlas Contabilidade" },
+        { "id": "plaza-tech", "name": "Plaza Tech Solutions" }
+      ]
+    },
+    {
+      "id": "saude-bem-estar",
+      "name": "Saúde & bem-estar",
+      "description": "Clínicas médicas, odontológicas, pilates, fisioterapia e terapias integrativas em ambientes acolhedores.",
+      "companies": [
+        { "id": "clinica-integrada", "name": "Clínica Integrada" },
+        { "id": "studio-pilates", "name": "Studio Pilates Plaza" },
+        { "id": "odontologia-plaza", "name": "Odontologia Plaza" }
+      ]
+    },
+    {
+      "id": "gastronomia-conveniencia",
+      "name": "Gastronomia & conveniência",
+      "description": "Restaurantes, cafeterias, mercado e opções rápidas para quem precisa praticidade no dia a dia.",
+      "companies": [
+        { "id": "cafe-jaguar", "name": "Café Jaguar" },
+        { "id": "emporio-centro", "name": "Empório do Centro" },
+        { "id": "praca-sabores", "name": "Praça Sabores" }
+      ]
+    },
+    {
+      "id": "beleza-estetica",
+      "name": "Beleza & estética",
+      "description": "Centros de estética, salões e barbearias com serviços premium e profissionais especializados.",
+      "companies": [
+        { "id": "studio-beleza", "name": "Studio Beleza" },
+        { "id": "spa-jaguar", "name": "Spa Jaguar" },
+        { "id": "barbearia-plaza", "name": "Barbearia Plaza" }
+      ]
+    }
+  ],
+  "generatedAt": "2024-01-01T00:00:00.000Z"
+}
