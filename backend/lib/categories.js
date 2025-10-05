@@ -1,9 +1,10 @@
-export const CATEGORIES = [
-  { name: 'Administração', slug: 'administracao', table: 'administracao' },
-  { name: 'Advocacia', slug: 'advocacia', table: 'advocacia' },
-  { name: 'Beleza', slug: 'beleza', table: 'beleza' },
-  { name: 'Contabilidade', slug: 'contabilidade', table: 'contabilidade' },
-  { name: 'Imobiliária', slug: 'imobiliaria', table: 'imobiliaria' },
-];
+import { COMPANY_CATEGORIES } from '../src/config/company-categories.js';
+
+export const CATEGORIES = COMPANY_CATEGORIES.map((category) => ({
+  ...category,
+  slug: category.slug ?? category.id,
+}));
 
 export const bySlug = Object.fromEntries(CATEGORIES.map((category) => [category.slug, category]));
+
+export { COMPANY_CATEGORIES };

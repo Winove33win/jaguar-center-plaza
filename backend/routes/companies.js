@@ -1,13 +1,18 @@
 import express from 'express';
 
 import pool from '../db/pool.js';
-import { bySlug } from '../lib/categories.js';
+import { CATEGORIES, bySlug } from '../lib/categories.js';
 import { pickCompanyFields } from '../lib/normalize.js';
 
 const router = express.Router();
+const knownCategoryTables = new Set(CATEGORIES.map((category) => category.table));
 const columnCache = new Map();
 
 async function getTableColumns(table) {
+  if (!knownCategoryTables.has(table)) {
+    return [];
+  }
+
   if (columnCache.has(table)) {
     return columnCache.get(table);
   }
