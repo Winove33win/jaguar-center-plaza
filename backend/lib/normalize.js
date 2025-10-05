@@ -1,53 +1,41 @@
-export function parseMaybeJson(value) {
-  if (typeof value !== 'string') {
-    return value;
-  }
+import { normalizeCompanyRow } from '../src/services/company-normalizer.js';
 
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return value;
-  }
-
-  try {
-    return JSON.parse(trimmed);
-  } catch (error) {
-    return value;
-  }
-}
-
-export function pickCompanyFields(row = {}, category) {
-  const normalizedAddress =
-    typeof row.endereco === 'string'
-      ? parseMaybeJson(row.endereco)
-      : row.endereco;
-
-  const address =
-    typeof row.endereco === 'string'
-      ? (normalizedAddress && typeof normalizedAddress === 'object'
-          ? normalizedAddress.formatted ?? null
-          : row.endereco)
-      : normalizedAddress?.formatted ?? null;
-
-  const parsedGallery = parseMaybeJson(row.galeria_de_midia);
-  const gallery = Array.isArray(parsedGallery) ? parsedGallery : null;
+export function pickCompanyFields(row = {}, category, tableId = category, index = 0) {
+  const normalized = normalizeCompanyRow(tableId || category, row, index);
+  const phones = Array.isArray(normalized.phones) ? normalized.phones : [];
+  const emails = Array.isArray(normalized.emails) ? normalized.emails : [];
+  const services = Array.isArray(normalized.services) ? normalized.services : [];
+  const gallery = Array.isArray(normalized.gallery) && normalized.gallery.length ? normalized.gallery : null;
 
   return {
-    id: row.id || row.pk || null,
+    id: normalized.id ?? null,
+    slug: normalized.slug ?? null,
     category,
-    name: row.titulo || row.title || row.titulo_col || null,
-    description: row.descricao || null,
-    address,
-    room: row.sala || null,
-    phone: row.celular || null,
-    email: row.email || null,
-    logo: row.logo || row.imagem || null,
-    instagram: row.instagram || null,
-    facebook: row.facebook || null,
-    whatsapp: row.link_whatsapp || row.links_whatsapp || null,
+    name: normalized.name ?? null,
+    description: normalized.shortDescription || normalized.description || null,
+    shortDescription: normalized.shortDescription || null,
+    address: normalized.address || null,
+    room: normalized.room || null,
+    phone: phones[0] || null,
+    phones,
+    email: emails[0] || null,
+    emails,
+    logo: normalized.logo || null,
+    coverImage: normalized.coverImage || null,
+    instagram: normalized.instagram || null,
+    facebook: normalized.facebook || null,
+    whatsapp: normalized.whatsapp || null,
+    website: normalized.website || null,
+    mapsUrl: normalized.mapsUrl || null,
+    schedule: normalized.schedule || null,
+    services,
     gallery,
-    createdAt: row.created_date || null,
-    updatedAt: row.updated_date || null,
-    status: row.status_col || null,
+    socialLinks: normalized.socialLinks || [],
+    detailPath: normalized.detailPath || null,
+    listPath: normalized.listPath || null,
+    highlight: Boolean(normalized.highlight),
+    createdAt: row.created_date || row.created_at || null,
+    updatedAt: row.updated_date || row.updated_at || null,
+    status: row.status_col || row.status || null,
   };
 }

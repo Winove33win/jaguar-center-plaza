@@ -53,6 +53,7 @@ export interface CompanySummary {
   coverImage?: string;
   logo?: string;
   highlight?: boolean;
+  room?: string;
   phones?: string[];
   emails?: string[];
   whatsapp?: string;
@@ -66,6 +67,8 @@ export interface CompanySummary {
   services?: string[];
   gallery?: CompanyMedia[];
   socialLinks?: CompanySocialLink[];
+  detailPath?: string;
+  listPath?: string;
 }
 
 export interface CompanyCategory {

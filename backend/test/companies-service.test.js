@@ -1,9 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { __test__ } from '../src/services/companies-service.js';
-
-const { mapRowToCompany } = __test__;
+import { normalizeCompanyRow } from '../src/services/company-normalizer.js';
 
 test('mapRowToCompany preserves formatted address information', () => {
   const row = {
@@ -15,7 +13,7 @@ test('mapRowToCompany preserves formatted address information', () => {
     }
   };
 
-  const company = mapRowToCompany('test-category', row, 0);
+  const company = normalizeCompanyRow('test-category', row, 0);
 
   assert.equal(
     company.address,
