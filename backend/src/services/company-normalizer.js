@@ -1,4 +1,10 @@
+
+import { env } from '../config/env.js';
 import { normalizeRow } from '../utils/rows.js';
+import { ensureAbsoluteUrl } from '../utils/urls.js';
+
+import { normalizeRow } from '../utils/rows.js';
+
 
 const COMPANY_FIELD_CANDIDATES = {
   id: ['id', 'uuid', 'pk', 'codigo', 'codigo_sala'],
@@ -275,6 +281,27 @@ function parseGallery(value) {
   return ensureArray(asString).map((url) => ({ url }));
 }
 
+
+function normalizeGallery(items, baseUrl) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items
+    .map((item) => {
+      const url = ensureAbsoluteUrl(item.url, baseUrl);
+      if (!url) {
+        return null;
+      }
+
+      const alt = ensureString(item.alt);
+      return alt ? { url, alt } : { url };
+    })
+    .filter(Boolean);
+}
+
+
+
 function toBoolean(value) {
   if (typeof value === 'boolean') {
     return value;
@@ -289,7 +316,15 @@ function toBoolean(value) {
 }
 
 function normalizePhones(phones) {
+
+  return [...new Set(phones.map((phone) => ensureString(phone).trim()).filter(Boolean))];
+}
+
+function normalizeEmails(emails) {
+  return [...new Set(emails.map((email) => ensureString(email).trim()).filter(Boolean))];
+
   return [...new Set(phones.map((phone) => phone.trim()).filter(Boolean))];
+
 }
 
 function normalizeTableId(tableId) {
@@ -458,7 +493,11 @@ export function normalizeCompanyRow(tableId, row = {}, index = 0) {
     shortDescription: pickFirst(normalizedRow, lookup, COMPANY_FIELD_CANDIDATES.shortDescription, ''),
     description: pickFirst(normalizedRow, lookup, COMPANY_FIELD_CANDIDATES.description, ''),
     phones: normalizePhones(phones),
+
+    emails: normalizeEmails(emails),
+
     emails,
+
     whatsapp: pickFirst(normalizedRow, lookup, COMPANY_FIELD_CANDIDATES.whatsapp, ''),
     website: pickFirst(normalizedRow, lookup, COMPANY_FIELD_CANDIDATES.website, ''),
     instagram: pickFirst(normalizedRow, lookup, COMPANY_FIELD_CANDIDATES.instagram, ''),
@@ -476,6 +515,13 @@ export function normalizeCompanyRow(tableId, row = {}, index = 0) {
     detailPath: ensurePath(detailPathCandidate.value || ''),
     listPath: ensurePath(listPathCandidate.value || '')
   };
+
+
+  const publicBaseUrl = env.publicBaseUrl;
+  company.logo = ensureAbsoluteUrl(company.logo, publicBaseUrl);
+  company.coverImage = ensureAbsoluteUrl(company.coverImage, publicBaseUrl);
+  company.gallery = normalizeGallery(company.gallery, publicBaseUrl);
+
 
   company.socialLinks = buildSocialLinks(company);
 
@@ -512,6 +558,10 @@ export const __test__ = {
   ensureArray,
   normalizeAddress,
   normalizePhones,
+
+  normalizeEmails,
+
+
   normalizeTableId,
   buildTableSpecificCandidates,
   findTableSpecificValue,
