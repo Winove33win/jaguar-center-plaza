@@ -8,6 +8,24 @@ const router = express.Router();
 const knownCategoryTables = new Set(CATEGORIES.map((category) => category.table));
 const columnCache = new Map();
 
+function createColumnLookup(columns = []) {
+  const lookup = new Map();
+  columns.forEach((column) => {
+    if (typeof column === 'string' && column.trim()) {
+      lookup.set(column.toLowerCase(), column);
+    }
+  });
+  return lookup;
+}
+
+function resolveColumn(columnLookup, name) {
+  if (!name) {
+    return null;
+  }
+
+  return columnLookup.get(String(name).toLowerCase()) || null;
+}
+
 async function getTableColumns(table) {
   if (!knownCategoryTables.has(table)) {
     return [];
@@ -38,7 +56,7 @@ async function getTableColumns(table) {
   return columns;
 }
 
-function buildSearchClause(columns, searchTerm, params) {
+function buildSearchClause(columnLookup, searchTerm, params) {
   if (!searchTerm) {
     return '';
   }
@@ -46,47 +64,82 @@ function buildSearchClause(columns, searchTerm, params) {
   const likeValue = `%${searchTerm}%`;
   const searchColumns = [];
 
-  if (columns.includes('titulo')) {
-    searchColumns.push('`titulo` LIKE ?');
+  const titleColumn = resolveColumn(columnLookup, 'titulo') || resolveColumn(columnLookup, 'title');
+  if (titleColumn) {
+    searchColumns.push(`\`${titleColumn}\` LIKE ?`);
     params.push(likeValue);
   }
 
-  if (columns.includes('title')) {
-    searchColumns.push('`title` LIKE ?');
+  const nameColumn = resolveColumn(columnLookup, 'nome');
+  if (nameColumn && nameColumn !== titleColumn) {
+    searchColumns.push(`\`${nameColumn}\` LIKE ?`);
     params.push(likeValue);
   }
 
-  if (columns.includes('descricao')) {
-    searchColumns.push('`descricao` LIKE ?');
+  const descriptionColumn =
+    resolveColumn(columnLookup, 'descricao') || resolveColumn(columnLookup, 'descricao_curta') || resolveColumn(columnLookup, 'description');
+
+  if (descriptionColumn) {
+    searchColumns.push(`\`${descriptionColumn}\` LIKE ?`);
     params.push(likeValue);
   }
 
   if (searchColumns.length === 0) {
-    params.splice(0, params.length);
+    params.length = 0;
     return '';
   }
 
   return `(${searchColumns.join(' OR ')})`;
 }
 
-function resolveOrderClause(columns) {
-  if (columns.includes('updated_date')) {
-    return 'ORDER BY `updated_date` IS NULL, `updated_date` DESC';
+function resolveOrderClause(columnLookup) {
+  const updatedDateColumn = resolveColumn(columnLookup, 'updated_date');
+  if (updatedDateColumn) {
+    return `ORDER BY \`${updatedDateColumn}\` IS NULL, \`${updatedDateColumn}\` DESC`;
   }
 
-  if (columns.includes('updated_at')) {
-    return 'ORDER BY `updated_at` IS NULL, `updated_at` DESC';
+  const updatedAtColumn = resolveColumn(columnLookup, 'updated_at');
+  if (updatedAtColumn) {
+    return `ORDER BY \`${updatedAtColumn}\` IS NULL, \`${updatedAtColumn}\` DESC`;
   }
 
-  if (columns.includes('created_date')) {
-    return 'ORDER BY `created_date` IS NULL, `created_date` DESC';
+  const createdDateColumn = resolveColumn(columnLookup, 'created_date');
+  if (createdDateColumn) {
+    return `ORDER BY \`${createdDateColumn}\` IS NULL, \`${createdDateColumn}\` DESC`;
   }
 
-  if (columns.includes('created_at')) {
-    return 'ORDER BY `created_at` IS NULL, `created_at` DESC';
+  const createdAtColumn = resolveColumn(columnLookup, 'created_at');
+  if (createdAtColumn) {
+    return `ORDER BY \`${createdAtColumn}\` IS NULL, \`${createdAtColumn}\` DESC`;
   }
 
   return '';
+}
+
+function buildPublicationFilters(categoryInfo, columnLookup, params) {
+  const filters = [];
+
+  const statusColumn = resolveColumn(columnLookup, categoryInfo.statusColumn);
+  if (statusColumn) {
+    filters.push(`\`${statusColumn}\` = ?`);
+    params.push('PUBLISHED');
+  }
+
+  const publishDateColumn = resolveColumn(columnLookup, categoryInfo.publishDateColumn);
+  if (publishDateColumn) {
+    filters.push(
+      `(\`${publishDateColumn}\` IS NULL OR \`${publishDateColumn}\` <= UTC_TIMESTAMP())`
+    );
+  }
+
+  const unpublishDateColumn = resolveColumn(columnLookup, categoryInfo.unpublishDateColumn);
+  if (unpublishDateColumn) {
+    filters.push(
+      `(\`${unpublishDateColumn}\` IS NULL OR \`${unpublishDateColumn}\` > UTC_TIMESTAMP())`
+    );
+  }
+
+  return filters;
 }
 
 function normalizePage(value, fallback) {
@@ -118,41 +171,73 @@ router.get('/companies', async (req, res) => {
       return res.status(404).json({ error: 'Category data not available' });
     }
 
+    const columnLookup = createColumnLookup(columns);
+
     const pageNumber = normalizePage(page, 1);
     const size = Math.min(normalizePage(pageSize, 12), 100);
     const offset = (pageNumber - 1) * size;
 
     const searchTerm = typeof q === 'string' ? q.trim() : '';
-    const whereParams = [];
-    const whereClause = buildSearchClause(columns, searchTerm, whereParams);
-    const filters = whereClause ? `WHERE ${whereClause}` : '';
+    const searchParams = [];
+    const filters = [];
+
+    const searchClause = buildSearchClause(columnLookup, searchTerm, searchParams);
+    if (searchClause) {
+      filters.push(searchClause);
+    }
+
+    const whereParams = [...searchParams];
+    const publicationFilters = buildPublicationFilters(categoryInfo, columnLookup, whereParams);
+    if (publicationFilters.length) {
+      filters.push(...publicationFilters);
+    }
+
+    const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
 
     const [countRows] = await pool.query(
-      `SELECT COUNT(*) AS total FROM \`${categoryInfo.table}\` ${filters}`,
+      `SELECT COUNT(*) AS total FROM \`${categoryInfo.table}\` ${filtersSql}`,
       whereParams
     );
 
     const total = Number(countRows?.[0]?.total ?? countRows?.[0]?.c ?? 0);
-    const orderClause = resolveOrderClause(columns);
+    const orderClause = resolveOrderClause(columnLookup);
 
     const [rows] = await pool.query(
-      `SELECT * FROM \`${categoryInfo.table}\` ${filters} ${orderClause} LIMIT ? OFFSET ?`,
+      `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ? OFFSET ?`,
       [...whereParams, size, offset]
     );
 
     const items = Array.isArray(rows)
-      ? rows.map((row) => {
-          const normalized = pickCompanyFields(row, categoryInfo.slug);
+      ? rows.map((row, index) => {
+          const normalized = pickCompanyFields(
+            row,
+            categoryInfo.slug,
+            categoryInfo.table,
+            offset + index
+          );
+
           return {
             id: normalized.id,
+            slug: normalized.slug,
             category: normalized.category,
             name: normalized.name,
             description: normalized.description,
+            shortDescription: normalized.shortDescription,
             logo: normalized.logo,
+            coverImage: normalized.coverImage,
             address: normalized.address,
             room: normalized.room,
             phone: normalized.phone,
+            phones: normalized.phones,
+            email: normalized.email,
+            emails: normalized.emails,
             whatsapp: normalized.whatsapp,
+            instagram: normalized.instagram,
+            facebook: normalized.facebook,
+            website: normalized.website,
+            detailPath: normalized.detailPath,
+            listPath: normalized.listPath,
+            highlight: normalized.highlight,
           };
         })
       : [];
@@ -180,25 +265,14 @@ router.get('/companies/:category/:id', async (req, res) => {
       return res.status(404).json({ error: 'Category data not available' });
     }
 
-    const conditions = [];
+    const columnLookup = createColumnLookup(columns);
     const params = [];
-
-    if (columns.includes('id')) {
-      conditions.push('`id` = ?');
-      params.push(id);
-    }
-
-    if (columns.includes('pk')) {
-      conditions.push('`pk` = ?');
-      params.push(id);
-    }
-
-    if (!conditions.length) {
-      return res.status(500).json({ error: 'Category primary key not configured' });
-    }
+    const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
+    const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+    const orderClause = resolveOrderClause(columnLookup);
 
     const [rows] = await pool.query(
-      `SELECT * FROM \`${categoryInfo.table}\` WHERE ${conditions.join(' OR ')} LIMIT 1`,
+      `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT 500`,
       params
     );
 
@@ -206,8 +280,22 @@ router.get('/companies/:category/:id', async (req, res) => {
       return res.status(404).json({ error: 'Company not found' });
     }
 
-    const normalized = pickCompanyFields(rows[0], categoryInfo.slug);
-    res.json(normalized);
+    const normalizedRows = rows.map((row, index) =>
+      pickCompanyFields(row, categoryInfo.slug, categoryInfo.table, index)
+    );
+
+    const target = String(id).toLowerCase();
+    const match = normalizedRows.find((company) => {
+      const companyId = company.id ? String(company.id).toLowerCase() : null;
+      const companySlug = company.slug ? String(company.slug).toLowerCase() : null;
+      return companyId === target || companySlug === target;
+    });
+
+    if (!match) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    res.json(match);
   } catch (error) {
     console.error('Failed to fetch company details', error);
     res.status(500).json({ error: 'Failed to fetch company details' });
