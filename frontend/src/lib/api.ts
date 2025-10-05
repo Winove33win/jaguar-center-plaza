@@ -32,15 +32,50 @@ export interface AreasResponse {
   generatedAt?: string;
 }
 
+export interface CompanyMedia {
+  url: string;
+  alt?: string;
+}
+
+export interface CompanySocialLink {
+  label: string;
+  url: string;
+  type?: 'website' | 'instagram' | 'facebook' | 'whatsapp' | 'linkedin';
+}
+
 export interface CompanySummary {
   id: string;
+  slug?: string;
   name: string;
+  tagline?: string;
+  shortDescription?: string;
+  description?: string;
+  coverImage?: string;
+  logo?: string;
+  highlight?: boolean;
+  phones?: string[];
+  emails?: string[];
+  whatsapp?: string;
+  website?: string;
+  instagram?: string;
+  facebook?: string;
+  linkedin?: string;
+  address?: string;
+  mapsUrl?: string;
+  schedule?: string;
+  services?: string[];
+  gallery?: CompanyMedia[];
+  socialLinks?: CompanySocialLink[];
 }
 
 export interface CompanyCategory {
   id: string;
+  slug?: string;
   name: string;
   description?: string;
+  headline?: string;
+  heroImage?: string;
+  cardImage?: string;
   companies: CompanySummary[];
 }
 

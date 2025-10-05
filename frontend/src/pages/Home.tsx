@@ -64,6 +64,7 @@ type CategoryCard = {
   description: string;
   companiesLabel: string;
   image: string;
+  href: string;
 };
 
 const fallbackCategoryCards: CategoryCard[] = [
@@ -141,10 +142,14 @@ export default function HomePage() {
         ? category.description
         : 'Conheça o mix de empresas que oferecem serviços completos para o seu dia a dia.',
     companiesLabel: formatCompaniesLabel(category.companies?.length ?? 0),
-    image: categoryImages[index % categoryImages.length]
+    image: category.cardImage ?? category.heroImage ?? categoryImages[index % categoryImages.length],
+    href: `/empresas/${category.slug || category.id}`
   }));
 
-  const categoryCards: CategoryCard[] = dynamicCategoryCards.length > 0 ? dynamicCategoryCards : fallbackCategoryCards;
+  const categoryCards: CategoryCard[] =
+    dynamicCategoryCards.length > 0
+      ? dynamicCategoryCards
+      : fallbackCategoryCards.map((card) => ({ ...card, href: '/empresas' }));
 
   return (
     <div className="space-y-24 pb-24">
@@ -287,7 +292,7 @@ export default function HomePage() {
                   <h3 className="text-xl font-semibold text-primary-800">{card.title}</h3>
                   <p className="flex-1 text-sm text-[#4f5d55]">{card.description}</p>
                   <Link
-                    to="/empresas"
+                    to={card.href}
                     className="inline-flex items-center text-sm font-semibold text-primary-600 transition-colors hover:text-accent-500"
                   >
                     Ver empresas

@@ -1,45 +1,395 @@
 {
   "categories": [
     {
-      "id": "servicos-corporativos",
-      "name": "Serviços corporativos",
-      "description": "Contabilidade, advocacia, tecnologia e consultorias preparadas para apoiar o crescimento das empresas.",
+      "id": "administracao",
+      "slug": "administracao",
+      "name": "Administração",
+      "headline": "Consultorias, contabilidade e gestão estratégica para impulsionar empresas locais.",
+      "description": "Profissionais especializados em administração, finanças e gestão para apoiar o crescimento sustentável do seu negócio.",
+      "heroImage": "/Fachada.jpg",
+      "cardImage": "/Fachada.jpg",
       "companies": [
-        { "id": "contato-digital", "name": "Contato Digital" },
-        { "id": "atlas-contabilidade", "name": "Atlas Contabilidade" },
-        { "id": "plaza-tech", "name": "Plaza Tech Solutions" }
+        {
+          "id": "integra-consultoria",
+          "slug": "integra-consultoria",
+          "name": "Integra Consultoria Empresarial",
+          "tagline": "Planejamento financeiro, societário e de processos sob medida.",
+          "shortDescription": "Equipe multidisciplinar que estrutura diagnósticos, planos de ação e implementação de rotinas de gestão.",
+          "description": "A Integra Consultoria Empresarial atua há mais de 12 anos com assessoria estratégica, estruturação financeira, governança e implantação de indicadores para pequenas e médias empresas.",
+          "coverImage": "/Fachada4.jpg",
+          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
+          "phones": ["+55 (19) 3833-5601"],
+          "emails": ["contato@integraconsultoria.com.br"],
+          "website": "https://integraconsultoria.com.br",
+          "instagram": "https://instagram.com/integraconsultoria",
+          "address": "Sala 210 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 18h",
+          "services": [
+            "Planejamento financeiro e orçamentário",
+            "Implantação de indicadores (KPIs)",
+            "Consultoria societária e sucessória"
+          ],
+          "gallery": [
+            { "url": "/Fachada.jpg", "alt": "Equipe da Integra Consultoria reunida em sala de reuniões" },
+            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Workshop de planejamento com clientes" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://integraconsultoria.com.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/integraconsultoria", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "atlas-contabilidade",
+          "slug": "atlas-contabilidade",
+          "name": "Atlas Contabilidade & BPO",
+          "tagline": "BPO financeiro, fiscal e folha integrado à tecnologia.",
+          "shortDescription": "Especialistas em terceirização de rotinas administrativas com dashboards em tempo real.",
+          "description": "A Atlas Contabilidade oferece soluções completas de contabilidade consultiva, gestão de folha, apuração fiscal e controladoria com acompanhamento digital.",
+          "coverImage": "/Fachada3.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 3833-5602", "+55 (19) 99123-4455"],
+          "emails": ["relacionamento@atlasbpo.com.br"],
+          "website": "https://atlasbpo.com.br",
+          "instagram": "https://instagram.com/atlasbpo",
+          "address": "Sala 312 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 18h",
+          "services": [
+            "BPO financeiro e administrativo",
+            "Gestão de folha e benefícios",
+            "Apuração fiscal e relatórios gerenciais"
+          ],
+          "gallery": [
+            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Equipe da Atlas reunida em frente ao Jaguar Center Plaza" },
+            { "url": "/img-jaguar-center-plaza-001-768x460.jpg", "alt": "Vista interna do Jaguar Center Plaza" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://atlasbpo.com.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/atlasbpo", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "prime-gestao",
+          "slug": "prime-gestao",
+          "name": "Prime Gestão Condominial",
+          "tagline": "Administração condominial com suporte jurídico e financeiro.",
+          "shortDescription": "Atendimento personalizado para condomínios residenciais, comerciais e industriais.",
+          "description": "A Prime Gestão Condominial atende mais de 80 empreendimentos com soluções de governança, compliance, cobrança e prestação de contas digital.",
+          "coverImage": "/Fachada5.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 3833-5603"],
+          "emails": ["relacionamento@primegestao.com.br"],
+          "website": "https://primegestao.com.br",
+          "instagram": "https://instagram.com/primegestaocondominial",
+          "address": "Sala 118 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 17h",
+          "services": [
+            "Prestação de contas digital",
+            "Gestão de assembleias e comunicação",
+            "Consultoria jurídica condominial"
+          ],
+          "gallery": [
+            { "url": "/Fachada4.jpg", "alt": "Atendimento da Prime Gestão em sala corporativa" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://primegestao.com.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/primegestaocondominial", "type": "instagram" }
+          ]
+        }
       ]
     },
     {
-      "id": "saude-bem-estar",
-      "name": "Saúde & bem-estar",
-      "description": "Clínicas médicas, odontológicas, pilates, fisioterapia e terapias integrativas em ambientes acolhedores.",
+      "id": "advocacia",
+      "slug": "advocacia",
+      "name": "Advocacia",
+      "headline": "Escritórios especializados com atendimento consultivo e contencioso.",
+      "description": "Profissionais de direito empresarial, trabalhista, cível e tributário com foco em soluções ágeis e humanizadas.",
+      "heroImage": "/Fachada3.jpg",
+      "cardImage": "/Fachada3.jpg",
       "companies": [
-        { "id": "clinica-integrada", "name": "Clínica Integrada" },
-        { "id": "studio-pilates", "name": "Studio Pilates Plaza" },
-        { "id": "odontologia-plaza", "name": "Odontologia Plaza" }
+        {
+          "id": "andrade-azevedo",
+          "slug": "andrade-azevedo",
+          "name": "Andrade & Azevedo Sociedade de Advogados",
+          "tagline": "Estrutura completa para demandas empresariais e societárias.",
+          "shortDescription": "Atuação consultiva e contenciosa com equipe multidisciplinar em direito empresarial, societário e tributário.",
+          "description": "O escritório Andrade & Azevedo reúne especialistas em direito empresarial, societário e tributário. Atende empresas de médio e grande porte com foco na mitigação de riscos e na sustentabilidade jurídica dos negócios.",
+          "coverImage": "/Fachada.jpg",
+          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
+          "phones": ["+55 (19) 3833-5604"],
+          "emails": ["contato@andradeeazevedo.adv.br"],
+          "website": "https://andradeeazevedo.adv.br",
+          "instagram": "https://instagram.com/andradeeazevedo",
+          "address": "Sala 504 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h30 às 18h",
+          "services": [
+            "Assessoria societária e governança",
+            "Planejamento tributário preventivo",
+            "Atuação contenciosa estratégica"
+          ],
+          "gallery": [
+            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Reunião da equipe Andrade & Azevedo" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://andradeeazevedo.adv.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/andradeeazevedo", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "salvador-lima",
+          "slug": "salvador-lima",
+          "name": "Salvador Lima Advocacia Trabalhista",
+          "tagline": "Defesa e consultoria trabalhista para empresas e executivos.",
+          "shortDescription": "Atendimento especializado em negociações coletivas, auditoria trabalhista e contencioso estratégico.",
+          "description": "O escritório Salvador Lima atua há 20 anos em direito do trabalho, oferecendo consultoria preventiva, auditoria, due diligence e defesa em litígios estratégicos.",
+          "coverImage": "/Fachada5.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 3833-5605"],
+          "emails": ["agenda@salvadorlima.adv.br"],
+          "website": "https://salvadorlima.adv.br",
+          "instagram": "https://instagram.com/salvadorlimaadv",
+          "address": "Sala 410 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 9h às 18h",
+          "services": [
+            "Consultoria preventiva e compliance trabalhista",
+            "Negociação coletiva e acordos extrajudiciais",
+            "Defesa em ações trabalhistas complexas"
+          ],
+          "gallery": [
+            { "url": "/Fachada4.jpg", "alt": "Sala de atendimento do escritório Salvador Lima" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://salvadorlima.adv.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/salvadorlimaadv", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "pires-rodrigues",
+          "slug": "pires-rodrigues",
+          "name": "Pires & Rodrigues Advocacia Cível",
+          "tagline": "Atuação personalizada em direito de família, sucessões e imobiliário.",
+          "shortDescription": "Equipe voltada para demandas cíveis com mediação humanizada e foco em resultados.",
+          "description": "A Pires & Rodrigues é referência regional em mediação e resolução de conflitos cíveis, imobiliários e de família, com suporte jurídico completo.",
+          "coverImage": "/Fachada3.jpg",
+          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
+          "phones": ["+55 (19) 3833-5606"],
+          "emails": ["contato@piresrodrigues.adv.br"],
+          "instagram": "https://instagram.com/piresrodriguesadv",
+          "address": "Sala 220 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 17h",
+          "services": [
+            "Mediação e conciliação familiar",
+            "Regularização imobiliária",
+            "Inventários e planejamento sucessório"
+          ],
+          "gallery": [
+            { "url": "/Fachada.jpg", "alt": "Equipe da Pires & Rodrigues atendendo clientes" }
+          ],
+          "socialLinks": [
+            { "label": "Instagram", "url": "https://instagram.com/piresrodriguesadv", "type": "instagram" }
+          ]
+        }
       ]
     },
     {
-      "id": "gastronomia-conveniencia",
-      "name": "Gastronomia & conveniência",
-      "description": "Restaurantes, cafeterias, mercado e opções rápidas para quem precisa praticidade no dia a dia.",
+      "id": "contabilidade",
+      "slug": "contabilidade",
+      "name": "Contabilidade",
+      "headline": "Contadores parceiros para manter a saúde financeira da sua empresa.",
+      "description": "Escritórios contábeis com soluções digitais, consultoria fiscal e suporte ao empreendedor.",
+      "heroImage": "/Fachada4.jpg",
+      "cardImage": "/Fachada4.jpg",
       "companies": [
-        { "id": "cafe-jaguar", "name": "Café Jaguar" },
-        { "id": "emporio-centro", "name": "Empório do Centro" },
-        { "id": "praca-sabores", "name": "Praça Sabores" }
+        {
+          "id": "plaza-contabil",
+          "slug": "plaza-contabil",
+          "name": "Plaza Contábil Inteligente",
+          "tagline": "Contabilidade consultiva e digital com dashboard em tempo real.",
+          "shortDescription": "Especialistas em negócios do varejo, saúde e serviços, com acompanhamento próximo ao empreendedor.",
+          "description": "A Plaza Contábil Inteligente oferece assessoria completa em abertura de empresas, planejamento tributário, folha de pagamento e contabilidade consultiva.",
+          "coverImage": "/Fachada5.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 3833-5607"],
+          "emails": ["contato@plazacontabil.com.br"],
+          "website": "https://plazacontabil.com.br",
+          "instagram": "https://instagram.com/plazacontabil",
+          "address": "Sala 315 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 18h",
+          "services": [
+            "Planejamento tributário",
+            "Gestão de folha e benefícios",
+            "Relatórios gerenciais em tempo real"
+          ],
+          "gallery": [
+            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Equipe da Plaza Contábil em reunião" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://plazacontabil.com.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/plazacontabil", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "domus-fiscal",
+          "slug": "domus-fiscal",
+          "name": "Domus Fiscal & Auditoria",
+          "tagline": "Especialistas em auditoria tributária e revisão de benefícios fiscais.",
+          "shortDescription": "Mais de 15 anos de atuação em consultoria e auditoria fiscal no interior paulista.",
+          "description": "A Domus Fiscal é referência regional em auditoria e recuperação de créditos tributários, com equipe composta por contadores e advogados tributaristas.",
+          "coverImage": "/Fachada3.jpg",
+          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
+          "phones": ["+55 (19) 3833-5608"],
+          "emails": ["relacionamento@domusfiscal.com.br"],
+          "instagram": "https://instagram.com/domusfiscal",
+          "address": "Sala 221 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h30 às 17h30",
+          "services": [
+            "Auditoria tributária completa",
+            "Recuperação de créditos",
+            "Treinamentos in company"
+          ],
+          "gallery": [
+            { "url": "/Fachada4.jpg", "alt": "Reunião de consultores Domus Fiscal" }
+          ],
+          "socialLinks": [
+            { "label": "Instagram", "url": "https://instagram.com/domusfiscal", "type": "instagram" }
+          ]
+        },
+        {
+          "id": "epsilon-contabilidade",
+          "slug": "epsilon-contabilidade",
+          "name": "Epsilon Contabilidade Consultiva",
+          "tagline": "Tecnologia e proximidade para o dia a dia do empreendedor.",
+          "shortDescription": "Consultoria contábil com foco em startups, profissionais liberais e franquias.",
+          "description": "A Epsilon Contabilidade alia tecnologia, atendimento consultivo e planejamento tributário para negócios em expansão.",
+          "coverImage": "/Fachada.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 3833-5609"],
+          "emails": ["contato@epsiloncontabil.com.br"],
+          "website": "https://epsiloncontabil.com.br",
+          "instagram": "https://instagram.com/epsiloncontabil",
+          "address": "Sala 214 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 8h às 18h",
+          "services": [
+            "Abertura e regularização de empresas",
+            "Consultoria contábil e financeira",
+            "BPO fiscal e trabalhista"
+          ],
+          "gallery": [
+            { "url": "/img-jaguar-center-plaza-001-768x460.jpg", "alt": "Espaço compartilhado da Epsilon Contabilidade" }
+          ],
+          "socialLinks": [
+            { "label": "Site", "url": "https://epsiloncontabil.com.br", "type": "website" },
+            { "label": "Instagram", "url": "https://instagram.com/epsiloncontabil", "type": "instagram" }
+          ]
+        }
       ]
     },
     {
-      "id": "beleza-estetica",
-      "name": "Beleza & estética",
-      "description": "Centros de estética, salões e barbearias com serviços premium e profissionais especializados.",
+      "id": "beleza",
+      "slug": "beleza",
+      "name": "Beleza & bem-estar",
+      "headline": "Estúdios e centros de estética que valorizam autocuidado, saúde e autoestima.",
+      "description": "Experiências completas de beleza, terapias corporais, pilates e bem-estar para todas as idades.",
+      "heroImage": "/Fachada5.jpg",
+      "cardImage": "/Fachada5.jpg",
       "companies": [
-        { "id": "studio-beleza", "name": "Studio Beleza" },
-        { "id": "spa-jaguar", "name": "Spa Jaguar" },
-        { "id": "barbearia-plaza", "name": "Barbearia Plaza" }
+        {
+          "id": "studio-alessandra-moraes",
+          "slug": "studio-alessandra-moraes",
+          "name": "Studio Alessandra Moraes",
+          "tagline": "Pilates, treinamento funcional e terapias integrativas.",
+          "shortDescription": "Espaço completo com aulas personalizadas, equipamentos modernos e acompanhamento multidisciplinar.",
+          "description": "O Studio Alessandra Moraes é um ambiente dedicado ao movimento consciente, pilates, treinamento funcional, barras de access, ventosaterapia e bem-estar integral.",
+          "coverImage": "/Fachada4.jpg",
+          "logo": "/1.png",
+          "phones": ["+55 (19) 99697-6642"],
+          "emails": ["ale.pca@hotmail.com"],
+          "instagram": "https://instagram.com/studioalessandramoraes",
+          "address": "Sala 117 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sex. · 7h às 21h · Sáb. · 8h às 13h",
+          "services": [
+            "Pilates clássico e contemporâneo",
+            "Treinamento funcional",
+            "Terapias integrativas"
+          ],
+          "gallery": [
+            { "url": "/jaguar center plaza - Jaguariuna.jpg", "alt": "Sala de pilates do Studio Alessandra Moraes" },
+            { "url": "/jaguar center plaza - Jaguariuna_edited.jpg", "alt": "Alunos praticando treinamento funcional" },
+            { "url": "/Fachada5.jpg", "alt": "Entrada do Studio Alessandra Moraes" }
+          ],
+          "socialLinks": [
+            { "label": "Instagram", "url": "https://instagram.com/studioalessandramoraes", "type": "instagram" },
+            { "label": "WhatsApp", "url": "https://wa.me/5519996976642", "type": "whatsapp" }
+          ]
+        },
+        {
+          "id": "barber-dom-fernandes",
+          "slug": "barber-dom-fernandes",
+          "name": "Barber Shop Dom Fernandes",
+          "tagline": "Barbearia premium com lounge, bar e experiências personalizadas.",
+          "shortDescription": "Cortes clássicos e modernos, terapia capilar, bar com drinks autorais e eventos temáticos.",
+          "description": "A Dom Fernandes oferece experiência completa de grooming masculino, com barbearia, spa capilar, bar, mesas de sinuca e curadoria musical semanal.",
+          "coverImage": "/Fachada3.jpg",
+          "logo": "/logo-jaguar-center-plaza-002b-768x535.png",
+          "phones": ["+55 (19) 99874-1020"],
+          "instagram": "https://instagram.com/domfernandesbarber",
+          "address": "Sala 028 · Piso térreo · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Ter. a sex. · 10h às 21h · Sáb. · 9h às 19h",
+          "services": [
+            "Cortes, barba e design de sobrancelha",
+            "Terapia capilar e spa para barba",
+            "Eventos temáticos com DJ e mixologia"
+          ],
+          "gallery": [
+            { "url": "/333984251_205311685379957_6835703374332389472_n.jpg", "alt": "Barbearia Dom Fernandes com clientes" },
+            { "url": "/333674171_999380511025032_54232673152881839_n.jpg", "alt": "Bar da barbearia Dom Fernandes" }
+          ],
+          "socialLinks": [
+            { "label": "Instagram", "url": "https://instagram.com/domfernandesbarber", "type": "instagram" },
+            { "label": "WhatsApp", "url": "https://wa.me/5519998741020", "type": "whatsapp" }
+          ]
+        },
+        {
+          "id": "galeria-retro",
+          "slug": "galeria-retro",
+          "name": "Galeria Retrô Estética",
+          "tagline": "Centro de estética avançada com protocolos exclusivos.",
+          "shortDescription": "Tratamentos faciais, corporais e depilação a laser com equipamentos de alta performance.",
+          "description": "A Galeria Retrô combina estética avançada, consultoria de imagem e produtos dermocosméticos exclusivos em um ambiente acolhedor.",
+          "coverImage": "/Fachada.jpg",
+          "logo": "/logo-jaguar-center-plaza-002-1-768x535.png",
+          "phones": ["+55 (19) 99852-4411"],
+          "emails": ["contato@galeriaretro.com.br"],
+          "instagram": "https://instagram.com/galeriaretroestetica",
+          "address": "Sala 036 · Jaguar Center Plaza",
+          "mapsUrl": "https://maps.app.goo.gl/direcoes-jaguar-center-plaza",
+          "schedule": "Seg. a sáb. · 9h às 20h",
+          "services": [
+            "Limpeza de pele e revitalização facial",
+            "Tratamentos corporais e drenagem linfática",
+            "Depilação a laser e design de sobrancelhas"
+          ],
+          "gallery": [
+            { "url": "/Fachada5.jpg", "alt": "Sala de atendimento da Galeria Retrô" },
+            { "url": "/jaguar center plaza - Jaguariuna.jpg", "alt": "Detalhes do ambiente da Galeria Retrô" }
+          ],
+          "socialLinks": [
+            { "label": "Instagram", "url": "https://instagram.com/galeriaretroestetica", "type": "instagram" },
+            { "label": "WhatsApp", "url": "https://wa.me/5519998524411", "type": "whatsapp" }
+          ]
+        }
       ]
     }
   ],
-  "generatedAt": "2024-01-01T00:00:00.000Z"
+  "generatedAt": "2024-06-01T00:00:00.000Z"
 }
