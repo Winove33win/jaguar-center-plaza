@@ -27,10 +27,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.4",
-
     "supertest": "^7.1.4"
-
-    "supertest": "^6.3.4"
-main
   }
 }
