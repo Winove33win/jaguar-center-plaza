@@ -32,6 +32,23 @@ export interface AreasResponse {
   generatedAt?: string;
 }
 
+export interface CompanySummary {
+  id: string;
+  name: string;
+}
+
+export interface CompanyCategory {
+  id: string;
+  name: string;
+  description?: string;
+  companies: CompanySummary[];
+}
+
+export interface CategoriesResponse {
+  categories: CompanyCategory[];
+  generatedAt?: string;
+}
+
 export interface LibrasLeadPayload {
   name: string;
   email: string;
@@ -42,6 +59,7 @@ export interface LibrasLeadPayload {
 }
 
 const AREAS_FALLBACK = '/assets/areas-fallback.json';
+const CATEGORIES_FALLBACK = '/assets/categories-fallback.json';
 
 export async function fetchAreas(): Promise<AreasResponse> {
   try {
@@ -50,6 +68,16 @@ export async function fetchAreas(): Promise<AreasResponse> {
   } catch (error) {
     console.warn('Falha ao buscar áreas, usando fallback.', error);
     return fetchFallbackJson<AreasResponse>(AREAS_FALLBACK);
+  }
+}
+
+export async function fetchCategories(): Promise<CategoriesResponse> {
+  try {
+    const response = await api.get<CategoriesResponse>('/categories');
+    return response.data;
+  } catch (error) {
+    console.warn('Falha ao buscar categorias, usando fallback.', error);
+    return fetchFallbackJson<CategoriesResponse>(CATEGORIES_FALLBACK);
   }
 }
 
