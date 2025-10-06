@@ -6,7 +6,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 
-import companiesRouter from '../routes/companies.js';
+import companiesRouter from './routes/companies.js';
 import { env, resolvePublicBaseUrl } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import apiRouter from './routes/index.js';
