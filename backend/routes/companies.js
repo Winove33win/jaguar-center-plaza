@@ -58,6 +58,16 @@ function toListItem(normalized) {
   };
 }
 
+function mapRowsToCompanies(rows, categoryInfo, startIndex = 0) {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return [];
+  }
+
+  return rows.map((row, index) =>
+    pickCompanyFields(row, categoryInfo.slug, categoryInfo.table, startIndex + index)
+  );
+}
+
 function createColumnLookup(columns = []) {
   const lookup = new Map();
   columns.forEach((column) => {
@@ -190,6 +200,27 @@ function isRowPublished(row, categoryInfo) {
   }
 
   return true;
+}
+
+async function fetchCategoryItems(categoryInfo, limit = 500) {
+  const columns = await getTableColumns(categoryInfo.table);
+
+  if (!columns.length) {
+    return [];
+  }
+
+  const columnLookup = createColumnLookup(columns);
+  const params = [];
+  const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
+  const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+  const orderClause = resolveOrderClause(columnLookup);
+
+  const [rows] = await pool.query(
+    `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ?`,
+    [...params, limit]
+  );
+
+  return mapRowsToCompanies(rows, categoryInfo);
 }
 
 function buildSearchClause(columnLookup, searchTerm, params) {
@@ -331,6 +362,7 @@ router.get('/companies', async (req, res) => {
         whereParams
       );
 
+
       const total = Number(countRows?.[0]?.total ?? countRows?.[0]?.c ?? 0);
       const orderClause = resolveOrderClause(columnLookup);
 
@@ -340,6 +372,31 @@ router.get('/companies', async (req, res) => {
       );
 
       const items = mapRowsToCompanies(rows, categoryInfo, offset).map(toListItem);
+
+    const items = mapRowsToCompanies(rows, categoryInfo, offset).map((normalized) => ({
+      id: normalized.id,
+      slug: normalized.slug,
+      category: normalized.category,
+      name: normalized.name,
+      description: normalized.description,
+      shortDescription: normalized.shortDescription,
+      logo: normalized.logo,
+      coverImage: normalized.coverImage,
+      address: normalized.address,
+      room: normalized.room,
+      phone: normalized.phone,
+      phones: normalized.phones,
+      email: normalized.email,
+      emails: normalized.emails,
+      whatsapp: normalized.whatsapp,
+      instagram: normalized.instagram,
+      facebook: normalized.facebook,
+      website: normalized.website,
+      detailPath: normalized.detailPath,
+      listPath: normalized.listPath,
+      highlight: normalized.highlight,
+    }));
+
 
       return res.json({ page: pageNumber, pageSize: size, total, items });
     }
@@ -426,8 +483,12 @@ router.get('/companies/:category/:id', async (req, res) => {
       return res.status(404).json({ error: 'Company not found' });
     }
 
+
     const publishedRows = rows.filter((row) => isRowPublished(row, categoryInfo));
     const normalizedRows = mapRowsToCompanies(publishedRows, categoryInfo);
+
+    const normalizedRows = mapRowsToCompanies(rows, categoryInfo);
+
     const target = String(id).toLowerCase();
     const match = normalizedRows.find((company) => {
       const companyId = company.id ? String(company.id).toLowerCase() : null;
