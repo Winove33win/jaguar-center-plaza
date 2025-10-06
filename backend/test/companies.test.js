@@ -17,13 +17,13 @@ const { default: app } = await import('../app.js');
 
 const fixturesByTable = Object.fromEntries(
   CATEGORIES.map((category, index) => {
-    const columns = ['id', 'titulo', 'descricao', 'updated_at', 'status_col'];
+    const columns = ['id', 'titulo', 'descricao', 'updated_at', 'status'];
     const row = {
       id: index + 1,
       titulo: `${category.name} Example`,
       descricao: `Description for ${category.name}`,
       updated_at: '2024-01-01',
-      status_col: 'published',
+      status: 'published',
     };
 
     return [
@@ -100,4 +100,53 @@ test('GET /api/companies resolves each category list and detail', async (t) => {
     assert.equal(detailResponse.body.category, category.slug);
     assert.equal(detailResponse.body.name, fixture.rows[0].titulo);
   }
+});
+
+test('category endpoints fall back gracefully when metadata inspection fails', async (t) => {
+  const row = {
+    id: 'fallback-id',
+    titulo: 'Fallback Example',
+    descricao: 'Example description',
+    endereco: 'Rua Teste, 123',
+    celular: '(19) 99999-9999',
+    status: 'published',
+    publish_date: null,
+    unpublish_date: null,
+  };
+
+  const queryMock = mock.method(pool, 'query', async (sql) => {
+    if (typeof sql === 'string' && sql.includes('information_schema.columns')) {
+      throw new Error('Access denied');
+    }
+
+    if (typeof sql === 'string' && sql.includes('COUNT(*)')) {
+      return [[{ total: 1 }], []];
+    }
+
+    return [[row], []];
+  });
+
+  t.after(() => {
+    queryMock.mock.restore();
+  });
+
+  const listResponse = await request(app)
+    .get('/api/companies')
+    .query({ category: 'administracao' });
+
+  assert.equal(listResponse.status, 200);
+  assert.equal(listResponse.body.total, 1);
+  assert.equal(listResponse.body.items[0].name, row.titulo);
+
+  const categoryResponse = await request(app).get('/api/administracao');
+
+  assert.equal(categoryResponse.status, 200);
+  assert.equal(categoryResponse.body.length, 1);
+  assert.equal(categoryResponse.body[0].name, row.titulo);
+
+  const detailResponse = await request(app).get('/api/companies/administracao/fallback-id');
+
+  assert.equal(detailResponse.status, 200);
+  assert.equal(detailResponse.body.id, row.id);
+  assert.equal(detailResponse.body.name, row.titulo);
 });

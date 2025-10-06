@@ -8,6 +8,55 @@ import { buildPublicationStatusClause } from '../src/utils/publication-status.js
 const router = express.Router();
 const knownCategoryTables = new Set(CATEGORIES.map((category) => category.table));
 const columnCache = new Map();
+const FALLBACK_COLUMNS = null;
+const STATUS_VALUES = new Set([
+  'published',
+  'publicado',
+  'publicada',
+  'active',
+  'ativo',
+  'ativa',
+  '1',
+  'true',
+  'sim',
+  'yes',
+]);
+
+function mapRowsToCompanies(rows, categoryInfo, startIndex = 0) {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return [];
+  }
+
+  return rows.map((row, index) =>
+    pickCompanyFields(row, categoryInfo.slug, categoryInfo.table, startIndex + index)
+  );
+}
+
+function toListItem(normalized) {
+  return {
+    id: normalized.id,
+    slug: normalized.slug,
+    category: normalized.category,
+    name: normalized.name,
+    description: normalized.description,
+    shortDescription: normalized.shortDescription,
+    logo: normalized.logo,
+    coverImage: normalized.coverImage,
+    address: normalized.address,
+    room: normalized.room,
+    phone: normalized.phone,
+    phones: normalized.phones,
+    email: normalized.email,
+    emails: normalized.emails,
+    whatsapp: normalized.whatsapp,
+    instagram: normalized.instagram,
+    facebook: normalized.facebook,
+    website: normalized.website,
+    detailPath: normalized.detailPath,
+    listPath: normalized.listPath,
+    highlight: normalized.highlight,
+  };
+}
 
 function mapRowsToCompanies(rows, categoryInfo, startIndex = 0) {
   if (!Array.isArray(rows) || rows.length === 0) {
@@ -48,23 +97,109 @@ async function getTableColumns(table) {
 
   const database = process.env.DB_NAME;
   if (!database) {
-    columnCache.set(table, []);
-    return [];
+    columnCache.set(table, FALLBACK_COLUMNS);
+    return FALLBACK_COLUMNS;
   }
 
-  const [rows] = await pool.query(
-    'SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ?',
-    [database, table]
-  );
+  try {
+    const [rows] = await pool.query(
+      'SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ?',
+      [database, table]
+    );
 
-  const columns = Array.isArray(rows)
-    ? rows
-        .map((row) => row.column_name || row.COLUMN_NAME)
-        .filter((name) => typeof name === 'string' && name.length > 0)
-    : [];
+    const columns = Array.isArray(rows)
+      ? rows
+          .map((row) => row.column_name || row.COLUMN_NAME)
+          .filter((name) => typeof name === 'string' && name.length > 0)
+      : [];
 
-  columnCache.set(table, columns);
-  return columns;
+    columnCache.set(table, columns);
+    return columns;
+  } catch (error) {
+    console.warn(`Unable to inspect columns for table ${table}`, error);
+    columnCache.set(table, FALLBACK_COLUMNS);
+    return FALLBACK_COLUMNS;
+  }
+}
+
+async function fetchCategoryItems(categoryInfo, limit = 500) {
+  const columns = await getTableColumns(categoryInfo.table);
+
+  if (Array.isArray(columns) && columns.length > 0) {
+    const columnLookup = createColumnLookup(columns);
+    const params = [];
+    const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
+    const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+    const orderClause = resolveOrderClause(columnLookup);
+
+    const [rows] = await pool.query(
+      `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ?`,
+      [...params, limit]
+    );
+
+    return mapRowsToCompanies(rows, categoryInfo);
+  }
+
+  const [rows] = await pool.query(`SELECT * FROM \`${categoryInfo.table}\` LIMIT ?`, [limit]);
+  const filtered = rows.filter((row) => isRowPublished(row, categoryInfo));
+  return mapRowsToCompanies(filtered, categoryInfo);
+}
+
+function getRowValue(row, ...candidates) {
+  if (!row || typeof row !== 'object') {
+    return null;
+  }
+
+  const lookup = new Map();
+  for (const key of Object.keys(row)) {
+    lookup.set(key.toLowerCase(), key);
+  }
+
+  for (const candidate of candidates) {
+    if (!candidate) {
+      continue;
+    }
+
+    const key = lookup.get(String(candidate).toLowerCase());
+    if (key) {
+      return row[key];
+    }
+  }
+
+  return null;
+}
+
+function parseDate(value) {
+  if (!value) {
+    return null;
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function isRowPublished(row, categoryInfo) {
+  const statusValue = getRowValue(row, categoryInfo.statusColumn, 'status', 'status_col');
+  if (statusValue !== null && statusValue !== undefined) {
+    const normalized = String(statusValue).trim().toLowerCase();
+    if (normalized && !STATUS_VALUES.has(normalized)) {
+      return false;
+    }
+  }
+
+  const publishDateValue = getRowValue(row, categoryInfo.publishDateColumn, 'publish_date', 'publish_at');
+  const publishDate = parseDate(publishDateValue);
+  if (publishDate && publishDate.getTime() > Date.now()) {
+    return false;
+  }
+
+  const unpublishDateValue = getRowValue(row, categoryInfo.unpublishDateColumn, 'unpublish_date', 'unpublish_at');
+  const unpublishDate = parseDate(unpublishDateValue);
+  if (unpublishDate && unpublishDate.getTime() <= Date.now()) {
+    return false;
+  }
+
+  return true;
 }
 
 async function fetchCategoryItems(categoryInfo, limit = 500) {
@@ -198,46 +333,45 @@ router.get('/companies', async (req, res) => {
 
   try {
     const columns = await getTableColumns(categoryInfo.table);
-
-    if (!columns.length) {
-      return res.status(404).json({ error: 'Category data not available' });
-    }
-
-    const columnLookup = createColumnLookup(columns);
-
     const pageNumber = normalizePage(page, 1);
     const size = Math.min(normalizePage(pageSize, 12), 100);
     const offset = (pageNumber - 1) * size;
-
     const searchTerm = typeof q === 'string' ? q.trim() : '';
-    const searchParams = [];
-    const filters = [];
 
-    const searchClause = buildSearchClause(columnLookup, searchTerm, searchParams);
-    if (searchClause) {
-      filters.push(searchClause);
-    }
+    if (Array.isArray(columns) && columns.length > 0) {
+      const columnLookup = createColumnLookup(columns);
 
-    const whereParams = [...searchParams];
-    const publicationFilters = buildPublicationFilters(categoryInfo, columnLookup, whereParams);
-    if (publicationFilters.length) {
-      filters.push(...publicationFilters);
-    }
+      const searchParams = [];
+      const filters = [];
 
-    const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+      const searchClause = buildSearchClause(columnLookup, searchTerm, searchParams);
+      if (searchClause) {
+        filters.push(searchClause);
+      }
 
-    const [countRows] = await pool.query(
-      `SELECT COUNT(*) AS total FROM \`${categoryInfo.table}\` ${filtersSql}`,
-      whereParams
-    );
+      const whereParams = [...searchParams];
+      const publicationFilters = buildPublicationFilters(categoryInfo, columnLookup, whereParams);
+      if (publicationFilters.length) {
+        filters.push(...publicationFilters);
+      }
 
-    const total = Number(countRows?.[0]?.total ?? countRows?.[0]?.c ?? 0);
-    const orderClause = resolveOrderClause(columnLookup);
+      const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
 
-    const [rows] = await pool.query(
-      `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ? OFFSET ?`,
-      [...whereParams, size, offset]
-    );
+      const [countRows] = await pool.query(
+        `SELECT COUNT(*) AS total FROM \`${categoryInfo.table}\` ${filtersSql}`,
+        whereParams
+      );
+
+
+      const total = Number(countRows?.[0]?.total ?? countRows?.[0]?.c ?? 0);
+      const orderClause = resolveOrderClause(columnLookup);
+
+      const [rows] = await pool.query(
+        `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ? OFFSET ?`,
+        [...whereParams, size, offset]
+      );
+
+      const items = mapRowsToCompanies(rows, categoryInfo, offset).map(toListItem);
 
     const items = mapRowsToCompanies(rows, categoryInfo, offset).map((normalized) => ({
       id: normalized.id,
@@ -263,7 +397,34 @@ router.get('/companies', async (req, res) => {
       highlight: normalized.highlight,
     }));
 
-    res.json({ page: pageNumber, pageSize: size, total, items });
+
+      return res.json({ page: pageNumber, pageSize: size, total, items });
+    }
+
+    const [rows] = await pool.query(`SELECT * FROM \`${categoryInfo.table}\``);
+    const publishedRows = rows.filter((row) => isRowPublished(row, categoryInfo));
+    let normalizedRows = mapRowsToCompanies(publishedRows, categoryInfo);
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      normalizedRows = normalizedRows.filter((company) => {
+        const fields = [
+          company.name,
+          company.shortDescription,
+          company.description,
+          company.address,
+        ];
+
+        return fields.some(
+          (value) => typeof value === 'string' && value.toLowerCase().includes(term)
+        );
+      });
+    }
+
+    const total = normalizedRows.length;
+    const paginated = normalizedRows.slice(offset, offset + size).map(toListItem);
+
+    res.json({ page: pageNumber, pageSize: size, total, items: paginated });
   } catch (error) {
     console.error('Failed to list companies', error);
     res.status(500).json({ error: 'Failed to list companies' });
@@ -282,24 +443,49 @@ router.get('/companies/:category/:id', async (req, res) => {
   try {
     const columns = await getTableColumns(categoryInfo.table);
 
-    if (!columns.length) {
-      return res.status(404).json({ error: 'Category data not available' });
+    if (Array.isArray(columns) && columns.length > 0) {
+      const columnLookup = createColumnLookup(columns);
+      const params = [];
+      const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
+      const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+      const orderClause = resolveOrderClause(columnLookup);
+
+      const [rows] = await pool.query(
+        `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT 500`,
+        params
+      );
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      const normalizedRows = mapRowsToCompanies(rows, categoryInfo);
+
+      const target = String(id).toLowerCase();
+      const match = normalizedRows.find((company) => {
+        const companyId = company.id ? String(company.id).toLowerCase() : null;
+        const companySlug = company.slug ? String(company.slug).toLowerCase() : null;
+        return companyId === target || companySlug === target;
+      });
+
+      if (!match) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      return res.json(match);
     }
 
-    const columnLookup = createColumnLookup(columns);
-    const params = [];
-    const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
-    const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
-    const orderClause = resolveOrderClause(columnLookup);
-
     const [rows] = await pool.query(
-      `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT 500`,
-      params
+      `SELECT * FROM \`${categoryInfo.table}\` LIMIT 500`
     );
 
     if (!Array.isArray(rows) || rows.length === 0) {
       return res.status(404).json({ error: 'Company not found' });
     }
+
+
+    const publishedRows = rows.filter((row) => isRowPublished(row, categoryInfo));
+    const normalizedRows = mapRowsToCompanies(publishedRows, categoryInfo);
 
     const normalizedRows = mapRowsToCompanies(rows, categoryInfo);
 

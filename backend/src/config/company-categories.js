@@ -5,7 +5,7 @@
     name: 'Administração',
     description:
       'Consultorias, BPOs e administradoras que apoiam a estruturação financeira e operacional dos negócios residentes.',
-    statusColumn: 'status_col',
+    statusColumn: 'status',
     publishDateColumn: 'publish_date',
     unpublishDateColumn: 'unpublish_date'
   },
@@ -15,7 +15,9 @@
     name: 'Advocacia',
     description:
       'Escritórios jurídicos e especialistas em consultivo e contencioso empresarial com atendimento personalizado.',
-    statusColumn: 'status_col'
+    statusColumn: 'status',
+    publishDateColumn: 'publish_date',
+    unpublishDateColumn: 'unpublish_date'
   },
   {
     id: 'beleza',
@@ -23,7 +25,9 @@
     name: 'Beleza & Bem-estar',
     description:
       'Salões, barbearias e estúdios de bem-estar que oferecem experiências completas de autocuidado.',
-    statusColumn: 'status_col'
+    statusColumn: 'status',
+    publishDateColumn: 'publish_date',
+    unpublishDateColumn: 'unpublish_date'
   },
   {
     id: 'contabilidade',
@@ -31,7 +35,9 @@
     name: 'Contabilidade & Finanças',
     description:
       'Profissionais e empresas especializadas em contabilidade consultiva, BPO financeiro e controladoria.',
-    statusColumn: 'status_col'
+    statusColumn: 'status',
+    publishDateColumn: 'publish_date',
+    unpublishDateColumn: 'unpublish_date'
   },
   {
     id: 'imobiliaria',
@@ -39,7 +45,9 @@
     name: 'Imobiliárias & Condomínios',
     description:
       'Administradoras, corretores e serviços de gestão patrimonial e locação corporativa.',
-    statusColumn: 'status_col'
+    statusColumn: 'status',
+    publishDateColumn: 'publish_date',
+    unpublishDateColumn: 'unpublish_date'
   },
   {
     id: 'industrias',
@@ -47,7 +55,9 @@
     name: 'Indústrias & Serviços Técnicos',
     description:
       'Fornecedores técnicos e industriais que atendem demandas produtivas e de manutenção especializada.',
-    statusColumn: 'status_col'
+    statusColumn: 'status',
+    publishDateColumn: 'publish_date',
+    unpublishDateColumn: 'unpublish_date'
   },
   {
     id: 'lojas',
@@ -55,7 +65,7 @@
     name: 'Lojas & Conveniência',
     description:
       'Comércio, alimentação e conveniência para o dia a dia de quem frequenta o Jaguar Center Plaza.',
-    statusColumn: 'status_col',
+    statusColumn: 'status',
     publishDateColumn: 'publish_date',
     unpublishDateColumn: 'unpublish_date'
   }
