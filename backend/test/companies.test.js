@@ -83,6 +83,14 @@ test('GET /api/companies resolves each category list and detail', async (t) => {
     assert.equal(listResponse.body.items[0].category, category.slug);
     assert.equal(listResponse.body.items[0].name, fixture.rows[0].titulo);
 
+    const categoryResponse = await request(app).get(`/api/${category.slug}`);
+
+    assert.equal(categoryResponse.status, 200, `Category route for ${category.slug} should succeed`);
+    assert.ok(Array.isArray(categoryResponse.body), 'Category response should be an array');
+    assert.equal(categoryResponse.body.length, fixture.rows.length);
+    assert.equal(categoryResponse.body[0].category, category.slug);
+    assert.equal(categoryResponse.body[0].name, fixture.rows[0].titulo);
+
     const detailResponse = await request(app)
       .get(`/api/companies/${category.slug}/${fixture.rows[0].id}`)
       .query();
