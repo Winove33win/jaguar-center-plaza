@@ -103,9 +103,18 @@ export async function countByCategory() {
 
   const results = await Promise.all(
     entries.map(async ([slug, table]) => {
-      const rows = await query(`SELECT COUNT(*) AS total FROM \`${table}\``);
-      const total = Number(rows?.[0]?.total ?? 0);
-      return { categoria: slug, total };
+      try {
+        const rows = await query(`SELECT COUNT(*) AS total FROM \`${table}\``);
+        const total = Number(rows?.[0]?.total ?? 0);
+        return { categoria: slug, total };
+      } catch (error) {
+        if (error?.code === 'ER_NO_SUCH_TABLE') {
+          console.warn(`Table "${table}" for category "${slug}" was not found. Returning zero results.`);
+          return { categoria: slug, total: 0 };
+        }
+
+        throw error;
+      }
     })
   );
 
