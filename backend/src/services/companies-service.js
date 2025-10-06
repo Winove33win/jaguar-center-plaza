@@ -1,14 +1,13 @@
 import { COMPANY_CATEGORIES } from '../config/company-categories.js';
 import { query } from '../database/pool.js';
+import { buildPublicationStatusClause } from '../utils/publication-status.js';
 import { extractLatestDate, normalizeCompanyRow } from './company-normalizer.js';
 
 async function fetchRowsForCategory(config) {
   const conditions = [];
-  const params = {};
 
   if (config.statusColumn) {
-    conditions.push(`\`${config.statusColumn}\` = :status`);
-    params.status = 'PUBLISHED';
+    conditions.push(buildPublicationStatusClause(config.statusColumn));
   }
 
   if (config.publishDateColumn) {
@@ -24,7 +23,7 @@ async function fetchRowsForCategory(config) {
   const sql = `SELECT * FROM \`${tableName}\` ${whereClause} LIMIT 500`;
 
   try {
-    const rows = await query(sql, params);
+    const rows = await query(sql);
     return Array.isArray(rows) ? rows : [];
   } catch (error) {
     console.error(`Falha ao consultar a tabela ${tableName}`, error);

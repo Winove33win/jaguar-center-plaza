@@ -3,6 +3,7 @@ import express from 'express';
 import pool from '../db/pool.js';
 import { CATEGORIES, bySlug } from '../lib/categories.js';
 import { pickCompanyFields } from '../lib/normalize.js';
+import { buildPublicationStatusClause } from '../src/utils/publication-status.js';
 
 const router = express.Router();
 const knownCategoryTables = new Set(CATEGORIES.map((category) => category.table));
@@ -120,9 +121,9 @@ function buildPublicationFilters(categoryInfo, columnLookup, params) {
   const filters = [];
 
   const statusColumn = resolveColumn(columnLookup, categoryInfo.statusColumn);
-  if (statusColumn) {
-    filters.push(`\`${statusColumn}\` = ?`);
-    params.push('PUBLISHED');
+  const statusClause = buildPublicationStatusClause(statusColumn);
+  if (statusClause) {
+    filters.push(statusClause);
   }
 
   const publishDateColumn = resolveColumn(columnLookup, categoryInfo.publishDateColumn);
