@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
+import ImageGalleryCarousel from '../components/ImageGalleryCarousel';
 import { getCategories, getCompany, type CategorySummary } from '../api/companies';
 import { useSEO } from '../hooks/useSEO';
 
@@ -141,6 +142,20 @@ export default function CompanyDetailPage() {
               <div className="rounded-3xl bg-white p-8 shadow-lg">
                 <h2 className="text-2xl font-semibold text-primary-800">Sobre a empresa</h2>
                 <p className="mt-3 text-base leading-relaxed text-[#4f5d55]">{company.descricao}</p>
+              </div>
+            )}
+
+            {company && company.galeria.length > 0 && (
+              <div className="rounded-3xl bg-white p-8 shadow-lg">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-2xl font-semibold text-primary-800">Galeria de imagens</h2>
+                  <span className="text-sm font-medium uppercase tracking-[0.2em] text-primary-500">
+                    {company.galeria.length} {company.galeria.length === 1 ? 'imagem' : 'imagens'}
+                  </span>
+                </div>
+                <div className="mt-6">
+                  <ImageGalleryCarousel images={company.galeria} title={company.titulo} autoAdvance autoAdvanceInterval={6000} />
+                </div>
               </div>
             )}
 
