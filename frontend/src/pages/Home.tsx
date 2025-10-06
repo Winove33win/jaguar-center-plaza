@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
-import { fetchCategories, type CompanyCategory } from '../lib/api';
+import { getCategories, type CategorySummary } from '../api/companies';
 import { useSEO } from '../hooks/useSEO';
 
 const featureItems = [
@@ -67,6 +67,45 @@ type CategoryCard = {
   href: string;
 };
 
+const CATEGORY_CONTENT: Record<string, { description: string; image: string }> = {
+  administracao: {
+    description: 'Consultorias, serviços administrativos e soluções empresariais completas.',
+    image: '/Fachada.jpg'
+  },
+  advocacia: {
+    description: 'Escritórios de advocacia com atendimento personalizado e multissetorial.',
+    image: '/Fachada3.jpg'
+  },
+  beleza: {
+    description: 'Salões, barbearias e clínicas de estética que cuidam da sua beleza e bem-estar.',
+    image: '/Fachada5.jpg'
+  },
+  contabilidade: {
+    description: 'Contadores e consultorias especializadas para manter as finanças em dia.',
+    image: '/Fachada4.jpg'
+  },
+  imobiliaria: {
+    description: 'Imobiliárias e correspondentes que facilitam locações e investimentos.',
+    image: '/Fachada2.jpg'
+  },
+  industrias: {
+    description: 'Fornecedores e prestadores de serviços para o setor industrial.',
+    image: '/Fachada6.jpg'
+  },
+  lojas: {
+    description: 'Lojas e conveniências para o dia a dia de colaboradores e visitantes.',
+    image: '/Fachada7.jpg'
+  },
+  saude: {
+    description: 'Clínicas, consultórios e terapias integradas para cuidar da saúde.',
+    image: '/Fachada8.jpg'
+  },
+  servicos_publicos: {
+    description: 'Serviços essenciais e institucionais reunidos em um só lugar.',
+    image: '/Fachada9.jpg'
+  }
+};
+
 const fallbackCategoryCards: CategoryCard[] = [
   {
     title: 'Serviços corporativos',
@@ -124,8 +163,8 @@ function formatCompaniesLabel(count: number) {
 }
 
 export default function HomePage() {
-  const { data, isLoading, isError } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories });
-  const categories = data?.categories ?? [];
+  const { data, isLoading, isError } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
+  const categories = data ?? [];
 
   useSEO({
     title: 'Jaguar Center Plaza — Tudo para o seu conforto e bem-estar',
@@ -134,17 +173,20 @@ export default function HomePage() {
     canonical: 'https://www.jaguarcenterplaza.com.br/'
   });
 
-  const categoryImages = ['/Fachada.jpg', '/Fachada3.jpg', '/Fachada4.jpg', '/Fachada5.jpg'];
-  const dynamicCategoryCards: CategoryCard[] = categories.slice(0, 4).map((category: CompanyCategory, index) => ({
-    title: category.name,
-    description:
-      category.description?.trim()?.length
-        ? category.description
-        : 'Conheça o mix de empresas que oferecem serviços completos para o seu dia a dia.',
-    companiesLabel: formatCompaniesLabel(category.companies?.length ?? 0),
-    image: category.cardImage ?? category.heroImage ?? categoryImages[index % categoryImages.length],
-    href: `/empresas/${category.slug || category.id}`
-  }));
+  const dynamicCategoryCards: CategoryCard[] = categories.slice(0, 4).map((category: CategorySummary) => {
+    const meta = CATEGORY_CONTENT[category.slug] || {
+      description: 'Conheça o mix de empresas que oferecem serviços completos para o seu dia a dia.',
+      image: '/Fachada5.jpg'
+    };
+
+    return {
+      title: category.label,
+      description: meta.description,
+      companiesLabel: formatCompaniesLabel(category.total),
+      image: meta.image,
+      href: `/empresas/${category.slug}`
+    };
+  });
 
   const categoryCards: CategoryCard[] =
     dynamicCategoryCards.length > 0

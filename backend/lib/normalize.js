@@ -1,41 +1,58 @@
-import { normalizeCompanyRow } from '../src/services/company-normalizer.js';
+export function parseEndereco(endereco) {
+  if (endereco === null || endereco === undefined) {
+    return null;
+  }
 
-export function pickCompanyFields(row = {}, category, tableId = category, index = 0) {
-  const normalized = normalizeCompanyRow(tableId || category, row, index);
-  const phones = Array.isArray(normalized.phones) ? normalized.phones : [];
-  const emails = Array.isArray(normalized.emails) ? normalized.emails : [];
-  const services = Array.isArray(normalized.services) ? normalized.services : [];
-  const gallery = Array.isArray(normalized.gallery) && normalized.gallery.length ? normalized.gallery : null;
+  if (typeof endereco === 'string') {
+    const trimmed = endereco.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed && typeof parsed === 'object' && typeof parsed.formatted === 'string') {
+        return { formatted: parsed.formatted };
+      }
+    } catch (error) {
+      // ignore JSON parse errors and fall back to original string
+    }
+
+    return { formatted: trimmed };
+  }
+
+  if (typeof endereco === 'object') {
+    const formatted = typeof endereco.formatted === 'string' ? endereco.formatted : null;
+    if (formatted) {
+      return { formatted };
+    }
+  }
+
+  return { formatted: String(endereco) };
+}
+
+export function normalizeCompanyRow(row = {}) {
+  const endereco = parseEndereco(row.endereco);
+  const logo = row.logo != null ? String(row.logo) : null;
 
   return {
-    id: normalized.id ?? null,
-    slug: normalized.slug ?? null,
-    category,
-    name: normalized.name ?? null,
-    description: normalized.shortDescription || normalized.description || null,
-    shortDescription: normalized.shortDescription || null,
-    address: normalized.address || null,
-    room: normalized.room || null,
-    phone: phones[0] || null,
-    phones,
-    email: emails[0] || null,
-    emails,
-    logo: normalized.logo || null,
-    coverImage: normalized.coverImage || null,
-    instagram: normalized.instagram || null,
-    facebook: normalized.facebook || null,
-    whatsapp: normalized.whatsapp || null,
-    website: normalized.website || null,
-    mapsUrl: normalized.mapsUrl || null,
-    schedule: normalized.schedule || null,
-    services,
-    gallery,
-    socialLinks: normalized.socialLinks || [],
-    detailPath: normalized.detailPath || null,
-    listPath: normalized.listPath || null,
-    highlight: Boolean(normalized.highlight),
-    createdAt: row.created_date || row.created_at || null,
-    updatedAt: row.updated_date || row.updated_at || null,
-    status: row.status_col || row.status || null,
+    id: row.id ?? row.pk ?? null,
+    titulo: row.titulo ?? null,
+    descricao: row.descricao ?? null,
+    endereco: endereco?.formatted ?? null,
+    celular: row.celular ?? null,
+    email: row.email ?? null,
+    sala: row.sala ?? null,
+    logo,
+    createdAt: row.created_date ?? null,
+    updatedAt: row.updated_date ?? null
   };
+}
+
+export function pickCompanyFields(rows = []) {
+  if (!Array.isArray(rows)) {
+    return [];
+  }
+
+  return rows.map((row) => normalizeCompanyRow(row));
 }
