@@ -37,17 +37,24 @@ function normalizeBaseUrl(value) {
   return value.replace(/\/$/, '');
 }
 
+const dbHost = process.env.DB_HOST ?? process.env.MYSQL_HOST ?? '127.0.0.1';
+const dbPort = process.env.DB_PORT ?? process.env.MYSQL_PORT;
+const dbUser = process.env.DB_USER ?? process.env.MYSQL_USER ?? 'root';
+const dbPassword = process.env.DB_PASSWORD ?? process.env.MYSQL_PASSWORD ?? '';
+const dbName = process.env.DB_NAME ?? process.env.MYSQL_DATABASE ?? 'JaguarPlaza';
+const dbConnectionLimit = process.env.DB_CONN_LIMIT ?? process.env.MYSQL_CONN_LIMIT;
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: toNumber(process.env.PORT, 3333),
   publicBaseUrl: normalizeBaseUrl(process.env.PUBLIC_BASE_URL || ''),
   database: {
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: toNumber(process.env.DB_PORT, 3306),
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    name: process.env.DB_NAME || 'JaguarPlaza',
-    connectionLimit: toNumber(process.env.DB_CONN_LIMIT, 10)
+    host: dbHost,
+    port: toNumber(dbPort, 3306),
+    user: dbUser,
+    password: dbPassword,
+    name: dbName,
+    connectionLimit: toNumber(dbConnectionLimit, 10)
   },
   security: {
     trustProxy: toBoolean(process.env.TRUST_PROXY, true)
