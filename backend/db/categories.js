@@ -14,41 +14,28 @@ export const CATEGORIES = [
 
 const categoriesBySlug = new Map(CATEGORIES.map((category) => [category.slug, category]));
 
-function normalizeEndereco(value) {
-  if (value === null || value === undefined) {
-    return null;
+function parsePossibleJson(value) {
+  if (typeof value !== 'string') {
+    return value;
   }
 
-  if (typeof value === 'string') {
-    const trimmed = value.trim();
+  const trimmed = value.trim();
+  if (trimmed.length === 0) {
+    return '';
+  }
 
-    if (!trimmed) {
-      return null;
-    }
+  const looksLikeJson =
+    (trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'));
 
-    try {
-      const parsed = JSON.parse(trimmed);
-      if (parsed && typeof parsed === 'object') {
-        const formatted = typeof parsed.formatted === 'string' ? parsed.formatted.trim() : null;
-        if (formatted) {
-          return { formatted };
-        }
-      }
-    } catch (error) {
-      // ignore JSON parse errors – fallback to plain text
-    }
-
+  if (!looksLikeJson) {
     return trimmed;
   }
 
-  if (typeof value === 'object' && value !== null) {
-    const formatted = typeof value.formatted === 'string' ? value.formatted.trim() : null;
-    if (formatted) {
-      return { formatted };
-    }
+  try {
+    return JSON.parse(trimmed);
+  } catch (error) {
+    return trimmed;
   }
-
-  return String(value);
 }
 
 function toNullableString(value) {
@@ -56,33 +43,133 @@ function toNullableString(value) {
     return null;
   }
 
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
   const stringValue = String(value).trim();
   return stringValue.length > 0 ? stringValue : null;
 }
 
+function normalizeEndereco(value) {
+  const parsed = parsePossibleJson(value);
+
+  if (parsed === null || parsed === undefined) {
+    return null;
+  }
+
+  if (typeof parsed === 'string') {
+    const trimmed = parsed.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+
+  if (typeof parsed === 'object') {
+    const formatted = ['formatted', 'formatado', 'address', 'logradouro']
+      .map((key) => (typeof parsed[key] === 'string' ? parsed[key].trim() : ''))
+      .find((value) => value.length > 0);
+
+    if (formatted) {
+      return formatted;
+    }
+
+    const fallback = Object.values(parsed)
+      .map((item) => (typeof item === 'string' ? item.trim() : ''))
+      .filter((item) => item.length > 0);
+
+    if (fallback.length > 0) {
+      return fallback.join(', ');
+    }
+  }
+
+  const stringified = String(parsed).trim();
+  return stringified.length > 0 ? stringified : null;
+}
+
+function normalizeMediaUrl(value) {
+  const url = toNullableString(value);
+
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith('//')) {
+    return normalizeMediaUrl(`https:${url}`);
+  }
+
+  if (url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
+  }
+
+  if (url.startsWith('/api/media?url=')) {
+    return url;
+  }
+
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol === 'https:') {
+        return `/api/media?url=${encodeURIComponent(parsed.toString())}`;
+      }
+
+      return null;
+    } catch (error) {
+      return url;
+    }
+  }
+
+  if (url.startsWith('/')) {
+    return url;
+  }
+
+  return `/${url}`;
+}
+
+function normalizeMediaList(value) {
+  const parsed = parsePossibleJson(value);
+
+  const candidates = [];
+
+  if (Array.isArray(parsed)) {
+    candidates.push(...parsed);
+  } else if (typeof parsed === 'string') {
+    candidates.push(...parsed.split(/[;,\n]/));
+  } else if (parsed && typeof parsed === 'object') {
+    candidates.push(...Object.values(parsed));
+  }
+
+  const normalized = candidates
+    .map((item) => normalizeMediaUrl(item))
+    .filter((item) => typeof item === 'string' && item.length > 0);
+
+  return Array.from(new Set(normalized));
+}
+
 function mapCompanyRow(row = {}) {
+  const titulo = toNullableString(row.titulo ?? row.nome ?? row.name);
+  const descricao = toNullableString(row.descricao ?? row.description ?? row.tagline);
   const endereco = normalizeEndereco(row.endereco);
-  const company = {
+  const celular = toNullableString(row.celular ?? row.telefone ?? row.phone ?? row.whatsapp);
+  const email = toNullableString(row.email);
+  const sala = toNullableString(row.sala ?? row.salao ?? row.room);
+  const logo = normalizeMediaUrl(row.logo ?? row.imagem ?? row.image);
+  const galeria = normalizeMediaList(row.galeria ?? row.galeria_urls ?? row.gallery);
+  const midia = normalizeMediaList(row.midia ?? row.midia_urls ?? row.media);
+
+  return {
     pk: row.pk != null ? Number(row.pk) : null,
-    id: toNullableString(row.id),
-    titulo: toNullableString(row.titulo),
-    descricao: toNullableString(row.descricao),
+    id: toNullableString(row.id ?? row.slug ?? row.codigo ?? row.code),
+    titulo,
+    descricao,
     endereco,
-    celular: toNullableString(row.celular),
-    email: toNullableString(row.email),
-    sala: toNullableString(row.sala),
-    logo: toNullableString(row.logo)
+    celular,
+    email,
+    sala,
+    logo,
+    galeria,
+    midia,
+    createdAt: toNullableString(row.created_at ?? row.createdAt),
+    updatedAt: toNullableString(row.updated_at ?? row.updatedAt)
   };
-
-  if (row.galeria !== undefined && row.galeria !== null) {
-    company.galeria = String(row.galeria);
-  }
-
-  if (row.midia !== undefined && row.midia !== null) {
-    company.midia = String(row.midia);
-  }
-
-  return company;
 }
 
 export function getCategoryBySlug(slug) {
@@ -155,20 +242,8 @@ export async function listCompanies(tabela, { page = 1, pageSize = 12, q = '' } 
 
   const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
 
-  const selectColumns = [
-    "COALESCE(pk, 0) AS pk",
-    "COALESCE(id, '') AS id",
-    "COALESCE(titulo, '') AS titulo",
-    "COALESCE(descricao, '') AS descricao",
-    "COALESCE(endereco, '') AS endereco",
-    "COALESCE(celular, '') AS celular",
-    "COALESCE(email, '') AS email",
-    "COALESCE(sala, '') AS sala",
-    "COALESCE(logo, '') AS logo"
-  ];
-
-  const querySql =
-    `SELECT ${selectColumns.join(', ')} FROM \`${tabela}\` ${whereClause} ORDER BY titulo ASC LIMIT ? OFFSET ?`;
+  const orderBy = "ORDER BY COALESCE(titulo, '') <> '', titulo ASC";
+  const querySql = `SELECT * FROM \`${tabela}\` ${whereClause} ${orderBy} LIMIT ? OFFSET ?`;
   const countSql = `SELECT COUNT(*) AS total FROM \`${tabela}\` ${whereClause}`;
 
   const [rows] = await pool.query(querySql, [...params, currentPageSize, offset]);

@@ -193,50 +193,58 @@ export default function CompanyCategoryPage() {
           {category && items.length > 0 && (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {items.map((company: CompanyRecord, index) => {
-                const key = company.id ?? `${index}-${company.titulo ?? 'empresa'}`;
+                const identifier = company.id ?? (company.pk != null ? String(company.pk) : null);
+                const key = identifier ?? `${index}-${company.titulo ?? 'empresa'}`;
+                const detailPath = identifier ? `/empresas/${category.slug}/${identifier}` : null;
                 return (
                   <article key={key} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
-                  {company.logo && (
-                    <div className="flex items-center justify-center bg-primary-50 p-6">
-                      <img src={company.logo} alt={company.titulo ?? 'Empresa'} className="max-h-20 object-contain" />
+                    {company.logo && (
+                      <div className="flex items-center justify-center bg-primary-50 p-6">
+                        <img src={company.logo} alt={company.titulo ?? 'Empresa'} className="max-h-20 object-contain" />
+                      </div>
+                    )}
+                    <div className="flex flex-1 flex-col gap-4 p-6">
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-semibold text-primary-800">{company.titulo || 'Empresa sem título'}</h3>
+                        {company.descricao && <p className="text-sm text-[#4f5d55]">{company.descricao}</p>}
+                      </div>
+                      <div className="space-y-2 text-sm text-[#4f5d55]">
+                        {company.endereco && (
+                          <p>
+                            <span className="font-semibold text-primary-700">Endereço:</span> {company.endereco}
+                          </p>
+                        )}
+                        {company.sala && (
+                          <p>
+                            <span className="font-semibold text-primary-700">Sala:</span> {company.sala}
+                          </p>
+                        )}
+                        {company.celular && (
+                          <p>
+                            <span className="font-semibold text-primary-700">Telefone:</span> {company.celular}
+                          </p>
+                        )}
+                        {company.email && (
+                          <p>
+                            <span className="font-semibold text-primary-700">E-mail:</span> {company.email}
+                          </p>
+                        )}
+                      </div>
+                      <div className="mt-auto">
+                        {detailPath ? (
+                          <Link
+                            to={detailPath}
+                            className="inline-flex items-center rounded-full bg-primary-700 px-5 py-2 text-sm font-semibold text-white transition hover:bg-primary-600"
+                          >
+                            Ver detalhes
+                          </Link>
+                        ) : (
+                          <span className="inline-flex cursor-not-allowed items-center rounded-full bg-primary-200 px-5 py-2 text-sm font-semibold text-white">
+                            Detalhes indisponíveis
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <div className="flex flex-1 flex-col gap-4 p-6">
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-primary-800">{company.titulo || 'Empresa sem título'}</h3>
-                      {company.descricao && <p className="text-sm text-[#4f5d55]">{company.descricao}</p>}
-                    </div>
-                    <div className="space-y-2 text-sm text-[#4f5d55]">
-                      {company.endereco && (
-                        <p>
-                          <span className="font-semibold text-primary-700">Endereço:</span> {company.endereco}
-                        </p>
-                      )}
-                      {company.sala && (
-                        <p>
-                          <span className="font-semibold text-primary-700">Sala:</span> {company.sala}
-                        </p>
-                      )}
-                      {company.celular && (
-                        <p>
-                          <span className="font-semibold text-primary-700">Telefone:</span> {company.celular}
-                        </p>
-                      )}
-                      {company.email && (
-                        <p>
-                          <span className="font-semibold text-primary-700">E-mail:</span> {company.email}
-                        </p>
-                      )}
-                    </div>
-                    <div className="mt-auto">
-                      <Link
-                        to={`/empresas/${category.slug}/${company.id}`}
-                        className="inline-flex items-center rounded-full bg-primary-700 px-5 py-2 text-sm font-semibold text-white transition hover:bg-primary-600"
-                      >
-                        Ver detalhes
-                      </Link>
-                    </div>
-                  </div>
                   </article>
                 );
               })}
