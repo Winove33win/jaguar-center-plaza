@@ -12,7 +12,8 @@ after(() => {
   process.env.NODE_ENV = originalNodeEnv;
 });
 
-const { default: pool } = await import('../db/pool.js');
+const database = await import('../src/database/pool.js');
+const companiesService = await import('../src/services/companies-service.js');
 const { default: app } = await import('../app.js');
 
 const fixturesByTable = Object.fromEntries(
@@ -37,9 +38,11 @@ const fixturesByTable = Object.fromEntries(
 );
 
 test('GET /api/companies resolves each category list and detail', async (t) => {
-  const queryMock = mock.method(pool, 'query', async (sql, params = []) => {
+  companiesService.__test__.clearColumnCache();
+
+  const executeMock = mock.method(database.pool, 'execute', async (sql, params = {}) => {
     if (typeof sql === 'string' && sql.includes('information_schema.columns')) {
-      const tableName = params?.[1];
+      const tableName = params?.table;
       const fixture = fixturesByTable[tableName];
       const columns = fixture?.columns ?? [];
       return [columns.map((column) => ({ column_name: column })), []];
@@ -57,17 +60,12 @@ test('GET /api/companies resolves each category list and detail', async (t) => {
       return [[{ total: fixture.rows.length }], []];
     }
 
-    if (typeof sql === 'string' && sql.includes('LIMIT 1')) {
-      const idParam = params?.[0];
-      const row = fixture.rows.find((item) => String(item.id ?? item.pk) === String(idParam));
-      return [row ? [row] : [], []];
-    }
-
     return [fixture.rows, []];
   });
 
   t.after(() => {
-    queryMock.mock.restore();
+    executeMock.mock.restore();
+    companiesService.__test__.clearColumnCache();
   });
 
   for (const category of CATEGORIES) {
@@ -103,6 +101,7 @@ test('GET /api/companies resolves each category list and detail', async (t) => {
 });
 
 test('category endpoints fall back gracefully when metadata inspection fails', async (t) => {
+  companiesService.__test__.clearColumnCache();
   const row = {
     id: 'fallback-id',
     titulo: 'Fallback Example',
@@ -114,7 +113,7 @@ test('category endpoints fall back gracefully when metadata inspection fails', a
     unpublish_date: null,
   };
 
-  const queryMock = mock.method(pool, 'query', async (sql) => {
+  const executeMock = mock.method(database.pool, 'execute', async (sql) => {
     if (typeof sql === 'string' && sql.includes('information_schema.columns')) {
       throw new Error('Access denied');
     }
@@ -127,7 +126,8 @@ test('category endpoints fall back gracefully when metadata inspection fails', a
   });
 
   t.after(() => {
-    queryMock.mock.restore();
+    executeMock.mock.restore();
+    companiesService.__test__.clearColumnCache();
   });
 
   const listResponse = await request(app)
