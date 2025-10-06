@@ -9,6 +9,16 @@ const router = express.Router();
 const knownCategoryTables = new Set(CATEGORIES.map((category) => category.table));
 const columnCache = new Map();
 
+function mapRowsToCompanies(rows, categoryInfo, startIndex = 0) {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return [];
+  }
+
+  return rows.map((row, index) =>
+    pickCompanyFields(row, categoryInfo.slug, categoryInfo.table, startIndex + index)
+  );
+}
+
 function createColumnLookup(columns = []) {
   const lookup = new Map();
   columns.forEach((column) => {
@@ -55,6 +65,27 @@ async function getTableColumns(table) {
 
   columnCache.set(table, columns);
   return columns;
+}
+
+async function fetchCategoryItems(categoryInfo, limit = 500) {
+  const columns = await getTableColumns(categoryInfo.table);
+
+  if (!columns.length) {
+    return [];
+  }
+
+  const columnLookup = createColumnLookup(columns);
+  const params = [];
+  const filters = buildPublicationFilters(categoryInfo, columnLookup, params);
+  const filtersSql = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+  const orderClause = resolveOrderClause(columnLookup);
+
+  const [rows] = await pool.query(
+    `SELECT * FROM \`${categoryInfo.table}\` ${filtersSql} ${orderClause} LIMIT ?`,
+    [...params, limit]
+  );
+
+  return mapRowsToCompanies(rows, categoryInfo);
 }
 
 function buildSearchClause(columnLookup, searchTerm, params) {
@@ -208,40 +239,29 @@ router.get('/companies', async (req, res) => {
       [...whereParams, size, offset]
     );
 
-    const items = Array.isArray(rows)
-      ? rows.map((row, index) => {
-          const normalized = pickCompanyFields(
-            row,
-            categoryInfo.slug,
-            categoryInfo.table,
-            offset + index
-          );
-
-          return {
-            id: normalized.id,
-            slug: normalized.slug,
-            category: normalized.category,
-            name: normalized.name,
-            description: normalized.description,
-            shortDescription: normalized.shortDescription,
-            logo: normalized.logo,
-            coverImage: normalized.coverImage,
-            address: normalized.address,
-            room: normalized.room,
-            phone: normalized.phone,
-            phones: normalized.phones,
-            email: normalized.email,
-            emails: normalized.emails,
-            whatsapp: normalized.whatsapp,
-            instagram: normalized.instagram,
-            facebook: normalized.facebook,
-            website: normalized.website,
-            detailPath: normalized.detailPath,
-            listPath: normalized.listPath,
-            highlight: normalized.highlight,
-          };
-        })
-      : [];
+    const items = mapRowsToCompanies(rows, categoryInfo, offset).map((normalized) => ({
+      id: normalized.id,
+      slug: normalized.slug,
+      category: normalized.category,
+      name: normalized.name,
+      description: normalized.description,
+      shortDescription: normalized.shortDescription,
+      logo: normalized.logo,
+      coverImage: normalized.coverImage,
+      address: normalized.address,
+      room: normalized.room,
+      phone: normalized.phone,
+      phones: normalized.phones,
+      email: normalized.email,
+      emails: normalized.emails,
+      whatsapp: normalized.whatsapp,
+      instagram: normalized.instagram,
+      facebook: normalized.facebook,
+      website: normalized.website,
+      detailPath: normalized.detailPath,
+      listPath: normalized.listPath,
+      highlight: normalized.highlight,
+    }));
 
     res.json({ page: pageNumber, pageSize: size, total, items });
   } catch (error) {
@@ -281,9 +301,7 @@ router.get('/companies/:category/:id', async (req, res) => {
       return res.status(404).json({ error: 'Company not found' });
     }
 
-    const normalizedRows = rows.map((row, index) =>
-      pickCompanyFields(row, categoryInfo.slug, categoryInfo.table, index)
-    );
+    const normalizedRows = mapRowsToCompanies(rows, categoryInfo);
 
     const target = String(id).toLowerCase();
     const match = normalizedRows.find((company) => {
@@ -302,5 +320,17 @@ router.get('/companies/:category/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch company details' });
   }
 });
+
+for (const categoryInfo of CATEGORIES) {
+  router.get(`/${categoryInfo.slug}`, async (_req, res) => {
+    try {
+      const items = await fetchCategoryItems(categoryInfo);
+      res.json(items);
+    } catch (error) {
+      console.error(`Failed to list companies for category ${categoryInfo.slug}`, error);
+      res.status(500).json({ error: 'Failed to list companies' });
+    }
+  });
+}
 
 export default router;
