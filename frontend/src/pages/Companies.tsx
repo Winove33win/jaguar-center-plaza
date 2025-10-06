@@ -1,14 +1,44 @@
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
-import { fetchCategories, type CompanyCategory } from '../lib/api';
+import { getCategories, type CategorySummary } from '../api/companies';
 import { useSEO } from '../hooks/useSEO';
 
-function formatCompaniesLabel(count: number | undefined) {
-  if (!count || count <= 0) {
-    return 'Conheça as empresas';
-  }
+const CATEGORY_IMAGES: Record<string, string> = {
+  administracao: '/Fachada.jpg',
+  advocacia: '/Fachada3.jpg',
+  beleza: '/Fachada4.jpg',
+  contabilidade: '/Fachada5.jpg',
+  imobiliaria: '/Fachada2.jpg',
+  industrias: '/Fachada6.jpg',
+  lojas: '/Fachada7.jpg',
+  saude: '/Fachada8.jpg',
+  servicos_publicos: '/Fachada9.jpg'
+};
 
+const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+  administracao:
+    'Empresas especializadas em gestão administrativa, consultorias empresariais e suporte estratégico para o seu negócio.',
+  advocacia:
+    'Escritórios jurídicos e profissionais de advocacia que atuam em diversas áreas do direito com atendimento personalizado.',
+  beleza:
+    'Salões, barbearias, clínicas de estética e profissionais de beleza que cuidam do bem-estar diário.',
+  contabilidade:
+    'Contadores, assessorias fiscais e especialistas em finanças que garantem a saúde contábil da sua empresa.',
+  imobiliaria:
+    'Imobiliárias e consultorias para locação, compra e venda de imóveis residenciais e corporativos.',
+  industrias:
+    'Fornecedores industriais, distribuidores e serviços técnicos para apoiar a produção regional.',
+  lojas:
+    'Lojas e pontos de conveniência que oferecem produtos e facilidades para colaboradores e visitantes.',
+  saude:
+    'Clínicas médicas, odontológicas, fisioterapia e outros serviços de saúde e bem-estar.',
+  servicos_publicos:
+    'Serviços públicos e essenciais que simplificam o dia a dia de quem frequenta o Jaguar Center Plaza.'
+};
+
+function formatCompaniesLabel(count: number) {
   if (count === 1) {
     return '1 empresa';
   }
@@ -17,8 +47,12 @@ function formatCompaniesLabel(count: number | undefined) {
 }
 
 export default function CompaniesPage() {
-  const { data, isLoading, isError } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories });
-  const categories = data?.categories ?? [];
+  const {
+    data: categoriesData,
+    isLoading,
+    isError
+  } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
+  const categories = categoriesData ?? [];
 
   useSEO({
     title: 'Empresas por setor · Jaguar Center Plaza',
@@ -26,6 +60,22 @@ export default function CompaniesPage() {
       'Explore as empresas residentes do Jaguar Center Plaza organizadas por segmentos como administração, advocacia, contabilidade e beleza.',
     canonical: 'https://www.jaguarcenterplaza.com.br/empresas'
   });
+
+  const hasResults = categories.length > 0;
+
+  const cards = useMemo(() => {
+    return categories.map((category) => {
+      const image = CATEGORY_IMAGES[category.slug] || '/Fachada5.jpg';
+      const description = CATEGORY_DESCRIPTIONS[category.slug] ||
+        'Conheça as empresas que atuam neste segmento dentro do Jaguar Center Plaza.';
+
+      return {
+        ...category,
+        image,
+        description
+      };
+    });
+  }, [categories]);
 
   return (
     <div className="space-y-20 pb-20">
@@ -40,12 +90,6 @@ export default function CompaniesPage() {
           <p className="max-w-3xl text-base text-white/80 sm:text-lg">
             Conheça os segmentos presentes no Jaguar Center Plaza e encontre empresas especializadas em administração, advocacia, contabilidade, beleza e bem-estar.
           </p>
-          <div className="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-accent-200">
-            <span>Consultorias</span>
-            <span>Saúde corporativa</span>
-            <span>Beleza & bem-estar</span>
-            <span>Serviços essenciais</span>
-          </div>
         </Container>
       </section>
 
@@ -70,43 +114,41 @@ export default function CompaniesPage() {
             </div>
           )}
 
-          {!isLoading && !isError && categories.length === 0 && (
+          {!isLoading && !isError && !hasResults && (
             <div className="rounded-3xl bg-white p-6 shadow-lg">
               <p className="text-sm text-[#4f5d55]">Nenhuma categoria cadastrada no momento.</p>
             </div>
           )}
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {categories.map((category: CompanyCategory) => {
-              const slug = category.slug || category.id;
-              const companiesCount = category.companies?.length ?? 0;
-              const image = category.cardImage || category.heroImage || '/Fachada5.jpg';
-
-              return (
-                <article key={slug} className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
-                  <div className="relative h-56 w-full overflow-hidden">
-                    <img src={image} alt={category.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
-                      {formatCompaniesLabel(companiesCount)}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col gap-3 p-6">
-                    <h3 className="text-xl font-semibold text-primary-800">{category.name}</h3>
-                    <p className="flex-1 text-sm text-[#4f5d55]">{category.description}</p>
-                    <Link
-                      to={`/empresas/${slug}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 transition-colors hover:text-accent-500"
-                    >
-                      Ver mais
-                      <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                        <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+            {cards.map((category: CategorySummary & { image: string; description: string }) => (
+              <article key={category.slug} className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+                <div className="relative h-56 w-full overflow-hidden">
+                  <img
+                    src={category.image}
+                    alt={category.label}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
+                    {formatCompaniesLabel(category.total)}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  <h3 className="text-xl font-semibold text-primary-800">{category.label}</h3>
+                  <p className="flex-1 text-sm text-[#4f5d55]">{category.description}</p>
+                  <Link
+                    to={`/empresas/${category.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 transition-colors hover:text-accent-500"
+                  >
+                    Ver empresas
+                    <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                      <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </Container>
       </section>

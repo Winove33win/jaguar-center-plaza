@@ -1,70 +1,61 @@
 import { Router } from 'express';
 import {
-  fetchCompaniesForCategory,
-  fetchCompanyDetail,
-  fetchCompanyList
+  CATEGORIES,
+  getCompanyDetail,
+  listCompanies
 } from '../services/companies-service.js';
 
 const router = Router();
 
-router.get('/companies', async (req, res) => {
-  const { category, page = '1', pageSize = '12', q } = req.query;
+function isValidCategory(slug) {
+  return Boolean(CATEGORIES[String(slug || '').toLowerCase()]);
+}
 
-  if (!category || typeof category !== 'string') {
+router.get('/companies', async (req, res) => {
+  const { category, page = '1', pageSize = '12', q = '' } = req.query;
+  const normalizedCategory = typeof category === 'string' ? category.toLowerCase() : '';
+
+  if (!normalizedCategory) {
     return res.status(400).json({ error: 'category is required' });
   }
 
+  if (!isValidCategory(normalizedCategory)) {
+    return res.status(400).json({ error: 'invalid category' });
+  }
+
   try {
-    const result = await fetchCompanyList(category, {
-      page: Number.parseInt(String(page), 10) || 1,
-      pageSize: Number.parseInt(String(pageSize), 10) || 12,
-      search: typeof q === 'string' ? q.trim() : ''
+    const result = await listCompanies({
+      category: normalizedCategory,
+      page,
+      pageSize,
+      q
     });
 
     return res.json(result);
   } catch (error) {
-    if (error?.code === 'CATEGORY_NOT_FOUND') {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
     console.error('Failed to list companies', error);
     return res.status(500).json({ error: 'Failed to list companies' });
   }
 });
 
-router.get('/companies/:categorySlug/:identifier', async (req, res) => {
-  const { categorySlug, identifier } = req.params;
+router.get('/companies/:category/:id', async (req, res) => {
+  const { category, id } = req.params;
+  const normalizedCategory = String(category || '').toLowerCase();
+
+  if (!isValidCategory(normalizedCategory)) {
+    return res.status(400).json({ error: 'invalid category' });
+  }
 
   try {
-    const company = await fetchCompanyDetail(categorySlug, identifier);
+    const company = await getCompanyDetail({ category: normalizedCategory, id });
     if (!company) {
       return res.status(404).json({ error: 'Company not found' });
     }
 
     return res.json(company);
   } catch (error) {
-    if (error?.code === 'CATEGORY_NOT_FOUND') {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    console.error('Failed to fetch company details', error);
-    return res.status(500).json({ error: 'Failed to fetch company details' });
-  }
-});
-
-router.get('/:categorySlug', async (req, res) => {
-  const { categorySlug } = req.params;
-
-  try {
-    const companies = await fetchCompaniesForCategory(categorySlug);
-    return res.json(companies);
-  } catch (error) {
-    if (error?.code === 'CATEGORY_NOT_FOUND') {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    console.error(`Failed to list companies for category ${categorySlug}`, error);
-    return res.status(500).json({ error: 'Failed to list companies' });
+    console.error('Failed to load company detail', error);
+    return res.status(500).json({ error: 'Failed to load company detail' });
   }
 });
 

@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const frontendDir = path.join(rootDir, 'frontend');
 const backendDir = path.join(rootDir, 'backend');
-const distDir = path.join(backendDir, 'dist');
+const publicDir = path.join(backendDir, 'public');
 
 const truthyValues = new Set(['1', 'true', 'yes', 'on']);
 
@@ -57,9 +57,9 @@ async function buildFrontend() {
 }
 
 async function syncDist() {
-  await fs.rm(distDir, { recursive: true, force: true });
-  await fs.mkdir(distDir, { recursive: true });
-  await fs.cp(path.join(frontendDir, 'dist'), distDir, { recursive: true });
+  await fs.rm(publicDir, { recursive: true, force: true });
+  await fs.mkdir(publicDir, { recursive: true });
+  await fs.cp(path.join(frontendDir, 'dist'), publicDir, { recursive: true });
 }
 
 (async () => {
