@@ -6,7 +6,9 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 
-import companiesRouter from './routes/companies.js';
+import companiesRouter from './rotas/companies.js';
+import healthRouter from './rotas/health.js';
+import mediaRouter from './rotas/media.js';
 import { env, resolvePublicBaseUrl } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import apiRouter from './routes/index.js';
@@ -24,13 +26,14 @@ export function createApp() {
     app.set('trust proxy', 1);
   }
 
-  app.use(helmet());
   app.use(
-    helmet.contentSecurityPolicy({
-      useDefaults: true,
-      directives: {
-        'img-src': ["'self'", 'data:', 'https:', '*.wixstatic.com', 'static.wixstatic.com'],
-        'connect-src': ["'self'", 'https:']
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: false,
+        directives: {
+          defaultSrc: ["'self'"],
+          imgSrc: ["'self'", 'data:', 'blob:']
+        }
       }
     })
   );
@@ -52,8 +55,10 @@ export function createApp() {
     }
   });
 
-  app.use('/api', apiRouter);
+  app.use('/api', healthRouter);
+  app.use('/api', mediaRouter);
   app.use('/api', companiesRouter);
+  app.use('/api', apiRouter);
 
   if (fs.existsSync(publicDir)) {
     app.use(express.static(publicDir, { index: false, maxAge: env.nodeEnv === 'production' ? '1h' : 0 }));

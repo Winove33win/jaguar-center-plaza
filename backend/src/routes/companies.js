@@ -12,8 +12,11 @@ function isValidCategory(slug) {
 }
 
 router.get('/companies', async (req, res) => {
-  const { category, page = '1', pageSize = '12', q = '' } = req.query;
-  const normalizedCategory = typeof category === 'string' ? category.toLowerCase() : '';
+  const { category, categoria, page = '1', pageSize = '12', q = '' } = req.query;
+  const sourceCategory = typeof categoria === 'string' && categoria
+    ? categoria
+    : category;
+  const normalizedCategory = typeof sourceCategory === 'string' ? sourceCategory.toLowerCase() : '';
 
   if (!normalizedCategory) {
     return res.status(400).json({ error: 'category is required' });

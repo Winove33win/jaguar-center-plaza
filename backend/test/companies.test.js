@@ -24,14 +24,14 @@ async function ensureDatabaseAvailable() {
   }
 }
 
-test('GET /api/companies?category=administracao retorna lista', async (t) => {
+test('GET /api/companies?categoria=administracao retorna lista', async (t) => {
   const available = await ensureDatabaseAvailable();
   if (!available) {
     t.skip('Banco de dados indisponível no ambiente de testes.');
     return;
   }
 
-  const response = await request(app).get('/api/companies').query({ category: DEFAULT_CATEGORY });
+  const response = await request(app).get('/api/companies').query({ categoria: DEFAULT_CATEGORY });
 
   if (response.status === 500) {
     t.skip('Serviço de empresas indisponível para testes.');
@@ -48,7 +48,7 @@ test('GET /api/companies/administracao/:id retorna detalhe', async (t) => {
     return;
   }
 
-  const listResponse = await request(app).get('/api/companies').query({ category: DEFAULT_CATEGORY });
+  const listResponse = await request(app).get('/api/companies').query({ categoria: DEFAULT_CATEGORY });
   if (listResponse.status !== 200 || !Array.isArray(listResponse.body.items) || listResponse.body.items.length === 0) {
     t.skip('Nenhuma empresa disponível para testar detalhes.');
   }

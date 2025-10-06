@@ -1,122 +1,46 @@
-import { query } from '../../db/pool.js';
-import { pickCompanyFields } from '../../lib/normalize.js';
+import {
+  CATEGORIES as CATEGORY_LIST,
+  getCategoryBySlug,
+  getCompany,
+  listCategories as listCategoriesDb,
+  listCompanies as listCompaniesByTable
+} from '../../db/categories.js';
 
-export const CATEGORIES = {
-  administracao: 'administracao',
-  advocacia: 'advocacia',
-  beleza: 'beleza',
-  contabilidade: 'contabilidade',
-  imobiliaria: 'imobiliaria',
-  industrias: 'industrias',
-  lojas: 'lojas',
-  saude: 'saude',
-  servicos_publicos: 'servicos_publicos'
-};
+export const CATEGORIES = CATEGORY_LIST.reduce((accumulator, category) => {
+  // eslint-disable-next-line no-param-reassign
+  accumulator[category.slug] = category.tabela;
+  return accumulator;
+}, {});
 
 export function getCategoryTables() {
   return { ...CATEGORIES };
 }
 
-function ensureValidCategory(category) {
-  const normalized = String(category || '').toLowerCase();
-  const table = CATEGORIES[normalized];
+export async function listCompanies({ category, page = 1, pageSize = 12, q = '' }) {
+  const foundCategory = getCategoryBySlug(category);
 
-  if (!table) {
+  if (!foundCategory) {
     const error = new Error(`Categoria inválida: ${category}`);
     error.code = 'INVALID_CATEGORY';
     throw error;
   }
 
-  return { slug: normalized, table };
-}
-
-function sanitizePage(value, fallback) {
-  const number = Number.parseInt(value, 10);
-  return Number.isFinite(number) && number > 0 ? number : fallback;
-}
-
-function sanitizePageSize(value, fallback) {
-  const number = Number.parseInt(value, 10);
-  if (!Number.isFinite(number) || number <= 0) {
-    return fallback;
-  }
-
-  return Math.min(number, 50);
-}
-
-export async function listCompanies({ category, page = 1, pageSize = 12, q = '' }) {
-  const { table } = ensureValidCategory(category);
-  const currentPage = sanitizePage(page, 1);
-  const currentPageSize = sanitizePageSize(pageSize, 12);
-  const offset = (currentPage - 1) * currentPageSize;
-  const searchTerm = typeof q === 'string' ? q.trim() : '';
-
-  const filters = [];
-  const params = [];
-
-  if (searchTerm) {
-    filters.push('(' +
-      'COALESCE(titulo, \'\') LIKE ? OR ' +
-      'COALESCE(descricao, \'\') LIKE ?' +
-    ')');
-    const like = `%${searchTerm}%`;
-    params.push(like, like);
-  }
-
-  const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
-  const orderClause = 'ORDER BY created_date DESC, id DESC';
-
-  const sql = `SELECT * FROM \`${table}\` ${whereClause} ${orderClause} LIMIT ? OFFSET ?`;
-  const countSql = `SELECT COUNT(*) AS total FROM \`${table}\` ${whereClause}`;
-
-  const rows = await query(sql, [...params, currentPageSize, offset]);
-  const countRows = await query(countSql, params);
-  const total = Number(countRows?.[0]?.total ?? 0);
-
-  return {
-    items: pickCompanyFields(rows),
-    page: currentPage,
-    pageSize: currentPageSize,
-    total
-  };
+  return listCompaniesByTable(foundCategory.tabela, { page, pageSize, q });
 }
 
 export async function getCompanyDetail({ category, id }) {
-  const { table } = ensureValidCategory(category);
-  const identifier = String(id);
+  const foundCategory = getCategoryBySlug(category);
 
-  const rows = await query(
-    `SELECT * FROM \`${table}\` WHERE id = ? OR pk = ? LIMIT 1`,
-    [identifier, identifier]
-  );
-
-  if (!Array.isArray(rows) || rows.length === 0) {
-    return null;
+  if (!foundCategory) {
+    const error = new Error(`Categoria inválida: ${category}`);
+    error.code = 'INVALID_CATEGORY';
+    throw error;
   }
 
-  return pickCompanyFields(rows)[0] ?? null;
+  return getCompany(foundCategory.tabela, id);
 }
 
 export async function countByCategory() {
-  const tables = getCategoryTables();
-  const entries = Object.entries(tables);
-
-  const results = await Promise.all(
-    entries.map(async ([slug, table]) => {
-      try {
-        const rows = await query(`SELECT COUNT(*) AS total FROM \`${table}\``);
-        const total = Number(rows?.[0]?.total ?? 0);
-        return { categoria: slug, total };
-      } catch (error) {
-        if (error?.code === 'ER_NO_SUCH_TABLE') {
-          console.warn(`Table "${table}" for category "${slug}" was not found. Returning zero results.`);
-          return { categoria: slug, total: 0 };
-        }
-
-        throw error;
-      }
-    })
-  );
-
-  return results;
+  const categories = await listCategoriesDb();
+  return categories.map(({ slug, count }) => ({ categoria: slug, total: count }));
 }

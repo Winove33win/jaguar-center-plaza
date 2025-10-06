@@ -3,42 +3,38 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-function readEnv(key, fallbackKey) {
-  if (process.env[key] !== undefined && process.env[key] !== '') {
-    return process.env[key];
+const DEFAULT_PORT = 3306;
+
+function getRequiredEnv(key) {
+  const value = process.env[key];
+  if (value === undefined || value === '') {
+    return undefined;
   }
 
-  if (fallbackKey && process.env[fallbackKey] !== undefined && process.env[fallbackKey] !== '') {
-    return process.env[fallbackKey];
-  }
-
-  return undefined;
+  return value;
 }
 
-const host = readEnv('MYSQL_HOST', 'DB_HOST') || '127.0.0.1';
-const port = Number.parseInt(readEnv('MYSQL_PORT', 'DB_PORT') || '3306', 10);
-const user = readEnv('MYSQL_USER', 'DB_USER') || 'root';
-const password = readEnv('MYSQL_PASSWORD', 'DB_PASSWORD') || '';
-const database = readEnv('MYSQL_DATABASE', 'DB_NAME') || 'JaguarPlaza';
+const portFromEnv = Number.parseInt(getRequiredEnv('MYSQL_PORT') ?? `${DEFAULT_PORT}`, 10);
 
 export const pool = mysql.createPool({
-  host,
-  port: Number.isNaN(port) ? 3306 : port,
-  user,
-  password,
-  database,
+  host: getRequiredEnv('MYSQL_HOST') ?? '127.0.0.1',
+  port: Number.isNaN(portFromEnv) ? DEFAULT_PORT : portFromEnv,
+  user: getRequiredEnv('MYSQL_USER') ?? 'root',
+  password: getRequiredEnv('MYSQL_PASSWORD') ?? '',
+  database: getRequiredEnv('MYSQL_DATABASE') ?? undefined,
   waitForConnections: true,
-  connectionLimit: 5,
+  connectionLimit: 10,
   queueLimit: 0
 });
 
-export async function query(sql, params = []) {
+export async function ping() {
   try {
-    const [rows] = await pool.execute(sql, params);
-    return rows;
+    await pool.query('SELECT 1');
+    return true;
   } catch (error) {
-    console.error('[DB]', error?.message || error);
-    throw error;
+    // eslint-disable-next-line no-console
+    console.error('[DB] Ping failed', error);
+    return false;
   }
 }
 

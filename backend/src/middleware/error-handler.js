@@ -13,6 +13,7 @@ export function errorHandler(err, req, res, next) {
 
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Erro interno inesperado';
+  const code = err.code || 'INTERNAL_ERROR';
 
   if (status >= 500) {
     // eslint-disable-next-line no-console
@@ -20,7 +21,7 @@ export function errorHandler(err, req, res, next) {
   }
 
   res.status(status).json({
-    error: err.code || 'InternalError',
-    message
+    error: message,
+    code
   });
 }
