@@ -144,7 +144,11 @@ function normalizeMediaList(value) {
     }
 
     if (typeof candidate === 'object') {
+
+      const prioritizedKeys = ['url', 'src', 'imagem', 'image', 'foto', 'value'];
+
       const prioritizedKeys = ['url', 'src', 'imagem', 'image', 'value'];
+
       for (const key of prioritizedKeys) {
         const valueForKey = candidate[key];
         if (typeof valueForKey === 'string' && valueForKey.trim().length > 0) {
@@ -173,7 +177,9 @@ function mapCompanyRow(row = {}) {
   const email = toNullableString(row.email);
   const sala = toNullableString(row.sala ?? row.salao ?? row.room);
   const logo = normalizeMediaUrl(row.logo ?? row.imagem ?? row.image);
-  const galeria = normalizeMediaList(row.galeria ?? row.galeria_urls ?? row.gallery);
+  const galeria = normalizeMediaList(
+    row.galeria ?? row.galeria_urls ?? row.gallery ?? row.galeria_de_midia ?? row.media_gallery
+  );
   const midia = normalizeMediaList(row.midia ?? row.midia_urls ?? row.media);
 
   return {
