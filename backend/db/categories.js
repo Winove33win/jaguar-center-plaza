@@ -147,8 +147,6 @@ function normalizeMediaList(value) {
 
       const prioritizedKeys = ['url', 'src', 'imagem', 'image', 'foto', 'value'];
 
-      const prioritizedKeys = ['url', 'src', 'imagem', 'image', 'value'];
-
       for (const key of prioritizedKeys) {
         const valueForKey = candidate[key];
         if (typeof valueForKey === 'string' && valueForKey.trim().length > 0) {
