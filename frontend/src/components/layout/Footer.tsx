@@ -2,8 +2,8 @@ import Container from './Container';
 
 const siteLinks = [
   { label: 'Home', href: '/' },
+  { label: 'Empresas', href: '/empresas' },
   { label: 'Sobre nós', href: '/sobre-nos' },
-  { label: 'Salas', href: '/salas' },
   { label: 'Contato', href: '/contato' }
 ];
 

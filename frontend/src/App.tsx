@@ -7,7 +7,6 @@ import CompaniesPage from './pages/Companies';
 import CompanyCategoryPage from './pages/CompanyCategory';
 import CompanyDetailPage from './pages/CompanyDetail';
 import NotFoundPage from './pages/NotFound';
-import RoomsPage from './pages/Rooms';
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
         <Route path="/empresas/:categorySlug" element={<CompanyCategoryPage />} />
         <Route path="/empresas/:categorySlug/:companySlug" element={<CompanyDetailPage />} />
         <Route path="/sobre-nos" element={<AboutPage />} />
-        <Route path="/salas" element={<RoomsPage />} />
         <Route path="/contato" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
