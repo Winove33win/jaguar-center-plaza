@@ -415,7 +415,11 @@ export async function listCompanies(tabela, { page = 1, pageSize = 12, q = '' } 
       page: currentPage,
       pageSize: currentPageSize,
       total,
+
       items: rows.map((row) => mapCompanyRow(row, columns))
+
+      items: rows.map((row) => mapCompanyRow(row))
+
     };
   } catch (error) {
     if (error?.code === 'ER_NO_SUCH_TABLE') {
@@ -458,7 +462,9 @@ export async function getCompany(tabela, id) {
 export const __internal = {
   buildOrderByClause,
   buildSearchClause,
+
   mapCompanyRow,
+
   clearTableColumnsCache() {
     TABLE_COLUMNS_CACHE.clear();
   }

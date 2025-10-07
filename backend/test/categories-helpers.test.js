@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 
 import { __internal } from '../db/categories.js';
 
+
 const { buildSearchClause, buildOrderByClause, mapCompanyRow } = __internal;
+
+const { buildSearchClause, buildOrderByClause } = __internal;
+
 
 test('buildSearchClause uses available searchable columns', () => {
   const columns = new Map([
@@ -65,6 +69,7 @@ test('buildOrderByClause returns default ordering when nothing matches', () => {
   assert.equal(buildOrderByClause(columns), 'ORDER BY 1');
 });
 
+
 test('mapCompanyRow reads values regardless of column casing', () => {
   const columns = new Map([
     ['titulo', 'Titulo'],
@@ -84,3 +89,4 @@ test('mapCompanyRow reads values regardless of column casing', () => {
   assert.equal(mapped.descricao, 'Atendimento jurídico especializado');
   assert.equal(mapped.pk, 7);
 });
+
