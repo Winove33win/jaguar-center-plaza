@@ -14,6 +14,107 @@ export const CATEGORIES = [
 
 const categoriesBySlug = new Map(CATEGORIES.map((category) => [category.slug, category]));
 
+const TABLE_COLUMNS_CACHE = new Map();
+
+const SEARCHABLE_COLUMNS = [
+  'titulo',
+  'nome',
+  'name',
+  'razao_social',
+  'descricao',
+  'description',
+  'tagline',
+  'email',
+  'celular',
+  'telefone',
+  'whatsapp'
+];
+
+const TITLE_PREFERRED_COLUMNS = [
+  'titulo',
+  'nome',
+  'name',
+  'razao_social',
+  'descricao',
+  'description',
+  'tagline'
+];
+
+const FALLBACK_ORDER_COLUMNS = ['pk', 'id'];
+
+function normalizeColumnName(column) {
+  return typeof column === 'string' ? column.trim() : '';
+}
+
+async function getTableColumns(table) {
+  if (TABLE_COLUMNS_CACHE.has(table)) {
+    return TABLE_COLUMNS_CACHE.get(table);
+  }
+
+  try {
+    const [rows] = await pool.query(`SHOW COLUMNS FROM \`${table}\``);
+    const entries = Array.isArray(rows)
+      ? rows
+          .map((row) => {
+            const field = normalizeColumnName(row.Field ?? row.field);
+            return field ? [field.toLowerCase(), field] : null;
+          })
+          .filter((entry) => entry !== null)
+      : [];
+
+    const columnsMap = new Map(entries);
+    TABLE_COLUMNS_CACHE.set(table, columnsMap);
+    return columnsMap;
+  } catch (error) {
+    if (error?.code === 'ER_NO_SUCH_TABLE') {
+      const emptyMap = new Map();
+      TABLE_COLUMNS_CACHE.set(table, emptyMap);
+      return emptyMap;
+    }
+
+    throw error;
+  }
+}
+
+function buildSearchClause(columns, searchTerm) {
+  if (!searchTerm) {
+    return { clause: '', params: [] };
+  }
+
+  const availableColumns = SEARCHABLE_COLUMNS.map((column) => columns.get(column)).filter(Boolean);
+
+  if (availableColumns.length === 0) {
+    return { clause: '', params: [] };
+  }
+
+  const like = `%${searchTerm}%`;
+  const clause =
+    '(' +
+    availableColumns.map((column) => `COALESCE(\`${column}\`, '') LIKE ?`).join(' OR ') +
+    ')';
+  const params = new Array(availableColumns.length).fill(like);
+
+  return { clause, params };
+}
+
+function buildOrderByClause(columns) {
+  for (const column of TITLE_PREFERRED_COLUMNS) {
+    const actual = columns.get(column);
+    if (actual) {
+      return `ORDER BY (COALESCE(\`${actual}\`, '') = ''), \`${actual}\` ASC`;
+    }
+  }
+
+  for (const column of FALLBACK_ORDER_COLUMNS) {
+    const actual = columns.get(column);
+    if (actual) {
+      return `ORDER BY \`${actual}\` ASC`;
+    }
+  }
+
+  return 'ORDER BY 1';
+}
+
 function parsePossibleJson(value) {
   if (typeof value !== 'string') {
     return value;
@@ -253,34 +354,45 @@ export async function listCompanies(tabela, { page = 1, pageSize = 12, q = '' } 
   const filters = [];
   const params = [];
 
+  const columns = await getTableColumns(tabela);
+
   if (searchTerm) {
-    const like = `%${searchTerm}%`;
-    filters.push(
-      "(" +
-        "COALESCE(titulo, '') LIKE ? OR " +
-        "COALESCE(descricao, '') LIKE ? OR " +
-        "COALESCE(email, '') LIKE ?" +
-      ")"
-    );
-    params.push(like, like, like);
+    const { clause, params: searchParams } = buildSearchClause(columns, searchTerm);
+    if (clause) {
+      filters.push(clause);
+      params.push(...searchParams);
+    }
   }
 
   const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
 
-  const orderBy = "ORDER BY COALESCE(titulo, '') <> '', titulo ASC";
+  const orderBy = buildOrderByClause(columns);
   const querySql = `SELECT * FROM \`${tabela}\` ${whereClause} ${orderBy} LIMIT ? OFFSET ?`;
   const countSql = `SELECT COUNT(*) AS total FROM \`${tabela}\` ${whereClause}`;
 
-  const [rows] = await pool.query(querySql, [...params, currentPageSize, offset]);
-  const [countRows] = await pool.query(countSql, params);
-  const total = Number(countRows?.[0]?.total ?? 0);
+  try {
+    const [rows] = await pool.query(querySql, [...params, currentPageSize, offset]);
+    const [countRows] = await pool.query(countSql, params);
+    const total = Number(countRows?.[0]?.total ?? 0);
 
-  return {
-    page: currentPage,
-    pageSize: currentPageSize,
-    total,
-    items: rows.map((row) => mapCompanyRow(row))
-  };
+    return {
+      page: currentPage,
+      pageSize: currentPageSize,
+      total,
+      items: rows.map((row) => mapCompanyRow(row))
+    };
+  } catch (error) {
+    if (error?.code === 'ER_NO_SUCH_TABLE') {
+      return {
+        page: currentPage,
+        pageSize: currentPageSize,
+        total: 0,
+        items: []
+      };
+    }
+
+    throw error;
+  }
 }
 
 export async function getCompany(tabela, id) {
@@ -304,4 +416,12 @@ export async function getCompany(tabela, id) {
 
   return mapCompanyRow(rows[0]);
 }
+
+export const __internal = {
+  buildOrderByClause,
+  buildSearchClause,
+  clearTableColumnsCache() {
+    TABLE_COLUMNS_CACHE.clear();
+  }
+};
 
