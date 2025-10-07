@@ -23,11 +23,24 @@ export function normalizeCategorySlug(value?: string | number | null) {
   }
 
   const withoutDiacritics = stringValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const sanitized = withoutDiacritics
+  let sanitized = withoutDiacritics
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/_+/g, '_')
     .replace(/^_|_$/g, '');
+
+  if (!sanitized) {
+    return '';
+  }
+
+  const duplicateSuffixPattern = /(?:_+\d+)+$/;
+  if (duplicateSuffixPattern.test(sanitized)) {
+    const withoutSuffix = sanitized.replace(duplicateSuffixPattern, '');
+
+    if (withoutSuffix && LINKED_CATEGORY_SET.has(withoutSuffix)) {
+      sanitized = withoutSuffix;
+    }
+  }
 
   return sanitized;
 }
