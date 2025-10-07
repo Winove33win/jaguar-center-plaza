@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
 import { getCategories, getCompanies, type CategorySummary, type CompanyRecord } from '../api/companies';
 import { useSEO } from '../hooks/useSEO';
+import { isLinkedCategory, normalizeCategorySlug } from '../lib/categories';
 
 const CATEGORY_IMAGES: Record<string, string> = {
   administracao: '/Fachada.jpg',
@@ -50,6 +51,8 @@ function formatCompaniesLabel(count: number) {
 
 export default function CompanyCategoryPage() {
   const { categorySlug = '' } = useParams();
+  const normalizedCategorySlug = normalizeCategorySlug(categorySlug);
+  const isValidCategory = isLinkedCategory(normalizedCategorySlug);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -71,11 +74,26 @@ export default function CompanyCategoryPage() {
     isLoading: isLoadingCategories,
     isError: isCategoriesError
   } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
-  const categories = categoriesData ?? [];
+  const categories = useMemo(() => {
+    return (categoriesData ?? [])
+      .map((item) => {
+        const slug = normalizeCategorySlug(item.slug);
+
+        if (!slug || !isLinkedCategory(slug)) {
+          return null;
+        }
+
+        return {
+          ...item,
+          slug
+        };
+      })
+      .filter((item): item is CategorySummary => item !== null);
+  }, [categoriesData]);
 
   const category = useMemo<CategorySummary | undefined>(
-    () => categories.find((item) => item.slug === categorySlug),
-    [categories, categorySlug]
+    () => categories.find((item) => item.slug === normalizedCategorySlug),
+    [categories, normalizedCategorySlug]
   );
 
   const {
@@ -83,15 +101,15 @@ export default function CompanyCategoryPage() {
     isLoading: isLoadingCompanies,
     isError: isCompaniesError
   } = useQuery({
-    queryKey: ['companies', categorySlug, page, debouncedSearch],
+    queryKey: ['companies', normalizedCategorySlug, page, debouncedSearch],
     queryFn: () =>
       getCompanies({
-        category: categorySlug,
+        category: normalizedCategorySlug,
         page,
         pageSize: PAGE_SIZE,
         q: debouncedSearch
       }),
-    enabled: Boolean(categorySlug)
+    enabled: isValidCategory
   });
 
   useSEO({
@@ -99,11 +117,11 @@ export default function CompanyCategoryPage() {
       ? `${category.label} · Empresas no Jaguar Center Plaza`
       : 'Categorias de empresas · Jaguar Center Plaza',
     description:
-      CATEGORY_DESCRIPTIONS[categorySlug ?? ''] ||
+      CATEGORY_DESCRIPTIONS[normalizedCategorySlug] ||
       'Descubra empresas residentes no Jaguar Center Plaza organizadas por categorias de serviços corporativos e bem-estar.'
   });
 
-  const heroImage = CATEGORY_IMAGES[categorySlug] || '/Fachada4.jpg';
+  const heroImage = CATEGORY_IMAGES[normalizedCategorySlug] || '/Fachada4.jpg';
   const items = companiesData?.items ?? [];
   const total = companiesData?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -137,7 +155,7 @@ export default function CompanyCategoryPage() {
             </p>
             <h1 className="text-4xl font-bold sm:text-5xl">{category ? category.label : 'Categorias de empresas'}</h1>
             <p className="max-w-3xl text-base text-white/80 sm:text-lg">
-              {CATEGORY_DESCRIPTIONS[categorySlug] ||
+              {CATEGORY_DESCRIPTIONS[normalizedCategorySlug] ||
                 'Conheça as empresas presentes neste segmento no Jaguar Center Plaza.'}
             </p>
             {category && <div className="text-sm font-semibold text-accent-100">{formatCompaniesLabel(total)}</div>}

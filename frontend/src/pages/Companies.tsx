@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
 import { getCategories, type CategorySummary } from '../api/companies';
+import { isLinkedCategory, normalizeCategorySlug } from '../lib/categories';
 import { useSEO } from '../hooks/useSEO';
 
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -53,6 +54,22 @@ export default function CompaniesPage() {
     isError
   } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
   const categories = categoriesData ?? [];
+  const linkedCategories = useMemo(() => {
+    return categories
+      .map((category) => {
+        const slug = normalizeCategorySlug(category.slug);
+
+        if (!slug || !isLinkedCategory(slug)) {
+          return null;
+        }
+
+        return {
+          ...category,
+          slug
+        };
+      })
+      .filter((category): category is CategorySummary => category !== null);
+  }, [categories]);
 
   useSEO({
     title: 'Empresas por setor · Jaguar Center Plaza',
@@ -61,10 +78,10 @@ export default function CompaniesPage() {
     canonical: 'https://www.jaguarcenterplaza.com.br/empresas'
   });
 
-  const hasResults = categories.length > 0;
+  const hasResults = linkedCategories.length > 0;
 
   const cards = useMemo(() => {
-    return categories.map((category) => {
+    return linkedCategories.map((category) => {
       const image = CATEGORY_IMAGES[category.slug] || '/Fachada5.jpg';
       const description = CATEGORY_DESCRIPTIONS[category.slug] ||
         'Conheça as empresas que atuam neste segmento dentro do Jaguar Center Plaza.';
@@ -75,7 +92,7 @@ export default function CompaniesPage() {
         description
       };
     });
-  }, [categories]);
+  }, [linkedCategories]);
 
   return (
     <div className="space-y-20 pb-20">

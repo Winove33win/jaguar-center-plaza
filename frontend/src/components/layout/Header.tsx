@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Container from './Container';
 import { fetchAreas } from '../../lib/api';
+import { isLinkedCategory, normalizeCategorySlug } from '../../lib/categories';
 
 const navItems = [
   { label: 'Home', to: '/', type: 'route' as const },
@@ -14,14 +15,22 @@ const navItems = [
 export default function Header() {
   const query = useQuery({ queryKey: ['areas'], queryFn: fetchAreas });
   const areas = query.data?.items ?? [];
-  const categoryLinks = useMemo(
-    () =>
-      areas.map((item) => ({
-        label: item.name,
-        slug: item.slug || item.id
-      })),
-    [areas]
-  );
+  const categoryLinks = useMemo(() => {
+    return areas
+      .map((item) => {
+        const slug = normalizeCategorySlug(item.slug ?? item.id ?? null);
+
+        if (!slug || !isLinkedCategory(slug)) {
+          return null;
+        }
+
+        return {
+          slug,
+          label: item.name
+        };
+      })
+      .filter((item): item is { slug: string; label: string } => item !== null);
+  }, [areas]);
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
