@@ -32,6 +32,7 @@ const SEARCHABLE_COLUMNS = [
 ];
 
 const TITLE_PREFERRED_COLUMNS = [
+  'title',
   'titulo',
   'title',
   'nome',
@@ -300,10 +301,25 @@ function createRowValueGetter(row = {}, columns = new Map()) {
 function mapCompanyRow(row = {}, columns = new Map()) {
   const getValue = createRowValueGetter(row, columns);
 
+
+
   const titulo = toNullableString(
     getValue('titulo', 'title', 'nome', 'name', 'razao_social', 'descricao', 'description', 'tagline')
   );
+
   const descricao = toNullableString(getValue('descricao', 'description', 'tagline'));
+  const tituloDireto = toNullableString(getValue('titulo'));
+  const tituloAlternativo = toNullableString(getValue('title', 'nome', 'name', 'razao_social'));
+  let titulo = tituloDireto;
+
+  if (!titulo || (descricao && titulo === descricao)) {
+    titulo = tituloAlternativo ?? titulo;
+  }
+
+  if (!titulo) {
+    titulo = descricao ?? toNullableString(getValue('description', 'tagline'));
+  }
+
   const endereco = normalizeEndereco(getValue('endereco', 'address'));
   const celular = toNullableString(getValue('celular', 'telefone', 'phone', 'whatsapp'));
   const email = toNullableString(getValue('email'));
