@@ -116,6 +116,7 @@ test('mapCompanyRow prefers title column for company name when titulo is unavail
   assert.equal(mapped.descricao, 'Escritório especializado em direito civil');
 });
 
+
 test('mapCompanyRow falls back to title when titulo duplicates descricao', () => {
   const columns = new Map([
     ['titulo', 'titulo'],
