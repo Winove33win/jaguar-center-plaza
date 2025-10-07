@@ -52,6 +52,18 @@ test('buildOrderByClause prefers textual columns', () => {
   );
 });
 
+test('buildOrderByClause prefers title column before identifiers', () => {
+  const columns = new Map([
+    ['title', 'title'],
+    ['id', 'id']
+  ]);
+
+  assert.equal(
+    buildOrderByClause(columns),
+    "ORDER BY (COALESCE(`title`, '') = ''), `title` ASC"
+  );
+});
+
 test('buildOrderByClause falls back to identifiers', () => {
   const columns = new Map([
     ['id', 'id']
@@ -85,5 +97,22 @@ test('mapCompanyRow reads values regardless of column casing', () => {
   assert.equal(mapped.titulo, 'Advocacia Alfa');
   assert.equal(mapped.descricao, 'Atendimento jurídico especializado');
   assert.equal(mapped.pk, 7);
+});
+
+test('mapCompanyRow prefers title column for company name when titulo is unavailable', () => {
+  const columns = new Map([
+    ['title', 'title'],
+    ['descricao', 'descricao']
+  ]);
+
+  const row = {
+    title: 'Advocacia Beta',
+    descricao: 'Escritório especializado em direito civil'
+  };
+
+  const mapped = mapCompanyRow(row, columns);
+
+  assert.equal(mapped.titulo, 'Advocacia Beta');
+  assert.equal(mapped.descricao, 'Escritório especializado em direito civil');
 });
 

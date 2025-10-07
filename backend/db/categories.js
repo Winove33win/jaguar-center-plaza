@@ -18,6 +18,7 @@ const TABLE_COLUMNS_CACHE = new Map();
 
 const SEARCHABLE_COLUMNS = [
   'titulo',
+  'title',
   'nome',
   'name',
   'razao_social',
@@ -32,6 +33,7 @@ const SEARCHABLE_COLUMNS = [
 
 const TITLE_PREFERRED_COLUMNS = [
   'titulo',
+  'title',
   'nome',
   'name',
   'razao_social',
@@ -299,7 +301,7 @@ function mapCompanyRow(row = {}, columns = new Map()) {
   const getValue = createRowValueGetter(row, columns);
 
   const titulo = toNullableString(
-    getValue('titulo', 'nome', 'name', 'razao_social', 'descricao', 'description', 'tagline')
+    getValue('titulo', 'title', 'nome', 'name', 'razao_social', 'descricao', 'description', 'tagline')
   );
   const descricao = toNullableString(getValue('descricao', 'description', 'tagline'));
   const endereco = normalizeEndereco(getValue('endereco', 'address'));
