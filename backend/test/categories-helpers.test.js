@@ -3,10 +3,7 @@ import assert from 'node:assert/strict';
 
 import { __internal } from '../db/categories.js';
 
-
 const { buildSearchClause, buildOrderByClause, mapCompanyRow } = __internal;
-
-const { buildSearchClause, buildOrderByClause } = __internal;
 
 
 test('buildSearchClause uses available searchable columns', () => {
