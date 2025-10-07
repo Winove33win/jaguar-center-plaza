@@ -268,22 +268,58 @@ function normalizeMediaList(value) {
   return Array.from(new Set(normalized));
 }
 
-function mapCompanyRow(row = {}) {
-  const titulo = toNullableString(row.titulo ?? row.nome ?? row.name);
-  const descricao = toNullableString(row.descricao ?? row.description ?? row.tagline);
-  const endereco = normalizeEndereco(row.endereco);
-  const celular = toNullableString(row.celular ?? row.telefone ?? row.phone ?? row.whatsapp);
-  const email = toNullableString(row.email);
-  const sala = toNullableString(row.sala ?? row.salao ?? row.room);
-  const logo = normalizeMediaUrl(row.logo ?? row.imagem ?? row.image);
-  const galeria = normalizeMediaList(
-    row.galeria ?? row.galeria_urls ?? row.gallery ?? row.galeria_de_midia ?? row.media_gallery
+function createRowValueGetter(row = {}, columns = new Map()) {
+  return (...candidates) => {
+    for (const candidate of candidates) {
+      if (!candidate) {
+        continue;
+      }
+
+      const normalized = candidate.toLowerCase();
+      const actual = columns.get(normalized) ?? candidate;
+
+      if (actual in row && row[actual] != null) {
+        return row[actual];
+      }
+
+      if (normalized !== actual && normalized in row && row[normalized] != null) {
+        return row[normalized];
+      }
+
+      if (candidate in row && row[candidate] != null) {
+        return row[candidate];
+      }
+    }
+
+    return null;
+  };
+}
+
+function mapCompanyRow(row = {}, columns = new Map()) {
+  const getValue = createRowValueGetter(row, columns);
+
+  const titulo = toNullableString(
+    getValue('titulo', 'nome', 'name', 'razao_social', 'descricao', 'description', 'tagline')
   );
-  const midia = normalizeMediaList(row.midia ?? row.midia_urls ?? row.media);
+  const descricao = toNullableString(getValue('descricao', 'description', 'tagline'));
+  const endereco = normalizeEndereco(getValue('endereco', 'address'));
+  const celular = toNullableString(getValue('celular', 'telefone', 'phone', 'whatsapp'));
+  const email = toNullableString(getValue('email'));
+  const sala = toNullableString(getValue('sala', 'salao', 'room'));
+  const logo = normalizeMediaUrl(getValue('logo', 'imagem', 'image'));
+  const galeria = normalizeMediaList(
+    getValue('galeria', 'galeria_urls', 'gallery', 'galeria_de_midia', 'media_gallery')
+  );
+  const midia = normalizeMediaList(getValue('midia', 'midia_urls', 'media'));
+
+  const pkValue = getValue('pk');
+  const id = toNullableString(getValue('id', 'slug', 'codigo', 'code'));
+  const createdAt = toNullableString(getValue('created_at', 'createdAt'));
+  const updatedAt = toNullableString(getValue('updated_at', 'updatedAt'));
 
   return {
-    pk: row.pk != null ? Number(row.pk) : null,
-    id: toNullableString(row.id ?? row.slug ?? row.codigo ?? row.code),
+    pk: pkValue != null ? Number(pkValue) : null,
+    id,
     titulo,
     descricao,
     endereco,
@@ -293,8 +329,8 @@ function mapCompanyRow(row = {}) {
     logo,
     galeria,
     midia,
-    createdAt: toNullableString(row.created_at ?? row.createdAt),
-    updatedAt: toNullableString(row.updated_at ?? row.updatedAt)
+    createdAt,
+    updatedAt
   };
 }
 
@@ -379,7 +415,11 @@ export async function listCompanies(tabela, { page = 1, pageSize = 12, q = '' } 
       page: currentPage,
       pageSize: currentPageSize,
       total,
+
+      items: rows.map((row) => mapCompanyRow(row, columns))
+
       items: rows.map((row) => mapCompanyRow(row))
+
     };
   } catch (error) {
     if (error?.code === 'ER_NO_SUCH_TABLE') {
@@ -405,6 +445,8 @@ export async function getCompany(tabela, id) {
     return null;
   }
 
+  const columns = await getTableColumns(tabela);
+
   const [rows] = await pool.query(
     `SELECT * FROM \`${tabela}\` WHERE id = ? OR pk = ? LIMIT 1`,
     [identifier, identifier]
@@ -414,12 +456,15 @@ export async function getCompany(tabela, id) {
     return null;
   }
 
-  return mapCompanyRow(rows[0]);
+  return mapCompanyRow(rows[0], columns);
 }
 
 export const __internal = {
   buildOrderByClause,
   buildSearchClause,
+
+  mapCompanyRow,
+
   clearTableColumnsCache() {
     TABLE_COLUMNS_CACHE.clear();
   }
