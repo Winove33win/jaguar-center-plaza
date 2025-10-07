@@ -301,12 +301,6 @@ function createRowValueGetter(row = {}, columns = new Map()) {
 function mapCompanyRow(row = {}, columns = new Map()) {
   const getValue = createRowValueGetter(row, columns);
 
-
-
-  const titulo = toNullableString(
-    getValue('titulo', 'title', 'nome', 'name', 'razao_social', 'descricao', 'description', 'tagline')
-  );
-
   const descricao = toNullableString(getValue('descricao', 'description', 'tagline'));
   const tituloDireto = toNullableString(getValue('titulo'));
   const tituloAlternativo = toNullableString(getValue('title', 'nome', 'name', 'razao_social'));
