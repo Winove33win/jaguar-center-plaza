@@ -6,6 +6,7 @@ Este projeto reúne o backend Express e o frontend React/Vite do site institucio
 
 - `backend/`: API Node.js/Express que acessa MySQL via `mysql2/promise`, gera sitemaps e orquestra o build do frontend.
 - `frontend/`: SPA em React com React Router, TanStack Query, Tailwind CSS e provedores globais (toasts, SEO).
+- `frontend/public/presentation-assets/`: Pasta para imagens e documentos usados em apresentações corporativas.
 - `scripts/` e `deploy/`: utilitários de build, sincronização e automação de deploy.
 
 ## Variáveis de ambiente
