@@ -127,17 +127,38 @@ function normalizeMediaUrl(value) {
 function normalizeMediaList(value) {
   const parsed = parsePossibleJson(value);
 
-  const candidates = [];
+  function collectCandidates(candidate) {
+    if (candidate === null || candidate === undefined) {
+      return [];
+    }
 
-  if (Array.isArray(parsed)) {
-    candidates.push(...parsed);
-  } else if (typeof parsed === 'string') {
-    candidates.push(...parsed.split(/[;,\n]/));
-  } else if (parsed && typeof parsed === 'object') {
-    candidates.push(...Object.values(parsed));
+    if (Array.isArray(candidate)) {
+      return candidate.flatMap((item) => collectCandidates(item));
+    }
+
+    if (typeof candidate === 'string') {
+      return candidate
+        .split(/[;,\n]/)
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+    }
+
+    if (typeof candidate === 'object') {
+      const prioritizedKeys = ['url', 'src', 'imagem', 'image', 'foto', 'value'];
+      for (const key of prioritizedKeys) {
+        const valueForKey = candidate[key];
+        if (typeof valueForKey === 'string' && valueForKey.trim().length > 0) {
+          return collectCandidates(valueForKey);
+        }
+      }
+
+      return Object.values(candidate).flatMap((item) => collectCandidates(item));
+    }
+
+    return [];
   }
 
-  const normalized = candidates
+  const normalized = collectCandidates(parsed)
     .map((item) => normalizeMediaUrl(item))
     .filter((item) => typeof item === 'string' && item.length > 0);
 
@@ -152,7 +173,9 @@ function mapCompanyRow(row = {}) {
   const email = toNullableString(row.email);
   const sala = toNullableString(row.sala ?? row.salao ?? row.room);
   const logo = normalizeMediaUrl(row.logo ?? row.imagem ?? row.image);
-  const galeria = normalizeMediaList(row.galeria ?? row.galeria_urls ?? row.gallery);
+  const galeria = normalizeMediaList(
+    row.galeria ?? row.galeria_urls ?? row.gallery ?? row.galeria_de_midia ?? row.media_gallery
+  );
   const midia = normalizeMediaList(row.midia ?? row.midia_urls ?? row.media);
 
   return {
