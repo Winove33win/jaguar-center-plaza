@@ -24,7 +24,7 @@ async function buildSitemapXml(baseUrl) {
   const urlset = [
     createUrl(baseUrl, 'weekly', '1.0'),
     createUrl(`${baseUrl}/sobre-nos`, 'monthly', '0.8'),
-    createUrl(`${baseUrl}/salas`, 'weekly', '0.9'),
+    createUrl(`${baseUrl}/empresas`, 'weekly', '0.9'),
     createUrl(`${baseUrl}/contato`, 'monthly', '0.7')
   ];
 

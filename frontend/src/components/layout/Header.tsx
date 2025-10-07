@@ -8,7 +8,6 @@ const navItems = [
   { label: 'Home', to: '/', type: 'route' as const },
   { label: 'Empresas', to: '/empresas', type: 'route' as const },
   { label: 'Sobre nós', to: '/sobre-nos', type: 'route' as const },
-  { label: 'Salas', to: '/salas', type: 'route' as const },
   { label: 'Contato', to: '/contato', type: 'route' as const }
 ];
 
@@ -122,7 +121,7 @@ export default function Header() {
                 </option>
               ))}
               {categoryLinks.map((category) => (
-                <option key={category.slug} value={`/salas#${category.slug}`}>
+                <option key={category.slug} value={`/empresas/${category.slug}`}>
                   {category.label}
                 </option>
               ))}
@@ -138,7 +137,7 @@ export default function Header() {
               {categoryLinks.map((category) => (
                 <Link
                   key={category.slug}
-                  to={`/salas#${category.slug}`}
+                  to={`/empresas/${category.slug}`}
                   className="inline-flex items-center rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-primary-700 shadow-sm transition hover:bg-primary-100 hover:text-primary-800"
                 >
                   {category.label}
