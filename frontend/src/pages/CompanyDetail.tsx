@@ -4,19 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
 import ImageGalleryCarousel from '../components/ImageGalleryCarousel';
 import { getCategories, getCompany, type CategorySummary } from '../api/companies';
+import { CATEGORY_IMAGES, DEFAULT_CATEGORY_IMAGE } from '../constants/categoryImages';
 import { useSEO } from '../hooks/useSEO';
-
-const CATEGORY_IMAGES: Record<string, string> = {
-  administracao: '/Fachada.jpg',
-  advocacia: '/Fachada3.jpg',
-  beleza: '/Fachada4.jpg',
-  contabilidade: '/Fachada5.jpg',
-  imobiliaria: '/Fachada2.jpg',
-  industrias: '/Fachada6.jpg',
-  lojas: '/Fachada7.jpg',
-  saude: '/Fachada8.jpg',
-  servicos_publicos: '/Fachada9.jpg'
-};
 
 function normalizePhone(value: string | null) {
   if (!value) return null;
@@ -57,7 +46,7 @@ export default function CompanyDetailPage() {
     canonical: company ? `https://www.jaguarcenterplaza.com.br/empresas/${categorySlug}/${companySlug}` : undefined
   });
 
-  const heroImage = CATEGORY_IMAGES[categorySlug] || '/Fachada5.jpg';
+  const heroImage = CATEGORY_IMAGES[categorySlug] || DEFAULT_CATEGORY_IMAGE;
 
   const phones = useMemo(() => {
     const values = [] as string[];

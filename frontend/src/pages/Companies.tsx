@@ -3,20 +3,9 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
 import { getCategories, type CategorySummary } from '../api/companies';
+import { CATEGORY_IMAGES, DEFAULT_CATEGORY_IMAGE } from '../constants/categoryImages';
 import { isLinkedCategory, normalizeCategorySlug } from '../lib/categories';
 import { useSEO } from '../hooks/useSEO';
-
-const CATEGORY_IMAGES: Record<string, string> = {
-  administracao: '/Fachada.jpg',
-  advocacia: '/Fachada3.jpg',
-  beleza: '/Fachada4.jpg',
-  contabilidade: '/Fachada5.jpg',
-  imobiliaria: '/Fachada2.jpg',
-  industrias: '/Fachada6.jpg',
-  lojas: '/Fachada7.jpg',
-  saude: '/Fachada8.jpg',
-  servicos_publicos: '/Fachada9.jpg'
-};
 
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   administracao:
@@ -82,7 +71,7 @@ export default function CompaniesPage() {
 
   const cards = useMemo(() => {
     return linkedCategories.map((category) => {
-      const image = CATEGORY_IMAGES[category.slug] || '/Fachada5.jpg';
+      const image = CATEGORY_IMAGES[category.slug] || DEFAULT_CATEGORY_IMAGE;
       const description = CATEGORY_DESCRIPTIONS[category.slug] ||
         'Conheça as empresas que atuam neste segmento dentro do Jaguar Center Plaza.';
 
