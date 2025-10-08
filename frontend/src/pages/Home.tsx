@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Container from '../components/layout/Container';
@@ -54,14 +55,48 @@ const featureItems = [
   }
 ];
 
-const quickInfos = [
-  { label: 'Horário de funcionamento', value: 'Seg. a sex. das 7h às 21h · Sáb. das 8h às 14h' },
-  { label: 'Telefone', value: '(19) 3837-3391' },
-  { label: 'E-mail', value: 'jaguarcenterplaza@hotmail.com' },
-  { label: 'Endereço', value: 'Rua Cândido Bueno, 1299 · Centro · Jaguariúna/SP' }
+type QuickInfoCard = {
+  label: string;
+  content: ReactNode;
+};
+
+const quickInfoCards: QuickInfoCard[] = [
+  {
+    label: 'Horário de funcionamento',
+    content: <p className="text-sm font-medium text-white">Seg. a sex. das 7h às 21h · Sáb. das 8h às 14h</p>
+  },
+  {
+    label: 'Contato',
+    content: (
+      <div className="space-y-1 text-sm font-medium text-white">
+        <p>
+          <span className="text-white/80">Telefone:</span>{' '}
+          <a href="tel:+551938373391" className="underline decoration-white/40 underline-offset-2 hover:text-white">
+            (19) 3837-3391
+          </a>
+        </p>
+        <p>
+          <span className="text-white/80">E-mail:</span>{' '}
+          <a
+            href="mailto:jaguarcenterplaza@hotmail.com"
+            className="underline decoration-white/40 underline-offset-2 hover:text-white"
+          >
+            jaguarcenterplaza@hotmail.com
+          </a>
+        </p>
+      </div>
+    )
+  },
+  {
+    label: 'Endereço',
+    content: <p className="text-sm font-medium text-white">Rua Cândido Bueno, 1299 · Centro · Jaguariúna/SP</p>
+  }
 ];
 
+const categoriesWithFacadeImage = new Set(['imobiliaria', 'industrias', 'lojas', 'saude', 'servicos_publicos']);
+
 type CategoryCard = {
+  slug: string;
   title: string;
   description: string;
   companiesLabel: string;
@@ -118,6 +153,7 @@ const CATEGORY_CONTENT: Record<string, { title: string; description: string; ima
 };
 
 const fallbackCategoryCards: CategoryCard[] = Object.entries(CATEGORY_CONTENT).map(([slug, meta]) => ({
+  slug,
   title: meta.title,
   description: meta.description,
   companiesLabel: 'Empresas do setor',
@@ -173,6 +209,7 @@ export default function HomePage() {
     };
 
     return {
+      slug: category.slug,
       title: meta.title ?? category.label,
       description: meta.description,
       companiesLabel: formatCompaniesLabel(category.total),
@@ -220,10 +257,10 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="grid gap-4 pt-4 sm:grid-cols-3">
-              {quickInfos.map((info) => (
-                <div key={info.label} className="rounded-2xl bg-white/15 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-accent-100">{info.label}</p>
-                  <p className="mt-1 text-sm font-medium text-white">{info.value}</p>
+              {quickInfoCards.map((card) => (
+                <div key={card.label} className="rounded-2xl bg-white/15 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-accent-100">{card.label}</p>
+                  <div className="mt-1">{card.content}</div>
                 </div>
               ))}
             </div>
@@ -312,26 +349,41 @@ export default function HomePage() {
           )}
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {categoryCards.map((card) => (
-              <article key={card.title} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
-                <div className="relative h-44 w-full overflow-hidden">
-                  <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
-                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
-                    {card.companiesLabel}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col gap-3 p-6">
-                  <h3 className="text-xl font-semibold text-primary-800">{card.title}</h3>
-                  <p className="flex-1 text-sm text-[#4f5d55]">{card.description}</p>
-                  <Link
-                    to={card.href}
-                    className="inline-flex items-center text-sm font-semibold text-primary-600 transition-colors hover:text-accent-500"
-                  >
-                    Ver empresas
-                  </Link>
-                </div>
-              </article>
-            ))}
+            {categoryCards.map((card) => {
+              const shouldDisplayFacadeImage = categoriesWithFacadeImage.has(card.slug);
+
+              return (
+                <article key={card.slug} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
+                  <div className="relative h-44 w-full overflow-hidden">
+                    <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
+                      {card.companiesLabel}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-4 p-6">
+                    <div className="flex-1 space-y-3">
+                      <h3 className="text-xl font-semibold text-primary-800">{card.title}</h3>
+                      <p className="text-sm text-[#4f5d55]">{card.description}</p>
+                      {shouldDisplayFacadeImage && (
+                        <figure className="overflow-hidden rounded-2xl border border-primary-100">
+                          <img
+                            src="/Fachada.jpg"
+                            alt="Fachada do Jaguar Center Plaza"
+                            className="h-32 w-full object-cover"
+                          />
+                        </figure>
+                      )}
+                    </div>
+                    <Link
+                      to={card.href}
+                      className="inline-flex items-center text-sm font-semibold text-primary-600 transition-colors hover:text-accent-500"
+                    >
+                      Ver empresas
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </Container>
       </section>
