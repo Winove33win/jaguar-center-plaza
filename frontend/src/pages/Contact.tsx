@@ -66,17 +66,21 @@ export default function ContactPage() {
             espaço dentro do complexo.
           </p>
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <h2 className="text-lg font-semibold text-slate-900">Endereços oficiais</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Informações de contato</h2>
             <ul className="mt-4 space-y-4 text-sm text-slate-600">
               <li>
                 <p className="font-semibold text-slate-800">Jaguar Center Plaza</p>
-                <p>Rua Amazonas, 504 · Centro · Jaguariúna/SP</p>
-                <p>Segunda a sábado: 8h às 20h · Domingo: fechado</p>
+                <p>Rua Cândido Bueno, 1299 · Centro · Jaguariúna/SP</p>
+                <p>Segunda a sexta-feira: 7h às 21h · Sábados: 8h às 14h</p>
               </li>
               <li>
-                <p className="font-semibold text-slate-800">Central de Relacionamento</p>
-                <p>Telefone: (19) 3833-5600 · WhatsApp: (19) 9 8300-5600</p>
-                <p>E-mail: contato@jaguarcenterplaza.com.br</p>
+                <p className="font-semibold text-slate-800">Fale com a gente</p>
+                <p>Telefone: (19) 3837-3391</p>
+                <p>E-mail: jaguarcenterplaza@hotmail.com</p>
+              </li>
+              <li>
+                <p className="font-semibold text-slate-800">Atendimento ao cliente</p>
+                <p>jaguarcenterplaza@hotmail.com</p>
               </li>
             </ul>
           </div>
