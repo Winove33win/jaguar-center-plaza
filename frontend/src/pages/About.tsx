@@ -3,40 +3,40 @@ import { useSEO } from '../hooks/useSEO';
 
 const milestones = [
   {
-    year: '2008',
-    title: 'Inauguração do complexo',
+    year: '1996',
+    title: 'Fundação do condomínio',
     description:
-      'Nasce o Jaguar Center Plaza, reunindo serviços essenciais e primeiras operações corporativas no coração de Jaguariúna.'
+      'O Jaguar Center Plaza é inaugurado em 05 de agosto de 1996 na Rua Cândido Bueno, 1299, consolidando um endereço estratégico no centro de Jaguariúna.'
   },
   {
-    year: '2014',
-    title: 'Expansão para saúde e bem-estar',
+    year: '2005',
+    title: 'Ampliação das operações',
     description:
-      'Novos consultórios, clínicas e laboratórios ampliam o atendimento à população com infraestrutura completa e acessível.'
+      'A estrutura recebe novas salas comerciais e aprimora o atendimento às empresas com serviços essenciais a poucos passos, incluindo acesso facilitado a redes bancárias.'
   },
   {
-    year: '2021',
-    title: 'Hub de inovação e eventos',
+    year: '2018',
+    title: 'Modernização da infraestrutura',
     description:
-      'Espaços multiuso, coworking e auditórios recebem programas de aceleração, capacitações e encontros setoriais.'
+      'Estacionamento ampliado, escada rolante, elevador de serviço e sistema de monitoramento por câmeras reforçam a experiência e a segurança para condôminos e visitantes.'
   }
 ];
 
 const values = [
   {
-    title: 'Integração de serviços',
+    title: 'Localização privilegiada',
     description:
-      'Reunimos diferentes segmentos para facilitar a rotina de empresas, empreendedores e cidadãos em um único endereço.'
+      'Estamos em uma das principais vias de Jaguariúna, facilitando o acesso de clientes e parceiros a bancos, serviços públicos e ao comércio local.'
   },
   {
-    title: 'Hospitalidade e conveniência',
+    title: 'Estrutura completa',
     description:
-      'Experiência acolhedora com concierge dedicado, acessibilidade total, estacionamento e alimentação no mesmo local.'
+      'Com 50 salas comerciais, estacionamento amplo, escada rolante e elevador de serviço, oferecemos comodidade para operações de diferentes portes.'
   },
   {
-    title: 'Sustentabilidade urbana',
+    title: 'Ambiente seguro e acolhedor',
     description:
-      'Gestão responsável de recursos, eficiência energética e incentivo à mobilidade inteligente em Jaguariúna.'
+      'Monitoramento por câmeras e paisagismo cuidadoso criam um espaço agradável para trabalhar, receber clientes e construir relacionamentos duradouros.'
   }
 ];
 
@@ -53,11 +53,11 @@ export default function AboutPage() {
       <Container className="space-y-10">
         <header className="space-y-6">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary-500">Sobre nós</p>
-          <h1 className="section-title">Um hub completo que impulsiona Jaguariúna</h1>
+          <h1 className="section-title">Um endereço tradicional para fazer negócios em Jaguariúna</h1>
           <p className="section-subtitle">
-            O Jaguar Center Plaza nasceu para aproximar pessoas, marcas e serviços públicos em um mesmo lugar. Somos um polo de
-            negócios que valoriza a economia local, gera empregos e oferece experiências memoráveis para milhares de visitantes
-            todos os meses.
+            Fundado em 1996, o Condomínio Jaguar Center Plaza reúne empresas e profissionais que transformam o centro da cidade
+            em um polo comercial vibrante. Nossa infraestrutura é pensada para facilitar a rotina de quem empreende e de quem
+            busca serviços essenciais em um único endereço.
           </p>
         </header>
 
@@ -65,14 +65,14 @@ export default function AboutPage() {
           <div className="space-y-6 rounded-3xl border border-primary-100 bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-semibold text-slate-900">Nossa essência</h2>
             <p className="text-sm text-slate-600">
-              Reunimos administração, advocacia, saúde, estética, gastronomia, coworking e serviços públicos em uma estrutura
-              que não para de crescer. Cada detalhe foi pensado para garantir conforto, tecnologia e hospitalidade — desde a
-              recepção até os espaços de convivência.
+              Localizado na Rua Cândido Bueno, 1299, o Jaguar Center Plaza coloca empresas em uma região central, com fácil
+              conexão a serviços financeiros, alimentação e transporte. Cada sala recebe atenção especial para garantir
+              conforto, acessibilidade e a hospitalidade que nossos condôminos merecem.
             </p>
             <p className="text-sm text-slate-600">
-              Atuamos lado a lado com nossos condôminos para promover campanhas, eventos e treinamentos que fortalecem a
-              comunidade empresarial de Jaguariúna. Nosso compromisso é ser um parceiro estratégico para quem empreende e para
-              quem busca soluções completas em um só lugar.
+              A administração do condomínio oferece suporte próximo às empresas instaladas, promovendo melhorias contínuas na
+              infraestrutura, zelando pela segurança e estimulando um ambiente colaborativo que fortalece o comércio local de
+              Jaguariúna.
             </p>
           </div>
 
@@ -80,16 +80,16 @@ export default function AboutPage() {
             <h3 className="text-lg font-semibold text-slate-900">Indicadores</h3>
             <ul className="space-y-4 text-sm text-slate-600">
               <li>
-                <span className="block text-2xl font-semibold text-primary-600">+25 mil</span>
-                visitantes mensais circulando pelo complexo
+                <span className="block text-2xl font-semibold text-primary-600">50</span>
+                salas comerciais distribuídas em um único empreendimento
               </li>
               <li>
-                <span className="block text-2xl font-semibold text-primary-600">12 mil m²</span>
-                de área construída com acessibilidade universal
+                <span className="block text-2xl font-semibold text-primary-600">1996</span>
+                ano de inauguração do Jaguar Center Plaza
               </li>
               <li>
-                <span className="block text-2xl font-semibold text-primary-600">200</span>
-                vagas de estacionamento coberto e monitorado
+                <span className="block text-2xl font-semibold text-primary-600">(19) 3837-3391</span>
+                canal direto para informações e suporte administrativo
               </li>
             </ul>
           </aside>
@@ -99,10 +99,11 @@ export default function AboutPage() {
       <Container className="space-y-10">
         <div className="space-y-4">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary-500">Linha do tempo</p>
-          <h2 className="section-title">Evolução contínua ao lado da cidade</h2>
+          <h2 className="section-title">Tradição que acompanha o desenvolvimento da cidade</h2>
           <p className="section-subtitle">
-            Crescemos acompanhando o desenvolvimento de Jaguariúna e das empresas que escolheram o Jaguar Center Plaza como
-            casa. A cada expansão, novos segmentos e facilidades se somam para atender as necessidades da região.
+            Desde a fundação, acompanhamos as transformações de Jaguariúna ao oferecer infraestrutura moderna, segurança e
+            facilidades que ajudam empreendedores a prosperar. A cada etapa, reforçamos nosso compromisso com quem escolhe o
+            Jaguar Center Plaza como ponto de referência.
           </p>
         </div>
 
@@ -121,14 +122,15 @@ export default function AboutPage() {
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary-500">Nosso compromisso</p>
-            <h2 className="section-title">Um ecossistema a serviço de pessoas e negócios</h2>
+            <h2 className="section-title">Estrutura pronta para receber diferentes negócios</h2>
             <p className="section-subtitle">
-              Mais do que alugar salas, conectamos histórias. Trabalhamos com curadoria ativa de marcas e profissionais para
-              garantir diversidade de serviços e experiências positivas para quem visita o Jaguar Center Plaza todos os dias.
+              Muito mais do que um conjunto de salas, somos um condomínio preparado para receber empresas de diversos segmentos
+              com suporte administrativo, manutenção constante e atenção à experiência de clientes e colaboradores.
             </p>
             <p className="text-sm text-slate-600">
-              Nossa equipe multidisciplinar acompanha desde o planejamento da operação até o dia a dia dos condôminos, oferecendo
-              suporte comercial, jurídico e de marketing para potencializar resultados.
+              Do estacionamento amplo ao monitoramento por câmeras, passando pelo paisagismo e pelas áreas de circulação, cada
+              detalhe contribui para que o Jaguar Center Plaza seja um local confortável, seguro e funcional para quem trabalha
+              e visita.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-3">
