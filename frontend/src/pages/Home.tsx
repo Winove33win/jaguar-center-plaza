@@ -352,10 +352,16 @@ export default function HomePage() {
             {categoryCards.map((card) => {
               const shouldDisplayFacadeImage = categoriesWithFacadeImage.has(card.slug);
 
+              const displayedImage = shouldDisplayFacadeImage ? '/Fachada.jpg' : card.image;
+
               return (
                 <article key={card.slug} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
                   <div className="relative h-44 w-full overflow-hidden">
+
+                    <img src={displayedImage} alt={card.title} className="h-full w-full object-cover" />
+
                     <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+
                     <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
                       {card.companiesLabel}
                     </span>
@@ -364,6 +370,7 @@ export default function HomePage() {
                     <div className="flex-1 space-y-3">
                       <h3 className="text-xl font-semibold text-primary-800">{card.title}</h3>
                       <p className="text-sm text-[#4f5d55]">{card.description}</p>
+
                       {shouldDisplayFacadeImage && (
                         <figure className="overflow-hidden rounded-2xl border border-primary-100">
                           <img
@@ -373,6 +380,7 @@ export default function HomePage() {
                           />
                         </figure>
                       )}
+
                     </div>
                     <Link
                       to={card.href}
