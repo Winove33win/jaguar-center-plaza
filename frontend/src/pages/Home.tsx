@@ -71,17 +71,17 @@ const quickInfoCards: QuickInfoCard[] = [
       <div className="space-y-1 text-sm font-medium text-white">
         <p>
           <span className="text-white/80">Telefone:</span>{' '}
-          <a href="tel:+551938373391" className="underline decoration-white/40 underline-offset-2 hover:text-white">
-            (19) 3837-3391
+          <a href="tel:+551938335600" className="underline decoration-white/40 underline-offset-2 hover:text-white">
+            (19) 3833-5600
           </a>
         </p>
         <p>
           <span className="text-white/80">E-mail:</span>{' '}
           <a
-            href="mailto:jaguarcenterplaza@hotmail.com"
+            href="mailto:contato@jaguarcenterplaza.com.br"
             className="underline decoration-white/40 underline-offset-2 hover:text-white"
           >
-            jaguarcenterplaza@hotmail.com
+            contato@jaguarcenterplaza.com.br
           </a>
         </p>
       </div>

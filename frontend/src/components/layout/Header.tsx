@@ -16,7 +16,7 @@ export default function Header() {
   const query = useQuery({ queryKey: ['areas'], queryFn: fetchAreas });
   const areas = query.data?.items ?? [];
   const categoryLinks = useMemo(() => {
-    return areas
+    const links = areas
       .map((item) => {
         const slug = normalizeCategorySlug(item.slug ?? item.id ?? null);
 
@@ -30,6 +30,12 @@ export default function Header() {
         };
       })
       .filter((item): item is { slug: string; label: string } => item !== null);
+
+    if (!links.some((item) => item.slug === 'industrias')) {
+      links.push({ slug: 'industrias', label: 'Indústrias' });
+    }
+
+    return links;
   }, [areas]);
 
   return (
