@@ -62,8 +62,17 @@ export default function Footer() {
         </div>
       </Container>
       <div className="border-t border-white/10">
-        <Container className="py-6 text-center text-xs text-primary-200">
-          © {new Date().getFullYear()} Jaguar Center Plaza. Todos os direitos reservados.
+        <Container className="space-y-2 py-6 text-center text-xs text-primary-200">
+          <p>© {new Date().getFullYear()} Jaguar Center Plaza. Todos os direitos reservados.</p>
+          <p>
+            Construído por{' '}
+            <a
+              href="https://www.winove.com.br"
+              className="font-semibold text-white transition-colors hover:text-accent-200"
+            >
+              Winove
+            </a>
+          </p>
         </Container>
       </div>
     </footer>
