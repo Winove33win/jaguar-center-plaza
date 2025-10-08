@@ -357,11 +357,7 @@ export default function HomePage() {
               return (
                 <article key={card.slug} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
                   <div className="relative h-44 w-full overflow-hidden">
-
                     <img src={displayedImage} alt={card.title} className="h-full w-full object-cover" />
-
-                    <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
-
                     <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
                       {card.companiesLabel}
                     </span>
