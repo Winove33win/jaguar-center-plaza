@@ -59,11 +59,11 @@ export default function Header() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="tel:+551938335600" className="font-semibold text-accent-100 hover:text-white">
-              (19) 3833-5600
+            <a href="tel:+551938373391" className="font-semibold text-accent-100 hover:text-white">
+              (19) 3837-3391
             </a>
-            <a href="mailto:contato@jaguarcenterplaza.com.br" className="hidden font-medium text-accent-100 hover:text-white md:inline">
-              contato@jaguarcenterplaza.com.br
+            <a href="mailto:jaguarcenterplaza@hotmail.com" className="hidden font-medium text-accent-100 hover:text-white md:inline">
+              jaguarcenterplaza@hotmail.com
             </a>
           </div>
         </Container>
