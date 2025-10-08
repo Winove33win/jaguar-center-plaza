@@ -20,8 +20,6 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
     'Imobiliárias e consultorias para locação, compra e venda de imóveis residenciais e corporativos.',
   industrias:
     'Fornecedores industriais, distribuidores e serviços técnicos para apoiar a produção regional.',
-  lojas:
-    'Lojas e pontos de conveniência que oferecem produtos e facilidades para colaboradores e visitantes.',
   saude:
     'Clínicas médicas, odontológicas, fisioterapia e outros serviços de saúde e bem-estar.',
   servicos_publicos:

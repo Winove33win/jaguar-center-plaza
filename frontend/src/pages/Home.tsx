@@ -44,7 +44,7 @@ const featureItems = [
   },
   {
     title: 'Serviços essenciais',
-    description: 'Imobiliárias, lojas, serviços públicos e facilidades reunidos em um único endereço.',
+    description: 'Imobiliárias, serviços públicos e facilidades reunidos em um único endereço.',
     icon: (
       <svg aria-hidden className="h-7 w-7 text-primary-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M3 5h18M5 5v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5" />
@@ -93,8 +93,6 @@ const quickInfoCards: QuickInfoCard[] = [
   }
 ];
 
-const categoriesWithFacadeImage = new Set(['imobiliaria', 'industrias', 'lojas', 'saude', 'servicos_publicos']);
-
 type CategoryCard = {
   slug: string;
   title: string;
@@ -134,11 +132,6 @@ const CATEGORY_CONTENT: Record<string, { title: string; description: string; ima
     title: 'Indústrias',
     description: 'Fornecedores, assistência técnica e serviços voltados ao setor industrial.',
     image: CATEGORY_IMAGES.industrias
-  },
-  lojas: {
-    title: 'Lojas',
-    description: 'Estabelecimentos para o dia a dia com conveniência e praticidade.',
-    image: CATEGORY_IMAGES.lojas
   },
   saude: {
     title: 'Saúde',
@@ -192,12 +185,12 @@ function formatCompaniesLabel(count: number) {
 
 export default function HomePage() {
   const { data, isLoading, isError } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
-  const categories = data ?? [];
+  const categories = (data ?? []).filter((category) => category.slug !== 'lojas');
 
   useSEO({
     title: 'Jaguar Center Plaza — Conectamos serviços e negócios em Jaguariúna',
     description:
-      'Jaguar Center Plaza reúne empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliárias, indústrias, lojas e serviços públicos em Jaguariúna (SP).',
+      'Jaguar Center Plaza reúne empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliárias, indústrias e serviços públicos em Jaguariúna (SP).',
     canonical: 'https://www.jaguarcenterplaza.com.br/'
   });
 
@@ -213,7 +206,7 @@ export default function HomePage() {
       title: meta.title ?? category.label,
       description: meta.description,
       companiesLabel: formatCompaniesLabel(category.total),
-      image: meta.image,
+      image: meta.image ?? DEFAULT_CATEGORY_IMAGE,
       href: `/empresas/${category.slug}`
     };
   });
@@ -237,7 +230,7 @@ export default function HomePage() {
               O endereço completo para resolver serviços e impulsionar negócios em Jaguariúna
             </h1>
             <p className="text-lg text-white/80">
-              Conectamos empresas de serviços corporativos, saúde, beleza, imobiliárias, lojas e órgãos públicos para facilitar a rotina de moradores, profissionais e empreendedores.
+              Conectamos empresas de serviços corporativos, saúde, beleza, imobiliárias e órgãos públicos para facilitar a rotina de moradores, profissionais e empreendedores.
             </p>
             <p className="text-lg text-white/80">
               Aqui você encontra atendimento especializado, estrutura moderna e todos os serviços em um só lugar para ganhar tempo e qualidade de vida.
@@ -269,7 +262,7 @@ export default function HomePage() {
             <div className="rounded-3xl bg-white/90 p-8 text-primary-800 shadow-xl backdrop-blur">
               <h2 className="text-xl font-semibold">Tudo para o seu conforto e bem-estar</h2>
               <p className="mt-3 text-sm text-[#4f5d55]">
-                Administração, advocacia, saúde, beleza, lojas, serviços públicos e muito mais reunidos no Jaguar Center Plaza.
+                Administração, advocacia, saúde, beleza, serviços públicos e muito mais reunidos no Jaguar Center Plaza.
               </p>
               <div className="mt-6 space-y-4">
                 {featureItems.slice(0, 2).map((feature) => (
@@ -326,7 +319,7 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent-500">Empresas por setor</p>
             <h2 className="text-3xl font-bold text-primary-800 sm:text-4xl">Jaguar Center Plaza é o endereço dos principais serviços da cidade</h2>
             <p className="text-base text-[#4f5d55]">
-              São empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliária, indústrias, lojas e serviços públicos prontas para atender você.
+              São empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliária, indústrias e serviços públicos prontas para atender você.
             </p>
           </div>
 
@@ -350,14 +343,10 @@ export default function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {categoryCards.map((card) => {
-              const shouldDisplayFacadeImage = categoriesWithFacadeImage.has(card.slug);
-
-              const displayedImage = shouldDisplayFacadeImage ? '/Fachada.jpg' : card.image;
-
               return (
                 <article key={card.slug} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg">
                   <div className="relative h-44 w-full overflow-hidden">
-                    <img src={displayedImage} alt={card.title} className="h-full w-full object-cover" />
+                    <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
                     <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-primary-700">
                       {card.companiesLabel}
                     </span>
@@ -366,17 +355,6 @@ export default function HomePage() {
                     <div className="flex-1 space-y-3">
                       <h3 className="text-xl font-semibold text-primary-800">{card.title}</h3>
                       <p className="text-sm text-[#4f5d55]">{card.description}</p>
-
-                      {shouldDisplayFacadeImage && (
-                        <figure className="overflow-hidden rounded-2xl border border-primary-100">
-                          <img
-                            src="/Fachada.jpg"
-                            alt="Fachada do Jaguar Center Plaza"
-                            className="h-32 w-full object-cover"
-                          />
-                        </figure>
-                      )}
-
                     </div>
                     <Link
                       to={card.href}

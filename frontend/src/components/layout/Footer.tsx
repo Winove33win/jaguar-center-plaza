@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="space-y-4">
           <img src="/logo-jaguar-center-plaza-002b-768x535.png" alt="Jaguar Center Plaza" className="h-16 w-auto" />
           <p className="text-sm leading-relaxed text-primary-100">
-            Centro empresarial que reúne serviços corporativos, saúde, beleza, lojas e órgãos públicos em Jaguariúna.
+            Centro empresarial que reúne serviços corporativos, saúde, beleza e órgãos públicos em Jaguariúna.
           </p>
           <p className="text-sm text-primary-100">CNPJ 07.711.519/0001-80</p>
         </div>
