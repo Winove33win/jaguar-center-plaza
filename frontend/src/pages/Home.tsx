@@ -44,7 +44,7 @@ const featureItems = [
   },
   {
     title: 'Serviços essenciais',
-    description: 'Imobiliárias, lojas, serviços públicos e facilidades reunidos em um único endereço.',
+    description: 'Imobiliárias, serviços públicos e facilidades reunidos em um único endereço.',
     icon: (
       <svg aria-hidden className="h-7 w-7 text-primary-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M3 5h18M5 5v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5" />
@@ -133,11 +133,6 @@ const CATEGORY_CONTENT: Record<string, { title: string; description: string; ima
     description: 'Fornecedores, assistência técnica e serviços voltados ao setor industrial.',
     image: CATEGORY_IMAGES.industrias
   },
-  lojas: {
-    title: 'Lojas',
-    description: 'Estabelecimentos para o dia a dia com conveniência e praticidade.',
-    image: CATEGORY_IMAGES.lojas
-  },
   saude: {
     title: 'Saúde',
     description: 'Clínicas, consultórios e terapias integradas para cuidar da sua saúde.',
@@ -190,12 +185,12 @@ function formatCompaniesLabel(count: number) {
 
 export default function HomePage() {
   const { data, isLoading, isError } = useQuery({ queryKey: ['company-categories'], queryFn: getCategories });
-  const categories = data ?? [];
+  const categories = (data ?? []).filter((category) => category.slug !== 'lojas');
 
   useSEO({
     title: 'Jaguar Center Plaza — Conectamos serviços e negócios em Jaguariúna',
     description:
-      'Jaguar Center Plaza reúne empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliárias, indústrias, lojas e serviços públicos em Jaguariúna (SP).',
+      'Jaguar Center Plaza reúne empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliárias, indústrias e serviços públicos em Jaguariúna (SP).',
     canonical: 'https://www.jaguarcenterplaza.com.br/'
   });
 
@@ -235,7 +230,7 @@ export default function HomePage() {
               O endereço completo para resolver serviços e impulsionar negócios em Jaguariúna
             </h1>
             <p className="text-lg text-white/80">
-              Conectamos empresas de serviços corporativos, saúde, beleza, imobiliárias, lojas e órgãos públicos para facilitar a rotina de moradores, profissionais e empreendedores.
+              Conectamos empresas de serviços corporativos, saúde, beleza, imobiliárias e órgãos públicos para facilitar a rotina de moradores, profissionais e empreendedores.
             </p>
             <p className="text-lg text-white/80">
               Aqui você encontra atendimento especializado, estrutura moderna e todos os serviços em um só lugar para ganhar tempo e qualidade de vida.
@@ -267,7 +262,7 @@ export default function HomePage() {
             <div className="rounded-3xl bg-white/90 p-8 text-primary-800 shadow-xl backdrop-blur">
               <h2 className="text-xl font-semibold">Tudo para o seu conforto e bem-estar</h2>
               <p className="mt-3 text-sm text-[#4f5d55]">
-                Administração, advocacia, saúde, beleza, lojas, serviços públicos e muito mais reunidos no Jaguar Center Plaza.
+                Administração, advocacia, saúde, beleza, serviços públicos e muito mais reunidos no Jaguar Center Plaza.
               </p>
               <div className="mt-6 space-y-4">
                 {featureItems.slice(0, 2).map((feature) => (
@@ -324,7 +319,7 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent-500">Empresas por setor</p>
             <h2 className="text-3xl font-bold text-primary-800 sm:text-4xl">Jaguar Center Plaza é o endereço dos principais serviços da cidade</h2>
             <p className="text-base text-[#4f5d55]">
-              São empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliária, indústrias, lojas e serviços públicos prontas para atender você.
+              São empresas de administração, advocacia, contabilidade, saúde, beleza, imobiliária, indústrias e serviços públicos prontas para atender você.
             </p>
           </div>
 

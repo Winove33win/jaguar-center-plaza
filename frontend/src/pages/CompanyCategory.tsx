@@ -20,8 +20,6 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
     'Consultorias imobiliárias e correspondentes que facilitam locações, vendas e investimentos.',
   industrias:
     'Empresas industriais e de suporte técnico que atendem às demandas produtivas da região.',
-  lojas:
-    'Lojas e pontos de conveniência que tornam o dia a dia no Jaguar Center Plaza mais prático.',
   saude:
     'Clínicas, consultórios e profissionais de saúde com atendimento completo e acolhedor.',
   servicos_publicos:

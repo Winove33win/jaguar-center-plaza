@@ -5,7 +5,6 @@ export const LINKED_CATEGORY_SLUGS = [
   'contabilidade',
   'imobiliaria',
   'industrias',
-  'lojas',
   'saude',
   'servicos_publicos'
 ] as const;
