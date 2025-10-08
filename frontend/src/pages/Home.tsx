@@ -66,28 +66,6 @@ const quickInfoCards: QuickInfoCard[] = [
     content: <p className="text-sm font-medium text-white">Seg. a sex. das 7h às 21h · Sáb. das 8h às 14h</p>
   },
   {
-    label: 'Contato',
-    content: (
-      <div className="space-y-1 text-sm font-medium text-white">
-        <p>
-          <span className="text-white/80">Telefone:</span>{' '}
-          <a href="tel:+551938335600" className="underline decoration-white/40 underline-offset-2 hover:text-white">
-            (19) 3833-5600
-          </a>
-        </p>
-        <p>
-          <span className="text-white/80">E-mail:</span>{' '}
-          <a
-            href="mailto:contato@jaguarcenterplaza.com.br"
-            className="underline decoration-white/40 underline-offset-2 hover:text-white"
-          >
-            contato@jaguarcenterplaza.com.br
-          </a>
-        </p>
-      </div>
-    )
-  },
-  {
     label: 'Endereço',
     content: <p className="text-sm font-medium text-white">Rua Cândido Bueno, 1299 · Centro · Jaguariúna/SP</p>
   }
@@ -249,7 +227,7 @@ export default function HomePage() {
                 Agende uma visita
               </Link>
             </div>
-            <div className="grid gap-4 pt-4 sm:grid-cols-3">
+            <div className="grid gap-4 pt-4 sm:grid-cols-2">
               {quickInfoCards.map((card) => (
                 <div key={card.label} className="rounded-2xl bg-white/15 p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-accent-100">{card.label}</p>
