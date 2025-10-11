@@ -352,24 +352,13 @@ export default function HomePage() {
         <Container className="relative z-10 grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="space-y-4 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-accent-200">Eventos corporativos</p>
-            <h2 className="text-3xl font-bold sm:text-4xl">Auditórios, salas de reunião e espaços para ativações</h2>
+            <h2 className="text-3xl font-bold sm:text-4xl">Estrutura pronta para receber diferentes negócios</h2>
             <p className="text-base text-white/80">
-              Rooftop com vista panorâmica, áreas modulares para treinamentos, lounges corporativos e suporte especializado em produção de eventos.
+              Muito mais do que um conjunto de salas, somos um condomínio preparado para receber empresas de diversos segmentos com suporte administrativo, manutenção constante e atenção à experiência de clientes e colaboradores.
             </p>
-            <ul className="mt-6 space-y-3 text-sm text-white/90">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent-300" />
-                Plataforma digital para reservar espaços e acompanhar relatórios de performance.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent-300" />
-                Equipe de produção executiva, cenografia e suporte técnico para eventos corporativos.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent-300" />
-                Conexão com fornecedores homologados de catering, tecnologia e experiências imersivas.
-              </li>
-            </ul>
+            <p className="text-base text-white/80">
+              Do estacionamento amplo ao monitoramento por câmeras, passando pelo paisagismo e pelas áreas de circulação, cada detalhe contribui para que o Jaguar Center Plaza seja um local confortável, seguro e funcional para quem trabalha e visita.
+            </p>
             <Link
               to="/contato"
               className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary-700 shadow-lg transition-colors hover:bg-accent-200"
